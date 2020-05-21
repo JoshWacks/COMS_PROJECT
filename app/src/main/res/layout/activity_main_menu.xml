@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="#0099cc"
+             tools:context=".MainMenuActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:fitsSystemWindows="true" android:id="@+id/fullScreenLayout">
+
+        <LinearLayout android:id="@+id/fullscreen_content_controls"
+                      style="?metaButtonBarStyle"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="bottom|center_horizontal"
+                      android:background="#000000"
+                      android:orientation="horizontal"
+                      tools:ignore="UselessParent" android:backgroundTint="#020101" android:foregroundTint="#000000">
+
+            <Button android:id="@+id/dummy_button"
+                    style="?metaButtonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="EXIT"
+                    android:background="#DD0000"
+                    android:fontFamily="serif-monospace" android:textSize="36sp" android:textStyle="bold"
+                    android:textColor="#050505"/>
+
+        </LinearLayout>
+        <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="674dp"
+                android:id="@+id/tableLayout"
+                android:background="#FBFBFB"
+
+        >
+
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/tblRow0"
+            >
+
+                <Button
+                        android:text="I Am At The Petrol Station"
+                        android:layout_weight="1"
+                        android:layout_width="200dp"
+                        android:layout_height="130dp"
+                        android:layout_column="0"
+                        android:layout_gravity="center" android:id="@+id/btn00" android:textSize="22sp"
+                        android:textAlignment="center" android:backgroundTint="#1CE624"
+                        android:fontFamily="sans-serif" android:textStyle="bold"/>
+                <Button
+                        android:text="Account Details"
+                        android:layout_weight="1"
+                        android:layout_width="200dp"
+                        android:layout_height="130dp"
+                        android:layout_column="1"
+                        android:layout_gravity="center" android:id="@+id/btn01" android:textSize="22sp"
+                        android:textAlignment="center" android:backgroundTint="#DF5022"
+                        android:fontFamily="sans-serif" android:textStyle="bold"/>
+
+
+            </TableRow>
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/tblRow1">
+
+                <Button
+                        android:text="My Cars"
+                        android:layout_weight="1"
+                        android:layout_width="200dp"
+                        android:layout_height="130dp"
+                        android:layout_column="0"
+                        android:id="@+id/btn10" android:textSize="30sp"
+                        android:textAlignment="center" android:backgroundTint="#1432DC"
+                        android:fontFamily="sans-serif" android:textStyle="bold"/>
+                <Button
+                        android:text="My Cards"
+                        android:layout_weight="1"
+                        android:layout_width="200dp"
+                        android:layout_height="fill_parent"
+                        android:layout_column="1"
+                        android:id="@+id/btn11" android:textSize="30sp"
+                        android:textAlignment="center" android:backgroundTint="#DF2222"
+                        android:fontFamily="sans-serif" android:textStyle="bold"/>
+
+
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/tblRow2">
+
+                <Button
+                        android:text="Petrol Station Value"
+                        android:layout_weight="1"
+                        android:layout_width="200dp"
+                        android:layout_height="130dp"
+                        android:layout_column="0"
+                        android:id="@+id/btn20" android:textSize="22sp"
+                        android:textAlignment="center" android:backgroundTint="#FFEB3B"
+                        android:fontFamily="sans-serif" android:textStyle="bold"/>
+                <Button
+                        android:text="Car Fuel Efficiencies"
+                        android:layout_weight="1"
+                        android:layout_width="200dp"
+                        android:layout_height="130dp"
+                        android:layout_column="1"
+                        android:id="@+id/btn21" android:textSize="22sp"
+                        android:textAlignment="center" android:backgroundTint="#00C853"
+                        android:fontFamily="sans-serif" android:textStyle="bold"/>
+
+
+            </TableRow>
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/tblRow3">
+
+                <Button
+                        android:text="View My Fill Ups"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:id="@+id/btn30" android:textSize="24sp"
+                        android:textAlignment="center" android:backgroundTint="#00B8D4"
+                        android:fontFamily="sans-serif" android:textStyle="bold"/>
+
+
+            </TableRow>
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/tblRow4">
+
+                <TextView
+                        android:text="Current Fuel Prices"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="178dp"
+                        android:id="@+id/txtViewPrice" android:textSize="24sp"
+                        android:textAlignment="center" android:backgroundTint="#F1F3F4"
+                        android:fontFamily="sans-serif" android:textStyle="bold" android:background="#502929"
+                        android:textColor="#000000"/>
+
+
+            </TableRow>
+        </TableLayout>
+    </FrameLayout>
+
+</FrameLayout>
