@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
+             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="#0099cc"
@@ -24,24 +24,13 @@
                       android:layout_gravity="bottom|center_horizontal"
                       android:background="#000000"
                       android:orientation="horizontal"
-                      tools:ignore="UselessParent" android:backgroundTint="#020101" android:foregroundTint="#000000">
-
-            <Button android:id="@+id/dummy_button"
-                    style="?metaButtonBarButtonStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="EXIT"
-                    android:background="#DD0000"
-                    android:fontFamily="serif-monospace" android:textSize="36sp" android:textStyle="bold"
-                    android:textColor="#050505"/>
-
-        </LinearLayout>
+                      tools:ignore="UselessParent" android:backgroundTint="#020101" android:foregroundTint="#000000"/>
         <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="674dp"
+                android:layout_height="484dp"
                 android:id="@+id/tableLayout"
                 android:background="#FBFBFB"
+
 
         >
 
@@ -49,25 +38,26 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:id="@+id/tblRow0"
+
             >
 
                 <Button
                         android:text="I Am At The Petrol Station"
                         android:layout_weight="1"
-                        android:layout_width="200dp"
+                        android:layout_width="100dp"
                         android:layout_height="130dp"
                         android:layout_column="0"
-                        android:layout_gravity="center" android:id="@+id/btn00" android:textSize="22sp"
-                        android:textAlignment="center" android:backgroundTint="#1CE624"
+                        android:id="@+id/btn00" android:textSize="22sp"
+                        android:layout_gravity="fill" android:backgroundTint="#1CE624"
                         android:fontFamily="sans-serif" android:textStyle="bold"/>
                 <Button
                         android:text="Account Details"
                         android:layout_weight="1"
-                        android:layout_width="200dp"
+                        android:layout_width="100dp"
                         android:layout_height="130dp"
                         android:layout_column="1"
-                        android:layout_gravity="center" android:id="@+id/btn01" android:textSize="22sp"
-                        android:textAlignment="center" android:backgroundTint="#DF5022"
+                        android:id="@+id/btn01" android:textSize="22sp"
+                        android:layout_gravity="fill" android:backgroundTint="#DF5022"
                         android:fontFamily="sans-serif" android:textStyle="bold"/>
 
 
@@ -80,20 +70,20 @@
                 <Button
                         android:text="My Cars"
                         android:layout_weight="1"
-                        android:layout_width="200dp"
+                        android:layout_width="100dp"
                         android:layout_height="130dp"
                         android:layout_column="0"
                         android:id="@+id/btn10" android:textSize="30sp"
-                        android:textAlignment="center" android:backgroundTint="#1432DC"
+                        android:layout_gravity="fill" android:backgroundTint="#1432DC"
                         android:fontFamily="sans-serif" android:textStyle="bold"/>
                 <Button
                         android:text="My Cards"
                         android:layout_weight="1"
-                        android:layout_width="200dp"
+                        android:layout_width="100dp"
                         android:layout_height="fill_parent"
                         android:layout_column="1"
                         android:id="@+id/btn11" android:textSize="30sp"
-                        android:textAlignment="center" android:backgroundTint="#DF2222"
+                        android:layout_gravity="fill" android:backgroundTint="#DF2222"
                         android:fontFamily="sans-serif" android:textStyle="bold"/>
 
 
@@ -107,20 +97,20 @@
                 <Button
                         android:text="Petrol Station Value"
                         android:layout_weight="1"
-                        android:layout_width="200dp"
+                        android:layout_width="100dp"
                         android:layout_height="130dp"
                         android:layout_column="0"
                         android:id="@+id/btn20" android:textSize="22sp"
-                        android:textAlignment="center" android:backgroundTint="#FFEB3B"
-                        android:fontFamily="sans-serif" android:textStyle="bold"/>
+                        android:backgroundTint="#FFEB3B"
+                        android:fontFamily="sans-serif" android:textStyle="bold" android:layout_gravity="fill"/>
                 <Button
                         android:text="Car Fuel Efficiencies"
                         android:layout_weight="1"
-                        android:layout_width="200dp"
+                        android:layout_width="100dp"
                         android:layout_height="130dp"
                         android:layout_column="1"
                         android:id="@+id/btn21" android:textSize="22sp"
-                        android:textAlignment="center" android:backgroundTint="#00C853"
+                        android:layout_gravity="fill" android:backgroundTint="#00C853"
                         android:fontFamily="sans-serif" android:textStyle="bold"/>
 
 
@@ -133,7 +123,7 @@
                 <Button
                         android:text="View My Fill Ups"
                         android:layout_weight="1"
-                        android:layout_width="match_parent"
+                        android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:id="@+id/btn30" android:textSize="24sp"
                         android:textAlignment="center" android:backgroundTint="#00B8D4"
@@ -146,19 +136,32 @@
                     android:layout_height="fill_parent"
                     android:id="@+id/tblRow4">
 
-                <TextView
-                        android:text="Current Fuel Prices"
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="178dp"
-                        android:id="@+id/txtViewPrice" android:textSize="24sp"
-                        android:textAlignment="center" android:backgroundTint="#F1F3F4"
-                        android:fontFamily="sans-serif" android:textStyle="bold" android:background="#502929"
-                        android:textColor="#000000"/>
-
 
             </TableRow>
         </TableLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <Button android:id="@+id/btnExit"
+                    android:layout_width="match_parent"
+                    android:layout_height="76dp"
+                    android:layout_weight="1"
+                    android:text="LOG OUT"
+                    android:background="#DD0000"
+                    android:fontFamily="serif-monospace" android:textSize="66sp" android:textStyle="bold"
+                    android:textColor="#050505"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="600dp" app:layout_constraintStart_toStartOf="parent"
+                    android:textAlignment="center"/>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="115dp" android:id="@+id/txtViewPrice"
+                    android:textSize="24sp" android:textStyle="bold" android:textColor="#000000"
+                    android:background="#FFFFFF" app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="488dp" app:layout_constraintStart_toStartOf="parent"
+                    android:gravity="center" android:textAlignment="center"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
 </FrameLayout>
