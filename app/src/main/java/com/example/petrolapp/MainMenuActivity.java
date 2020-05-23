@@ -25,18 +25,6 @@ import java.util.ArrayList;
  * status bar and navigation/system bar) with user interaction.
  */
 public class MainMenuActivity extends AppCompatActivity {
-    /**
-     * Whether or not the system UI should be auto-hidden after
-     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-     */
-
-
-
-
-    /**
-     * Some older devices needs a small delay between UI widget updates
-     * and a change of the status and navigation bar.
-     */
 
 
 
@@ -47,10 +35,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main_menu);
         final String[] price = new String[1];
-
-
-
-
 
 
         final Thread thread = new Thread(new Runnable() {
@@ -64,7 +48,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         public void run() {
 
                             TextView myTextView = findViewById(R.id.txtViewPrice);
-                            myTextView.setText("The Current Petrol Price Is "+"\n"+ price[0]);
+                            myTextView.setText("Current Petrol Price: "+ price[0]);
                         }
                     });
 
@@ -106,13 +90,6 @@ public class MainMenuActivity extends AppCompatActivity {
       return fuelPrices.get(fuelPrices.size() - 1);
 
     }
-
-
-
-
-
-
-
 
     }
 
