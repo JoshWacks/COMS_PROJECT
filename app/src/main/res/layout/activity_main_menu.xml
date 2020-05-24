@@ -45,7 +45,7 @@
 
                 android:id="@+id/btnPetrol" android:textSize="24sp"
                 android:backgroundTint="#1CE624"
-                android:fontFamily="sans-serif" android:textStyle="bold"/>
+                android:fontFamily="sans-serif" android:textStyle="bold" android:onClick="atStation"/>
 
     </TableRow>
 
@@ -126,7 +126,7 @@
                 android:textSize="26sp"
                 android:backgroundTint="#00B8D4"
                 android:fontFamily="sans-serif"
-                android:textStyle="bold"/>
+                android:textStyle="bold" android:onClick="viewFillups"/>
         <Button
                 android:text="Account Details"
                 android:layout_weight="1"
@@ -170,7 +170,7 @@
                 android:textSize="30sp"
                 android:backgroundTint="#D50000"
                 android:fontFamily="sans-serif"
-                android:textStyle="bold"/>
+                android:textStyle="bold" android:onClick="logOut"/>
 
     </TableRow>
 

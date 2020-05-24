@@ -5,6 +5,7 @@
              android:layout_height="match_parent"
              android:background="#FFFFFF"
              tools:context=".MainMenuActivity"
+             android:fitsSystemWindows="true"
 >
 
 
@@ -45,7 +46,7 @@
 
                 android:id="@+id/btnPetrol" android:textSize="24sp"
                 android:backgroundTint="#1CE624"
-                android:fontFamily="sans-serif" android:textStyle="bold"/>
+                android:fontFamily="sans-serif" android:textStyle="bold" android:onClick="atStation"/>
 
     </TableRow>
 

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="#FFFFFF"
+             tools:context=".ViewFillUpsActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/fullscreen_content">
+
+        <TextView
+                android:text="Your Fill Ups"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="84dp" android:id="@+id/txtHeading" android:textStyle="bold"
+                android:textSize="38sp" android:gravity="center|top" android:fontFamily="@font/autour_one"
+                android:textColor="#00C853" android:textAllCaps="true" android:background="#FFFFFF"
+                android:textAlignment="center" android:foregroundTint="#101010"
+                app:layout_constraintBottom_toTopOf="@+id/scrollView"
+                android:layout_marginTop="10dp" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        <ScrollView
+                android:layout_width="393dp"
+                android:layout_height="465dp"
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="92dp"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="1dp"
+                android:id="@+id/scrollView" app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toEndOf="parent">
+            <TableLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:id="@+id/tblLayout">
+                <TableRow android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:id="@+id/rowHeadings"
+
+                >
+                    <TextView
+                            android:text="Station"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtHeading0" android:textStyle="bold" android:textSize="17sp"
+                            android:fontFamily="monospace" android:textColor="#0E249F" android:padding="4dp"
+                            android:paddingStart="4dp"/>
+
+                    <TextView
+                            android:text="Date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtHeading1" android:textStyle="bold" android:textSize="17sp"
+                            android:fontFamily="monospace" android:textColor="#0E249F" android:padding="4dp"
+                            android:paddingStart="4dp" android:background="#FF7043"/>
+                    <TextView
+                            android:text="Litres"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtHeading2" android:textStyle="bold" android:textSize="17sp"
+                            android:fontFamily="monospace" android:textColor="#0E249F" android:padding="4dp"
+                            android:paddingStart="4dp" android:background="#29B6F6"/>
+                    <TextView
+                            android:text="Cost(R)"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtHeading3" android:textStyle="bold" android:textSize="17sp"
+                            android:fontFamily="monospace" android:textColor="#0E249F" android:padding="4dp"
+                            android:paddingStart="4dp" android:background="#66BB6A"/>
+                    <TextView
+                            android:text="Mileage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtHeading4" android:textStyle="bold" android:textSize="17sp"
+                            android:fontFamily="monospace" android:textColor="#0E249F" android:padding="4dp"
+                            android:paddingStart="4dp" android:background="#EC407A"/>
+
+                    <!--ToDo add a efficiency element when they click on a row-->
+
+                </TableRow>
+
+
+            </TableLayout>
+
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:fitsSystemWindows="true">
+
+        <LinearLayout android:id="@+id/fullscreen_content_controls"
+                      style="?metaButtonBarStyle"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="bottom|center_horizontal"
+                      android:background="@color/black_overlay"
+                      android:orientation="horizontal"
+                      tools:ignore="UselessParent">
+            <Button android:id="@+id/btnBack"
+                    style="?metaButtonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="back" android:backgroundTint="#FF0000" android:textSize="24sp"
+                    android:textStyle="bold" android:fontFamily="monospace" android:textColor="#F30000"
+            />
+        </LinearLayout>
+    </FrameLayout>
+
+</FrameLayout>

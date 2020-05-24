@@ -1,23 +1,33 @@
 package com.example.petrolapp;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 
-import android.os.Looper;
+
+import android.content.Intent;
+
 import android.widget.TextView;
-import androidx.annotation.UiThread;
-import androidx.appcompat.app.ActionBar;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
+
 import android.view.View;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
-
-import java.io.IOException;
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;;
 import java.util.ArrayList;
 
 /**
@@ -26,10 +36,26 @@ import java.util.ArrayList;
  */
 public class MainMenuActivity extends AppCompatActivity {
 
+    public void atStation(View view){
+        Intent i=new Intent(getApplicationContext(),AtStationActivity.class);
+        startActivity(i);
+    }
+    public void logOut(View view){
+        Intent i=new Intent(getApplicationContext(),GPS_Service.class);
+        stopService(i);//Ends the GPS service when the logout before the app closes
+        System.exit(0);
+    }
+    public void viewFillups(View view){
+        Intent i=new Intent(getApplicationContext(),ViewFillUpsActivity.class);
+        startActivity(i);
+    }
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent i=new Intent(getApplicationContext(),GPS_Service.class);
+        startService(i);
 
         super.onCreate(savedInstanceState);
 
