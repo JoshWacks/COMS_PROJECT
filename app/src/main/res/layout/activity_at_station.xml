@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
+             android:layout_width="wrap_content"
              android:layout_height="match_parent"
              android:background="#FFFFFF"
              tools:context=".AtStationActivity">
@@ -30,9 +30,10 @@
                 android:layout_marginTop="547dp"/>
         <ImageView
                 android:layout_width="402dp"
-                android:layout_height="733dp" app:srcCompat="@drawable/at_station_image2"
-                android:id="@+id/img" app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:layout_height="636dp" app:srcCompat="@drawable/at_station_image2"
+                android:id="@+id/img"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="97dp" app:layout_constraintStart_toStartOf="parent"/>
         <TextView
                 android:text="AT THE STATION"
                 android:layout_width="match_parent"
@@ -62,16 +63,16 @@
                 android:textColor="#00B8D4" app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="298dp"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="2dp"
                 app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="359dp"
-                android:fontFamily="serif" android:textSize="36sp"
+                android:fontFamily="serif" android:textSize="34sp"
                 android:textColorHint="#00B8D4" android:textAlignment="textStart"/>
         <EditText
-                android:layout_width="414dp"
+                android:layout_width="wrap_content"
                 android:layout_height="88dp"
                 android:ems="10"
                 android:id="@+id/txtInLitres"
                 android:hint="Enter Your Litres" android:textStyle="bold"
                 android:textColor="#00B8D4"
-                android:fontFamily="serif" android:textSize="36sp"
+                android:fontFamily="serif" android:textSize="34sp"
                 android:textAlignment="textStart"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="405dp"
                 app:layout_constraintStart_toStartOf="parent" android:inputType="numberDecimal"

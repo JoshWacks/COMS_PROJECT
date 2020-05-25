@@ -1,6 +1,12 @@
 package com.example.petrolapp;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +19,69 @@ import android.view.View;
  * status bar and navigation/system bar) with user interaction.
  */
 public class ViewFillUpsActivity extends AppCompatActivity {
+    private static String user;
+    private static String liscencePlate;
+
+    private TableLayout tbl;
+
+    public void fillTable(){
+
+        tbl=findViewById(R.id.tblLayout);
+        ViewGroup.LayoutParams param = findViewById(R.id.txtHeading0).getLayoutParams();
+        TableRow tr = new TableRow(this);
+        TableRow.LayoutParams tableRowParams=new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.WRAP_CONTENT);
+
+        tr.setLayoutParams(tableRowParams);
+
+        TextView station=new TextView(this);
+        station.setText("Shell");
+        station.setLayoutParams(param);
+        station.setTextAppearance(R.style.fontForTextViews);
+        tr.addView(station);
+
+        TextView date=new TextView(this);
+        String d=java.time.LocalDate.now()+"";
+        date.setText(d);
+        date.setLayoutParams(param);
+        date.setTextAppearance(R.style.fontForTextViews);
+
+        tr.addView(date);
+
+        TextView litres=new TextView(this);
+        litres.setText("42,1");
+        litres.setLayoutParams(param);
+        litres.setTextAppearance(R.style.fontForTextViews);
+        tr.addView(litres);
+
+        TextView cost=new TextView(this);
+        cost.setText("928,21");
+        cost.setLayoutParams(param);
+
+        cost.setTextAppearance(R.style.fontForTextViews);
+        tr.addView(cost);
+
+        TextView mileage=new TextView(this);
+        mileage.setText("233,21");
+        mileage.setLayoutParams(param);
+        mileage.setTextAppearance(R.style.fontForTextViews);
+        tr.addView(mileage);
+
+        tbl.addView(tr);
+
+
+
+    }
+
+
+
+    public void goBack(View view){
+        Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
+        startActivity(i);
+    }
+
+
+
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -88,6 +157,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_view_fill_ups);
+        fillTable();
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
