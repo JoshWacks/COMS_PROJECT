@@ -42,6 +42,7 @@ public class AtStationActivity extends AppCompatActivity {
     }
 
     private boolean runtime_permissions(){
+
         if(Build.VERSION.SDK_INT>=23&& ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED&& ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
@@ -173,6 +174,8 @@ public class AtStationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_at_station);
+        Intent i=new Intent(getApplicationContext(),GPS_Service.class);
+        startService(i);
 
         btnDone=findViewById(R.id.btnDone);
 

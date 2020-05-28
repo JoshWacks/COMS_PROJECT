@@ -54,8 +54,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent i=new Intent(getApplicationContext(),GPS_Service.class);
-        startService(i);
+//        Intent i=new Intent(getApplicationContext(),GPS_Service.class);
+//        startService(i);
 
         super.onCreate(savedInstanceState);
 

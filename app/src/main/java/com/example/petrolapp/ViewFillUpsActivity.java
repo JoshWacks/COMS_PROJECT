@@ -2,6 +2,7 @@ package com.example.petrolapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -28,45 +29,81 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
         tbl=findViewById(R.id.tblLayout);
         ViewGroup.LayoutParams param = findViewById(R.id.txtHeading0).getLayoutParams();
-        TableRow tr = new TableRow(this);
-        TableRow.LayoutParams tableRowParams=new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.WRAP_CONTENT);
 
-        tr.setLayoutParams(tableRowParams);
+        for (int i = 0; i < 250; i++) {
+            TableRow tr = new TableRow(this);
+            TableRow.LayoutParams tableRowParams=new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.WRAP_CONTENT);
 
-        TextView station=new TextView(this);
-        station.setText("Shell");
-        station.setLayoutParams(param);
-        station.setTextAppearance(R.style.fontForTextViews);
-        tr.addView(station);
+            tr.setLayoutParams(tableRowParams);
 
-        TextView date=new TextView(this);
-        String d=java.time.LocalDate.now()+"";
-        date.setText(d);
-        date.setLayoutParams(param);
-        date.setTextAppearance(R.style.fontForTextViews);
 
-        tr.addView(date);
+            TextView station = new TextView(this);
+            station.setTextAlignment(4);
+            if(i%2==0){
+                station.setText("");
+            }else {
+                station.setText("Shell");
+            }
+            station.setLayoutParams(param);
+            station.setTextAppearance(R.style.fontForTextViews);
+            tr.addView(station);
 
-        TextView litres=new TextView(this);
-        litres.setText("42,1");
-        litres.setLayoutParams(param);
-        litres.setTextAppearance(R.style.fontForTextViews);
-        tr.addView(litres);
+            TextView date = new TextView(this);
+            date.setTextAlignment(4);
+            date.setBackgroundColor(Color.rgb(0, 170, 240));
+            String d = java.time.LocalDate.now() + "";
+            if(i%2==0){
+                date.setText("");
+            }else {
+                date.setText(d);
 
-        TextView cost=new TextView(this);
-        cost.setText("928,21");
-        cost.setLayoutParams(param);
+            }
+            date.setLayoutParams(param);
+            date.setTextAppearance(R.style.fontForTextViews);
+            tr.addView(date);
 
-        cost.setTextAppearance(R.style.fontForTextViews);
-        tr.addView(cost);
+            TextView litres = new TextView(this);
+            litres.setBackgroundColor(Color.GREEN);
+            litres.setTextAlignment(4);
+            if(i%2==0){
+                litres.setText("");
 
-        TextView mileage=new TextView(this);
-        mileage.setText("233,21");
-        mileage.setLayoutParams(param);
-        mileage.setTextAppearance(R.style.fontForTextViews);
-        tr.addView(mileage);
+            }else {
 
-        tbl.addView(tr);
+                litres.setText("42,1");
+            }
+            litres.setLayoutParams(param);
+            litres.setTextAppearance(R.style.fontForTextViews);
+            tr.addView(litres);
+
+            TextView cost = new TextView(this);
+            cost.setBackgroundColor(Color.rgb(240, 100, 100));
+            if(i%2==0){
+                cost.setText("");
+            }else {
+                cost.setText("928,21");
+
+            }
+            cost.setLayoutParams(param);
+            cost.setTextAlignment(4);
+            cost.setTextAppearance(R.style.fontForTextViews);
+            tr.addView(cost);
+
+            TextView mileage = new TextView(this);
+            mileage.setBackgroundColor(Color.rgb(255, 170, 0));
+            mileage.setTextAlignment(4);
+            if(i%2==0){
+                mileage.setText("");
+            }else {
+                mileage.setText("233,21");
+
+            }
+            mileage.setLayoutParams(param);
+            mileage.setTextAppearance(R.style.fontForTextViews);
+            tr.addView(mileage);
+
+            tbl.addView(tr);
+        }
 
 
 
