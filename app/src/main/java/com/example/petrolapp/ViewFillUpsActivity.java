@@ -1,6 +1,7 @@
 package com.example.petrolapp;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.ViewGroup;
@@ -14,6 +15,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.SQLOutput;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -29,84 +35,114 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
         tbl=findViewById(R.id.tblLayout);
         ViewGroup.LayoutParams param = findViewById(R.id.txtHeading0).getLayoutParams();
+        ContentValues cv=new ContentValues();
+        cv.put("USERNAME","JoshW");
 
-        for (int i = 0; i < 250; i++) {
-            TableRow tr = new TableRow(this);
-            TableRow.LayoutParams tableRowParams=new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.WRAP_CONTENT);
+        Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
 
-            tr.setLayoutParams(tableRowParams);
-
-
-            TextView station = new TextView(this);
-            station.setTextAlignment(4);
-            if(i%2==0){
-                station.setText("");
-            }else {
-                station.setText("Shell");
+        c.fetchInfo(ViewFillUpsActivity.this, "fetching_username",cv, new RequestHandler() {
+            @Override
+            public void processResponse(String response) {
+                procsesJson(response);
             }
-            station.setLayoutParams(param);
-            station.setTextAppearance(R.style.fontForTextViews);
-            tr.addView(station);
+        });
 
-            TextView date = new TextView(this);
-            date.setTextAlignment(4);
-            date.setBackgroundColor(Color.rgb(0, 170, 240));
-            String d = java.time.LocalDate.now() + "";
-            if(i%2==0){
-                date.setText("");
-            }else {
-                date.setText(d);
+//        for (int i = 0; i < 250; i++) {
+//            TableRow tr = new TableRow(this);
+//            TableRow.LayoutParams tableRowParams=new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.WRAP_CONTENT);
+//
+//            tr.setLayoutParams(tableRowParams);
+//
+//
+//            TextView station = new TextView(this);
+//            station.setTextAlignment(4);
+//            if(i%2==0){
+//                station.setText("");
+//            }else {
+//                station.setText("Shell");
+//            }
+//            station.setLayoutParams(param);
+//            station.setTextAppearance(R.style.fontForTextViews);
+//            tr.addView(station);
+//
+//            TextView date = new TextView(this);
+//            date.setTextAlignment(4);
+//            date.setBackgroundColor(Color.rgb(0, 170, 240));
+//            String d = java.time.LocalDate.now() + "";
+//            if(i%2==0){
+//                date.setText("");
+//            }else {
+//                date.setText(d);
+//
+//            }
+//            date.setLayoutParams(param);
+//            date.setTextAppearance(R.style.fontForTextViews);
+//            tr.addView(date);
+//
+//            TextView litres = new TextView(this);
+//            litres.setBackgroundColor(Color.GREEN);
+//            litres.setTextAlignment(4);
+//            if(i%2==0){
+//                litres.setText("");
+//
+//            }else {
+//
+//                litres.setText("42,1");
+//            }
+//            litres.setLayoutParams(param);
+//            litres.setTextAppearance(R.style.fontForTextViews);
+//            tr.addView(litres);
+//
+//            TextView cost = new TextView(this);
+//            cost.setBackgroundColor(Color.rgb(240, 100, 100));
+//            if(i%2==0){
+//                cost.setText("");
+//            }else {
+//                cost.setText("928,21");
+//
+//            }
+//            cost.setLayoutParams(param);
+//            cost.setTextAlignment(4);
+//            cost.setTextAppearance(R.style.fontForTextViews);
+//            tr.addView(cost);
+//
+//            TextView mileage = new TextView(this);
+//            mileage.setBackgroundColor(Color.rgb(255, 170, 0));
+//            mileage.setTextAlignment(4);
+//            if(i%2==0){
+//                mileage.setText("");
+//            }else {
+//                mileage.setText("233,21");
+//
+//            }
+//            mileage.setLayoutParams(param);
+//            mileage.setTextAppearance(R.style.fontForTextViews);
+//            tr.addView(mileage);
+//
+//            tbl.addView(tr);
+//        }
+
+
+
+    }
+    public void procsesJson(String json){
+        try {
+            JSONArray jsonArray=new JSONArray(json);
+            for (int i = 0; i <jsonArray.length() ; i++) {
+                JSONObject item=jsonArray.getJSONObject(i);
+                String username =item.getString("USERNAME");
+                String fn=item.getString("FIRST_NAME");
+                String ln =item.getString("LAST_NAME");
+                String email=item.getString("EMAIL_ADDRESS");
+                String password=item.getString("PASSWORD");
+
+                System.out.println(username+" "+fn+" "+ln+" "+email+" "+password);
+
 
             }
-            date.setLayoutParams(param);
-            date.setTextAppearance(R.style.fontForTextViews);
-            tr.addView(date);
-
-            TextView litres = new TextView(this);
-            litres.setBackgroundColor(Color.GREEN);
-            litres.setTextAlignment(4);
-            if(i%2==0){
-                litres.setText("");
-
-            }else {
-
-                litres.setText("42,1");
-            }
-            litres.setLayoutParams(param);
-            litres.setTextAppearance(R.style.fontForTextViews);
-            tr.addView(litres);
-
-            TextView cost = new TextView(this);
-            cost.setBackgroundColor(Color.rgb(240, 100, 100));
-            if(i%2==0){
-                cost.setText("");
-            }else {
-                cost.setText("928,21");
-
-            }
-            cost.setLayoutParams(param);
-            cost.setTextAlignment(4);
-            cost.setTextAppearance(R.style.fontForTextViews);
-            tr.addView(cost);
-
-            TextView mileage = new TextView(this);
-            mileage.setBackgroundColor(Color.rgb(255, 170, 0));
-            mileage.setTextAlignment(4);
-            if(i%2==0){
-                mileage.setText("");
-            }else {
-                mileage.setText("233,21");
-
-            }
-            mileage.setLayoutParams(param);
-            mileage.setTextAppearance(R.style.fontForTextViews);
-            tr.addView(mileage);
-
-            tbl.addView(tr);
+        } catch ( JSONException e) {
+            e.printStackTrace();
         }
-
-
-
     }
 
 
