@@ -174,8 +174,11 @@ public class AtStationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_at_station);
-        Intent i=new Intent(getApplicationContext(),GPS_Service.class);
-        startService(i);
+        View decorView=getWindow().getDecorView();
+        int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         btnDone=findViewById(R.id.btnDone);
 

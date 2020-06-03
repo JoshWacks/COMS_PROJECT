@@ -73,7 +73,7 @@
 
                 android:id="@+id/btnCars"
                 android:textSize="26sp"
-                android:backgroundTint="#1432DC"
+                android:backgroundTint="#FF6D00"
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"/>
 
@@ -141,30 +141,43 @@
 
 
     </TableRow>
+
     <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/tblRow4">
 
 
         <TextView
-                android:layout_width="311dp"
-                android:layout_height="wrap_content" android:id="@+id/txtViewPrice" android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/txtViewPPrice" android:textStyle="bold"
                 android:textSize="26sp" android:text="Current Petrol Price :" android:textColor="#000000"
                 android:textAlignment="textStart"/>
     </TableRow>
 
     <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/tblRow5">
+
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/txtViewDPrice" android:textStyle="bold"
+                android:textSize="26sp" android:text="Current Diesal Price :" android:textColor="#000000"
+                android:textAlignment="textStart"/>
+    </TableRow>
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tblRow6">
 
 
         <Button
                 android:text="Log Out"
                 android:layout_weight="1"
                 android:layout_width="399dp"
-                android:layout_height="96dp"
+                android:layout_height="80dp"
 
                 android:id="@+id/btnExit"
                 android:textSize="30sp"

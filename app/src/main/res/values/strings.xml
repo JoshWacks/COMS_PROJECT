@@ -8,4 +8,10 @@
     <string name="title_activity_at_station">AtStationActivity</string>
 
     <string name="title_activity_view_fill_ups">ViewFillUpsActivity</string>
+    <string-array name="sort_array">
+        <item>date</item>
+        <item>litres</item>
+        <item>cost</item>
+        <item>mileage</item>
+    </string-array>
 </resources>

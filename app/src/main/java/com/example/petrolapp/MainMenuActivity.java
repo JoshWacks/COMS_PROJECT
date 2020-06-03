@@ -1,11 +1,16 @@
 package com.example.petrolapp;
-
+//To-do
+//Get Current Diesal Price
+//Re-do Main menu layout
+//consider 2 screens and simple layout with paint backround
 
 
 import android.content.Intent;
 
+import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -54,14 +59,21 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        Intent i=new Intent(getApplicationContext(),GPS_Service.class);
-//        startService(i);
+        Intent i=new Intent(getApplicationContext(),GPS_Service.class);
+        startService(i);
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main_menu);
-        final String[] price = new String[1];
+        View decorView=getWindow().getDecorView();
+        int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
+        setContentView(R.layout.activity_main_menu);
+
+        final String[] price = new String[1];
 
         final Thread thread = new Thread(new Runnable() {
 
@@ -73,7 +85,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            TextView myTextView = findViewById(R.id.txtViewPrice);
+                            TextView myTextView = findViewById(R.id.txtViewPPrice);
                             myTextView.setText("Current Petrol Price: "+ price[0]);
                         }
                     });
