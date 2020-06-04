@@ -1,7 +1,7 @@
 package com.example.petrolapp;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.content.*;
 import android.location.Location;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,10 +10,7 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.view.View;
@@ -24,6 +21,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import com.github.mikephil.charting.charts.LineChart;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -32,6 +36,11 @@ import androidx.core.content.ContextCompat;
 public class AtStationActivity extends AppCompatActivity {
     private double x_co;
     private double y_co;
+    private String user="JoshW";
+    private String stationAt="BP Central Service Station";
+    TextView txtStation;
+    TextView txtDate;
+    TextView txtCar;
     private Button btnDone;
 
     private BroadcastReceiver broadcastReceiver;
@@ -103,6 +112,65 @@ public class AtStationActivity extends AppCompatActivity {
         }
     }
 
+    public void configure(){
+        txtStation=findViewById(R.id.txtViewStation);
+        txtDate=findViewById(R.id.txtViewDate);
+
+        //To-do check GPS for their current petrol station
+        //To-do check if they have 2 cars and if so, let them choose which car they are filling up
+
+        txtStation.append(stationAt);
+        LocalDate d= LocalDate.now();//saves it for the query
+        txtDate.append(d+" ");//sets the current date
+
+
+
+
+    }
+
+    public String getDesc(){
+        ContentValues cv=new ContentValues();
+        cv.put("USERNAME",user);
+        final String[] desc = {""};
+
+        Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
+
+        c.fetchInfo(AtStationActivity.this, "get_CAR_DESC",cv, new RequestHandler() {
+            @Override
+            public void processResponse(String response) {
+
+                try {
+                    desc[0] =procsesJson(response);
+                    txtCar=findViewById(R.id.txtViewCar);
+                    txtCar.append(desc[0]);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        return desc[0];
+    }
+
+    public String procsesJson(String json) throws JSONException {
+        JSONArray jsonArray=new JSONArray(json);
+        String brand ="";
+        String model="";
+        for (int i = 0; i <jsonArray.length() ; i++) {//check if they have 2 cars
+            JSONObject item=jsonArray.getJSONObject(i);
+
+            brand=item.getString("CAR_BRAND");
+            model=item.getString("CAR_MODEL");
+
+        }
+
+        return brand+" "+model;
+    }
+
+
+
+
     private static final boolean AUTO_HIDE = true;
 
     /**
@@ -127,11 +195,8 @@ public class AtStationActivity extends AppCompatActivity {
             // Note that some of these constants are new as of API 16 (Jelly Bean)
             // and API 19 (KitKat). It is safe to use them, as they are inlined
             // at compile-time and do nothing on earlier devices.
-            mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            mContentView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN
+                    |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
     };
@@ -179,6 +244,8 @@ public class AtStationActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+        configure();
+        getDesc();
 
         btnDone=findViewById(R.id.btnDone);
 
@@ -245,13 +312,12 @@ public class AtStationActivity extends AppCompatActivity {
     @SuppressLint("InlinedApi")
     private void show() {
         // Show the system bar
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        mVisible = true;
-
-        // Schedule a runnable to display UI elements after a delay
         mHideHandler.removeCallbacks(mHidePart2Runnable);
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.show();
+        mVisible = true;
     }
 
     /**

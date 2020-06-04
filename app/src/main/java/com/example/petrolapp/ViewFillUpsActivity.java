@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Date;
 import java.sql.SQLOutput;
 
 /**
@@ -28,10 +29,8 @@ import java.sql.SQLOutput;
  */
 public class ViewFillUpsActivity extends AppCompatActivity {
     private static String user="JoshW";
-
-
-    private TableLayout tbl;
-
+    private TableLayout tbl;;
+    private String JSON;
     public void fillTable(){
 
         ContentValues cv=new ContentValues();
@@ -42,20 +41,15 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         c.fetchInfo(ViewFillUpsActivity.this, "get_CAR_LOG",cv, new RequestHandler() {
             @Override
             public void processResponse(String response) {
-
-                procsesJson(response);
+                JSON=response;
+                procsesJson(JSON);
             }
         });
-
-//        for (int i = 0; i < 250; i++) {
-//
-//        }
-
 
 
     }
     public void procsesJson(String json){
-        tbl=findViewById(R.id.tblLayout);
+
         ViewGroup.LayoutParams param = findViewById(R.id.txtHeading0).getLayoutParams();
         TableRow.LayoutParams tableRowParams=new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
 
@@ -65,8 +59,6 @@ public class ViewFillUpsActivity extends AppCompatActivity {
             for (int i = 0; i <jsonArray.length() ; i++) {
                 TableRow blankLine=new TableRow(this);//every record will have a blank line between them
                 blankLine.setLayoutParams(tableRowParams);
-
-
 
                 JSONObject item=jsonArray.getJSONObject(i);
 
@@ -80,6 +72,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                 double eff=item.getDouble("EFFICIENCY");
 
                 TableRow tr = new TableRow(this);
+                tr.setId(42);
                 tr.setLayoutParams(tableRowParams);
                 tr.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -87,6 +80,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                         Bundle extra=new Bundle();
                         extra.putString("name",stationFullName);
                         extra.putDouble("eff",eff);
+                        extra.putBoolean("found",true);
                         Intent i=new Intent(getApplicationContext(),popupApplication.class);
                         i.putExtras(extra);
                         startActivity(i);
@@ -168,7 +162,149 @@ public class ViewFillUpsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    public void showAll(View view) throws JSONException {
+        JSONArray jsonArray=new JSONArray(JSON);
+        int numViews=tbl.getChildCount();
+        if(numViews<jsonArray.length()*2+1) {
+            tbl.removeViews(1,numViews-1);
+            procsesJson(JSON);
+        }
+    }
 
+    public void search(View view) throws JSONException {
+        ViewGroup.LayoutParams param = findViewById(R.id.txtHeading0).getLayoutParams();
+        TableRow.LayoutParams tableRowParams=new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+
+        TextView txtDate=findViewById(R.id.txtDate);
+        JSONArray jsonArray=new JSONArray(JSON);
+
+        CharSequence req_date= txtDate.getText();
+        txtDate.setText("");
+
+        boolean found=false;//keeps track of if we found a record or not
+
+        for (int i = 0; i <jsonArray.length() ; i++) {
+
+            JSONObject item = jsonArray.getJSONObject(i);
+            String date = item.getString("DATE");
+
+            if(date.contentEquals(req_date)){
+                try {
+                    tbl.removeViews(1,tbl.getChildCount()-1);//removes all the rows except the heading row.
+                }
+                catch (NullPointerException | IndexOutOfBoundsException ex ){
+                    procsesJson(JSON);
+                }
+                TableRow blankLine = new TableRow(this);//every record will have a blank line between them
+                blankLine.setLayoutParams(tableRowParams);
+                found=true;
+
+                String stationFullName = item.getString("PETROL_STATION_NAME");
+                String words[] = stationFullName.split(" ");
+                String station = words[0];
+                double cost = item.getDouble("COST");
+                double mileage = item.getDouble("MILEAGE");
+
+                double litres = item.getDouble("LITRES");
+                double eff = item.getDouble("EFFICIENCY");
+
+                TableRow tr = new TableRow(this);
+                tr.setLayoutParams(tableRowParams);
+                tr.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle extra=new Bundle();
+                        extra.putString("name",stationFullName);
+                        extra.putDouble("eff",eff);
+                        extra.putBoolean("found",true);
+                        Intent i=new Intent(getApplicationContext(),popupApplication.class);
+                        i.putExtras(extra);
+                        startActivity(i);
+                    }
+                });
+
+
+
+                TextView stationView = new TextView(this);
+                stationView.setTextAlignment(4);
+                stationView.setText(station);
+                stationView.setLayoutParams(param);
+                stationView.setTextAppearance(R.style.fontForTextViews);
+                tr.addView(stationView);
+
+                TextView temp0=new TextView(this);
+                temp0.setLayoutParams(param);
+                blankLine.addView(temp0);
+
+                TextView dateView = new TextView(this);
+                dateView.setTextAlignment(4);
+                dateView.setBackgroundColor(Color.rgb(0, 170, 240));
+                dateView.setText(date);
+                dateView.setLayoutParams(param);
+                dateView.setTextAppearance(R.style.fontForTextViews);
+                tr.addView(dateView);
+
+                TextView temp1=new TextView(this);
+                temp1.setLayoutParams(param);
+                temp1.setBackgroundColor(Color.rgb(0, 170, 240));
+                blankLine.addView(temp1);
+
+                TextView litresView = new TextView(this);
+                litresView.setBackgroundColor(Color.GREEN);
+                litresView.setTextAlignment(4);
+                litresView.setText(litres+"");
+                litresView.setLayoutParams(param);
+                litresView.setTextAppearance(R.style.fontForTextViews);
+                tr.addView(litresView);
+
+                TextView temp2=new TextView(this);
+                temp2.setLayoutParams(param);
+                temp2.setBackgroundColor(Color.GREEN);
+                blankLine.addView(temp2);
+
+                TextView costView = new TextView(this);
+                costView.setBackgroundColor(Color.rgb(240, 100, 100));
+                costView.setText(cost+"");
+                costView.setLayoutParams(param);
+                costView.setTextAlignment(4);
+                costView.setTextAppearance(R.style.fontForTextViews);
+                tr.addView(costView);
+
+                TextView temp3=new TextView(this);
+                temp3.setLayoutParams(param);
+                temp3.setBackgroundColor(Color.rgb(240, 100, 100));
+                blankLine.addView(temp3);
+
+                TextView mileageView = new TextView(this);
+                mileageView.setBackgroundColor(Color.rgb(255, 170, 0));
+                mileageView.setTextAlignment(4);
+                mileageView.setText(mileage+"");
+                mileageView.setLayoutParams(param);
+                mileageView.setTextAppearance(R.style.fontForTextViews);
+                tr.addView(mileageView);
+
+
+                TextView temp4=new TextView(this);
+                temp4.setLayoutParams(param);
+                temp4.setBackgroundColor(Color.rgb(255, 170, 0));
+                blankLine.addView(temp4);
+
+                tbl.addView(blankLine);
+                tbl.addView(tr);
+            }
+
+
+        }
+        if(!found){
+            Bundle extra=new Bundle();
+            extra.putBoolean("found",found);
+            Intent i=new Intent(getApplicationContext(),popupApplication.class);
+            i.putExtras(extra);
+            startActivity(i);
+        }
+
+
+    }
 
 
     public void goBack(View view){
@@ -258,6 +394,8 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
         fillTable();
 
+        tbl=findViewById(R.id.tblLayout);
+
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
@@ -311,13 +449,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
     @SuppressLint("InlinedApi")
     private void show() {
-        // Show the system bar
-//        View decorView=getWindow().getDecorView();
-//        int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
-//        decorView.setSystemUiVisibility(uiOptions);
 
-
-        // Schedule a runnable to display UI elements after a delay
         mHideHandler.removeCallbacks(mHidePart2Runnable);
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
         ActionBar actionBar = getSupportActionBar();
