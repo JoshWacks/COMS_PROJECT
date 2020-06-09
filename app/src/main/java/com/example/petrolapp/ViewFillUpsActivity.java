@@ -6,10 +6,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,7 +28,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
     private static String user="JoshW";
     private TableLayout tbl;;
     private String JSON;
-    public void fillTable(){
+    public void fillTable(){//method to full the table when it originally opens
 
         ContentValues cv=new ContentValues();
         cv.put("USERNAME",user);
@@ -48,6 +45,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
 
     }
+
     public void procsesJson(String json){
 
         ViewGroup.LayoutParams param = findViewById(R.id.txtHeading0).getLayoutParams();
@@ -306,7 +304,39 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
     }
 
+    public void sort(View view) throws JSONException {
+        Spinner spnrSort=findViewById(R.id.spinnerSort);
+        String sort=spnrSort.getSelectedItem().toString();
 
+        Spinner spnrOrder=findViewById(R.id.spinnerOrder);
+        String temp=spnrOrder.getSelectedItem().toString();
+        String order="";
+        if(temp.equals("Ascending")){
+            order="ASC";
+        }
+        else{
+            order="DESC";
+        }
+        JSONArray jsonArray=new JSONArray(JSON);
+        int numViews=tbl.getChildCount();
+
+        tbl.removeViews(1,numViews-1);//removes all the current records being shown first
+
+        ContentValues cv=new ContentValues();
+        cv.put("USERNAME",user);
+        cv.put("sort",sort);
+        cv.put("order",order);
+
+        Connection connection=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
+
+        connection.fetchInfo(ViewFillUpsActivity.this, "get_CAR_LOG_SORTED",cv, new RequestHandler() {
+            @Override
+            public void processResponse(String response) {
+                JSON=response;
+                procsesJson(JSON);
+            }
+        });
+    }
     public void goBack(View view){
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
         startActivity(i);

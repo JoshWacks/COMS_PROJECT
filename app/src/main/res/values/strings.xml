@@ -14,4 +14,9 @@
         <item>cost</item>
         <item>mileage</item>
     </string-array>
+    <string-array name="order_array">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
+
 </resources>
