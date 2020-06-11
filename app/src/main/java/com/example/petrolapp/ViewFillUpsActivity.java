@@ -39,14 +39,14 @@ public class ViewFillUpsActivity extends AppCompatActivity {
             @Override
             public void processResponse(String response) {
                 JSON=response;
-                procsesJson(JSON);
+                processJson(JSON);
             }
         });
 
 
     }
 
-    public void procsesJson(String json){
+    public void processJson(String json){
 
         ViewGroup.LayoutParams param = findViewById(R.id.txtHeading0).getLayoutParams();
         TableRow.LayoutParams tableRowParams=new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
@@ -165,7 +165,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         int numViews=tbl.getChildCount();
         if(numViews<jsonArray.length()*2+1) {
             tbl.removeViews(1,numViews-1);
-            procsesJson(JSON);
+            processJson(JSON);
         }
     }
 
@@ -191,7 +191,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                     tbl.removeViews(1,tbl.getChildCount()-1);//removes all the rows except the heading row.
                 }
                 catch (NullPointerException | IndexOutOfBoundsException ex ){
-                    procsesJson(JSON);
+                    processJson(JSON);
                 }
                 TableRow blankLine = new TableRow(this);//every record will have a blank line between them
                 blankLine.setLayoutParams(tableRowParams);
@@ -333,7 +333,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
             @Override
             public void processResponse(String response) {
                 JSON=response;
-                procsesJson(JSON);
+                processJson(JSON);
             }
         });
     }

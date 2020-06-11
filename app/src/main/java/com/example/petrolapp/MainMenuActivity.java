@@ -130,4 +130,5 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     }
+    //TODO get the current Diesel Price
 

@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -34,14 +35,16 @@ import java.util.Date;
  * status bar and navigation/system bar) with user interaction.
  */
 public class AtStationActivity extends AppCompatActivity {
+
     private double x_co;
     private double y_co;
-    private String user="JoshW";
-    private String stationAt="BP Central Service Station";
+    private String user="JoshW";//TODO get the correct username from the main menu first via intent
+    private String stationAt="";
     TextView txtStation;
     TextView txtDate;
     TextView txtCar;
     private Button btnDone;
+
 
     private BroadcastReceiver broadcastReceiver;
 
@@ -49,6 +52,47 @@ public class AtStationActivity extends AppCompatActivity {
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
         startActivity(i);
     }
+
+    private void getStations(){
+
+        ContentValues cv=new ContentValues();
+        Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
+
+        c.fetchInfo(AtStationActivity.this, "get_STATIONS",cv, new RequestHandler() {
+            @Override
+            public void processResponse(String response) {
+                processStation(response);
+            }
+        });
+    }
+
+    private  void processStation(String json) {
+        String name="";
+        double x=0;
+        double y=0;
+
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject item=jsonArray.getJSONObject(i);
+                name=item.getString("PETROL_STATION_NAME");
+                x=item.getDouble("X_CO");
+                y=item.getDouble("Y_CO");
+                if((x_co-0.01)<x&&x<(x_co+0.01)&&(y_co-0.01)<y&&y<(y_co+0.01)){
+                    stationAt=name;
+                    txtStation.append(stationAt);
+                }
+
+
+
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     private boolean runtime_permissions(){
 
@@ -84,6 +128,7 @@ public class AtStationActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -91,12 +136,9 @@ public class AtStationActivity extends AppCompatActivity {
             broadcastReceiver=new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    Bundle extras=intent.getExtras();
-                    System.out.println("\n"+extras.getDouble("x_co")+" "+extras.getDouble("y_co"));//gets the co-ord's here
+                    Bundle extras=intent.getExtras();//gets the co-ord's here
                     x_co=extras.getDouble("x_co");
                     y_co=extras.getDouble("y_co");
-
-
 
                 }
             };
@@ -116,10 +158,10 @@ public class AtStationActivity extends AppCompatActivity {
         txtStation=findViewById(R.id.txtViewStation);
         txtDate=findViewById(R.id.txtViewDate);
 
-        //To-do check GPS for their current petrol station
-        //To-do check if they have 2 cars and if so, let them choose which car they are filling up
+        //Todo check GPS for their current petrol station
+        //Todo check if they have 2 cars and if so, let them choose which car they are filling up
 
-        txtStation.append(stationAt);
+
         LocalDate d= LocalDate.now();//saves it for the query
         txtDate.append(d+" ");//sets the current date
 
@@ -140,7 +182,7 @@ public class AtStationActivity extends AppCompatActivity {
             public void processResponse(String response) {
 
                 try {
-                    desc[0] =procsesJson(response);
+                    desc[0] =processJson(response);
                     txtCar=findViewById(R.id.txtViewCar);
                     txtCar.append(desc[0]);
 
@@ -153,7 +195,7 @@ public class AtStationActivity extends AppCompatActivity {
         return desc[0];
     }
 
-    public String procsesJson(String json) throws JSONException {
+    public String processJson(String json) throws JSONException {
         JSONArray jsonArray=new JSONArray(json);
         String brand ="";
         String model="";
@@ -242,10 +284,14 @@ public class AtStationActivity extends AppCompatActivity {
         View decorView=getWindow().getDecorView();
         int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();//configures the navigation bar and the name of the app at the top
+        assert actionBar != null;
         actionBar.hide();
+
+        getStations();
         configure();
         getDesc();
+        getStations();
 
         btnDone=findViewById(R.id.btnDone);
 

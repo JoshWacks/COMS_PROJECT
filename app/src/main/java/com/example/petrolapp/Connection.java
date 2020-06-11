@@ -11,7 +11,7 @@ import java.io.IOException;
 public class Connection {
     private String url;
     private String file;
-    private OkHttpClient client=new OkHttpClient();
+    private final OkHttpClient client=new OkHttpClient();
 
     public Connection(String prefix){
         url=prefix;

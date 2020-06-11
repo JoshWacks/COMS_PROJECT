@@ -12,14 +12,12 @@
             android:layout_width="match_parent"
             android:layout_height="164dp"
             android:id="@+id/tblRowHeading"
-
-
-            android:paddingTop="10dp">
+            android:paddingStart="10dp">
         <TextView
                 android:text="Petrol Perfect"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
-                android:layout_height="84dp" android:id="@+id/txtName" android:textStyle="bold"
+                android:layout_height="60dp" android:id="@+id/txtName" android:textStyle="bold"
                 android:textSize="38sp" android:gravity="center|top" android:fontFamily="@font/autour_one"
                 android:textColor="#00C853" android:textAllCaps="true" android:background="#FFFFFF"
                 android:textAlignment="center" android:foregroundTint="#101010"/>
@@ -30,6 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="164dp"
             android:id="@+id/tblRowPic"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:background="#FBFBFB">
         <ImageView
                 android:layout_width="wrap_content"
@@ -52,24 +52,33 @@
     <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tblRow1">
+            android:id="@+id/tblRow1"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
 
         <Button
                 android:text="My Cards"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
 
                 android:id="@+id/btnCards"
                 android:textSize="26sp"
                 android:backgroundTint="#DF2222"
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"/>
+    </TableRow>
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tblRow15"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
         <Button
                 android:text="My Cars"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="60dp"
 
                 android:id="@+id/btnCars"
                 android:textSize="26sp"
@@ -82,25 +91,34 @@
     <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tblRow2">
+            android:id="@+id/tblRow2"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
 
 
         <Button
                 android:text="Car Fuel Efficiencies"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="60dp"
 
                 android:id="@+id/btnFuel"
                 android:textSize="26sp"
                 android:backgroundTint="#00C853"
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"/>
+    </TableRow>
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tblRow25"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
         <Button
                 android:text="Petrol Station Value"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="120dp"
+                android:layout_height="60dp"
 
                 android:id="@+id/btnStation"
                 android:textSize="26sp"
@@ -113,25 +131,34 @@
     <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tblRow3">
+            android:id="@+id/tblRow3"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
 
 
         <Button
                 android:text="View My Fill Ups"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="60dp"
 
                 android:id="@+id/btnFillUps"
                 android:textSize="26sp"
                 android:backgroundTint="#00B8D4"
                 android:fontFamily="sans-serif"
                 android:textStyle="bold" android:onClick="viewFillups"/>
+    </TableRow>
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tblRow35"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
         <Button
                 android:text="Account Details"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"
+                android:layout_height="60dp"
 
                 android:id="@+id/btnAccount"
                 android:textSize="26sp"

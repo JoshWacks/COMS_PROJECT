@@ -28,8 +28,8 @@ public class GPS_Service extends Service {
             public void onLocationChanged(Location location) {
                 Intent i=new Intent("location_update");
                 Bundle extras=new Bundle();
-                extras.putDouble("x_co",location.getLongitude());
-                extras.putDouble("y_co",location.getLatitude());
+                extras.putDouble("x_co",location.getLatitude());
+                extras.putDouble("y_co",location.getLongitude());
                 i.putExtras(extras);
                 sendBroadcast(i);
 
