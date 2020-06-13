@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="wrap_content"
+             android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="#FFFFFF"
              tools:context=".AtStationActivity">
@@ -29,11 +29,12 @@
                 app:layout_constraintEnd_toStartOf="@+id/frameLayout" app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="547dp"/>
         <ImageView
-                android:layout_width="402dp"
+                android:layout_width="match_parent"
                 android:layout_height="636dp" app:srcCompat="@drawable/at_station_image2"
                 android:id="@+id/img"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="97dp" app:layout_constraintStart_toStartOf="parent"/>
+                android:layout_marginTop="97dp" app:layout_constraintStart_toStartOf="parent"
+                android:background="#FFFFFF" android:tintMode="src_over"/>
         <TextView
                 android:text="AT THE STATION"
                 android:layout_width="match_parent"
@@ -42,7 +43,8 @@
                 android:textAlignment="center" android:textSize="36sp" android:textColor="#00EC27"
                 android:fontFamily="@font/autour_one"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="4dp" app:layout_constraintStart_toStartOf="parent"/>
+                android:layout_marginTop="4dp" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="74dp"
@@ -50,48 +52,50 @@
                 android:ems="10"
                 android:id="@+id/txtInMileage"
                 android:hint="Enter  Your Mileage" android:textStyle="bold"
-                android:textColor="#00BFA5" app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="298dp"
+                android:textColor="#FFAB00" app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="298dp"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="2dp"
                 app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="359dp"
                 android:fontFamily="serif" android:textSize="34sp"
-                android:textColorHint="#00BFA5" android:textAlignment="center"/>
+                android:textColorHint="#FFAB00" android:textAlignment="center" android:textColorHighlight="#FFAB00"
+                android:textColorLink="#FFAB00"/>
         <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="88dp"
                 android:ems="10"
                 android:id="@+id/txtInLitres"
                 android:hint="Enter Your Litres" android:textStyle="bold"
-                android:textColor="#00BFA5"
+                android:textColor="#FFAB00"
                 android:fontFamily="serif" android:textSize="34sp"
                 android:textAlignment="center"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="405dp"
                 app:layout_constraintStart_toStartOf="parent" android:inputType="numberDecimal"
-                android:textColorHint="#00BFA5"/>
+                android:textColorHint="#FFAB00"/>
         <TextView
-                android:text="You Are At    :       "
+                android:text=" You Are At     :       "
                 android:layout_width="match_parent"
                 android:layout_height="60dp" android:id="@+id/txtViewStation"
                 android:textAlignment="textStart" android:fontFamily="serif" android:textStyle="bold"
                 android:textColor="#040404" android:textSize="16sp"
-                android:backgroundTint="#81D4FA" android:background="#FFFFFF" app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="84dp" app:layout_constraintStart_toStartOf="parent"/>
+                android:backgroundTint="#B3E5FC" android:background="#FFFFFF" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="84dp" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="60dp" android:id="@+id/txtViewDate"
                 android:textAlignment="textStart" android:fontFamily="serif" android:textStyle="bold"
                 android:textColor="#040404" android:textSize="18sp"
-                android:text=" Date            :      " app:layout_constraintTop_toTopOf="parent"
+                android:text=" Date              :      " app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="160dp" app:layout_constraintStart_toStartOf="parent"
-                android:background="#FAFAFA" android:backgroundTint="#81D4FA"
+                android:background="#FAFAFA" android:backgroundTint="#B2EBF2"
                 app:layout_constraintEnd_toEndOf="parent"/>
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="55dp" android:id="@+id/txtViewCar"
                 android:textAlignment="textStart" android:fontFamily="serif" android:textStyle="bold"
                 android:textColor="#040404" android:textSize="16sp"
-                android:text="Driving Your :      " app:layout_constraintStart_toStartOf="parent"
+                android:text=" Driving Your :      " app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="232dp"
-                android:background="#F8F8F8" android:backgroundTint="#81D4FA"
+                android:background="#F8F8F8" android:backgroundTint="#B2EBF2"
                 app:layout_constraintEnd_toEndOf="parent"/>
         <FrameLayout android:layout_width="match_parent"
                      android:layout_height="match_parent"

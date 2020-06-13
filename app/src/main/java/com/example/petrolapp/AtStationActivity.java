@@ -2,7 +2,8 @@ package com.example.petrolapp;
 
 import android.annotation.SuppressLint;
 import android.content.*;
-import android.location.Location;
+import android.widget.Toast;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,37 +14,35 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import com.github.mikephil.charting.charts.LineChart;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class AtStationActivity extends AppCompatActivity {
 
     private double x_co;
     private double y_co;
     private String user="JoshW";//TODO get the correct username from the main menu first via intent
     private String stationAt="";
+    LocalDate d= LocalDate.now();//saves it for the query
     TextView txtStation;
     TextView txtDate;
     TextView txtCar;
     private Button btnDone;
+
+    Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");//We can use the same connection throughout as file path will be the same
 
 
     private BroadcastReceiver broadcastReceiver;
@@ -53,10 +52,63 @@ public class AtStationActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void configure(){
+        txtStation=findViewById(R.id.txtViewStation);
+        txtDate=findViewById(R.id.txtViewDate);
+
+        Toast toast=Toast.makeText(getApplicationContext(),"Remember it is the mileage for your last trip",Toast.LENGTH_LONG);
+        toast.show();
+
+        //their current petrol station is found in processStation
+        //Todo check if they have 2 cars and if so, let them choose which car they are filling up
+
+        txtDate.append(d+" ");//sets the current date
+        getDesc();
+        getStations();
+
+    }
+
+    public void getDesc(){
+        ContentValues cv=new ContentValues();
+        cv.put("USERNAME",user);
+        final String[] desc = {""};
+
+
+        c.fetchInfo(AtStationActivity.this, "get_CAR_DESC",cv, new RequestHandler() {
+            @Override
+            public void processResponse(String response) {
+
+                try {
+                    desc[0] =processJson(response);
+                    txtCar=findViewById(R.id.txtViewCar);
+                    txtCar.append(desc[0]);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    public String processJson(String json) throws JSONException {
+        JSONArray jsonArray=new JSONArray(json);
+        String brand ="";
+        String model="";
+        for (int i = 0; i <jsonArray.length() ; i++) {//check if they have 2 cars
+            JSONObject item=jsonArray.getJSONObject(i);
+
+            brand=item.getString("CAR_BRAND");
+            model=item.getString("CAR_MODEL");
+
+        }
+
+        return brand+" "+model;
+    }
+
     private void getStations(){
 
         ContentValues cv=new ContentValues();
-        Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
 
         c.fetchInfo(AtStationActivity.this, "get_STATIONS",cv, new RequestHandler() {
             @Override
@@ -65,6 +117,7 @@ public class AtStationActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private  void processStation(String json) {
         String name="";
@@ -78,10 +131,14 @@ public class AtStationActivity extends AppCompatActivity {
                 name=item.getString("PETROL_STATION_NAME");
                 x=item.getDouble("X_CO");
                 y=item.getDouble("Y_CO");
+                //here we find the petrol station the user is at. the 0.01 is added on either side as it is very
+                //unlikely they will be at the exact coordinates
                 if((x_co-0.01)<x&&x<(x_co+0.01)&&(y_co-0.01)<y&&y<(y_co+0.01)){
                     stationAt=name;
                     txtStation.append(stationAt);
+
                 }
+
 
 
 
@@ -90,6 +147,46 @@ public class AtStationActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void insert(){
+        String strPrice= getIntent().getStringExtra("price");//gets the price from the main menu
+        double price=Double.parseDouble(strPrice.substring(2));//we use substring to remove the R in front of the price
+
+        TextView txtLitres=findViewById(R.id.txtInLitres);
+        CharSequence charLitres=  txtLitres.getText();
+        String strLitres=charLitres.toString();
+        double litres=Double.parseDouble(strLitres);
+        txtLitres.setText(" ");//we clear the text to ensure they don't enter the same record twice
+
+        double cost=litres*price;//cost is calculated via multiplying litres by price
+
+        TextView txtMileage=findViewById(R.id.txtInMileage);
+        CharSequence charMileage=  txtMileage.getText();
+        String strMileage=charMileage.toString();
+        double mileage=Double.parseDouble(strMileage);
+        txtMileage.setText(" ");//we clear the text to ensure they don't enter the same record twice
+
+
+        ContentValues cv=new ContentValues();
+        cv.put("USERNAME",user);
+        cv.put("STATION",stationAt);
+        cv.put("COST",cost);
+        cv.put("MILEAGE",mileage);
+        cv.put("DATE", String.valueOf(d));//the date is found earlier
+        cv.put("LITRES",litres);
+
+
+
+
+        c.fetchInfo(AtStationActivity.this, "insert_CAR_LOG",cv, new RequestHandler() {
+            @Override
+            public void processResponse(String response) {
+
+            }
+        });
+
+
     }
 
 
@@ -123,6 +220,9 @@ public class AtStationActivity extends AppCompatActivity {
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                insert();// we do the insert here or the onclick is overwritten
+                Toast toast=Toast.makeText(getApplicationContext(),"Successfully Added Full Up",Toast.LENGTH_LONG);
+                toast.show();
                 Intent i=new Intent(getApplicationContext(),GPS_Service.class);
                 stopService(i);
             }
@@ -139,6 +239,7 @@ public class AtStationActivity extends AppCompatActivity {
                     Bundle extras=intent.getExtras();//gets the co-ord's here
                     x_co=extras.getDouble("x_co");
                     y_co=extras.getDouble("y_co");
+                    System.out.println("x "+x_co+" y "+y_co);
 
                 }
             };
@@ -154,61 +255,9 @@ public class AtStationActivity extends AppCompatActivity {
         }
     }
 
-    public void configure(){
-        txtStation=findViewById(R.id.txtViewStation);
-        txtDate=findViewById(R.id.txtViewDate);
-
-        //Todo check GPS for their current petrol station
-        //Todo check if they have 2 cars and if so, let them choose which car they are filling up
-
-
-        LocalDate d= LocalDate.now();//saves it for the query
-        txtDate.append(d+" ");//sets the current date
 
 
 
-
-    }
-
-    public String getDesc(){
-        ContentValues cv=new ContentValues();
-        cv.put("USERNAME",user);
-        final String[] desc = {""};
-
-        Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
-
-        c.fetchInfo(AtStationActivity.this, "get_CAR_DESC",cv, new RequestHandler() {
-            @Override
-            public void processResponse(String response) {
-
-                try {
-                    desc[0] =processJson(response);
-                    txtCar=findViewById(R.id.txtViewCar);
-                    txtCar.append(desc[0]);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        return desc[0];
-    }
-
-    public String processJson(String json) throws JSONException {
-        JSONArray jsonArray=new JSONArray(json);
-        String brand ="";
-        String model="";
-        for (int i = 0; i <jsonArray.length() ; i++) {//check if they have 2 cars
-            JSONObject item=jsonArray.getJSONObject(i);
-
-            brand=item.getString("CAR_BRAND");
-            model=item.getString("CAR_MODEL");
-
-        }
-
-        return brand+" "+model;
-    }
 
 
 
@@ -288,12 +337,11 @@ public class AtStationActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.hide();
 
-        getStations();
         configure();
-        getDesc();
-        getStations();
+
 
         btnDone=findViewById(R.id.btnDone);
+
 
         if(!runtime_permissions()){
             enable_buttons();

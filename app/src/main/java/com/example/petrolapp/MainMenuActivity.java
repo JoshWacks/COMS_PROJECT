@@ -40,9 +40,12 @@ import java.util.ArrayList;
  * status bar and navigation/system bar) with user interaction.
  */
 public class MainMenuActivity extends AppCompatActivity {
+    private String price="";
 
     public void atStation(View view){
         Intent i=new Intent(getApplicationContext(),AtStationActivity.class);
+
+        i.putExtra("price",price);
         startActivity(i);
     }
     public void logOut(View view){
@@ -69,24 +72,25 @@ public class MainMenuActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.hide();
 
         setContentView(R.layout.activity_main_menu);
 
-        final String[] price = new String[1];
+
 
         final Thread thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 try  {
-                    price[0] =fetchPetrolPrice();
+                    price =fetchPetrolPrice();
                     MainMenuActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
                             TextView myTextView = findViewById(R.id.txtViewPPrice);
-                            myTextView.setText("Current Petrol Price: "+ price[0]);
+                            myTextView.setText("Current Petrol Price: "+ price);
                         }
                     });
 
