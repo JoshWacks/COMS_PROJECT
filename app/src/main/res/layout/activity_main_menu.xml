@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="164dp"
             android:id="@+id/tblRowHeading"
-            android:paddingStart="10dp">
+            android:paddingStart="10dp" android:paddingTop="3dp">
         <TextView
                 android:text="Petrol Perfect"
                 android:layout_width="match_parent"
@@ -192,7 +192,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/txtViewDPrice" android:textStyle="bold"
                 android:textSize="26sp" android:text="Current Diesal Price :" android:textColor="#000000"
-                android:textAlignment="textStart"/>
+                android:textAlignment="textStart" android:paddingTop="5dp"/>
     </TableRow>
     <TableRow
             android:layout_width="match_parent"

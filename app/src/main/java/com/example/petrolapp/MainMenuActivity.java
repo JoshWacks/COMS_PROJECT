@@ -7,7 +7,6 @@ package com.example.petrolapp;
 
 import android.content.Intent;
 
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -18,21 +17,8 @@ import android.view.View;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;;
+import org.jsoup.select.Elements;
+;
 import java.util.ArrayList;
 
 /**
@@ -40,12 +26,13 @@ import java.util.ArrayList;
  * status bar and navigation/system bar) with user interaction.
  */
 public class MainMenuActivity extends AppCompatActivity {
-    private String price="";
+    private String petrolPrice ="";
+    private String dieselPrice="";
 
     public void atStation(View view){
         Intent i=new Intent(getApplicationContext(),AtStationActivity.class);
 
-        i.putExtra("price",price);
+        i.putExtra("price", petrolPrice);
         startActivity(i);
     }
     public void logOut(View view){
@@ -66,6 +53,7 @@ public class MainMenuActivity extends AppCompatActivity {
         startService(i);
 
         super.onCreate(savedInstanceState);
+        fetchDieselPrice();
 
         View decorView=getWindow().getDecorView();
         int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -80,17 +68,21 @@ public class MainMenuActivity extends AppCompatActivity {
 
 
         final Thread thread = new Thread(new Runnable() {
-
+            //network calls must be done on their own threads
             @Override
             public void run() {
                 try  {
-                    price =fetchPetrolPrice();
+                    fetchPetrolPrice();
+                    fetchDieselPrice();//These must be run at the same time as the thread
                     MainMenuActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
-                            TextView myTextView = findViewById(R.id.txtViewPPrice);
-                            myTextView.setText("Current Petrol Price: "+ price);
+                            TextView pTextView = findViewById(R.id.txtViewPPrice);
+                            pTextView.setText("Current Petrol Price: "+ petrolPrice);
+                            TextView dTextView= findViewById(R.id.txtViewDPrice);
+                            dTextView.setText("Current Petrol Price: R "+ dieselPrice);
+
                         }
                     });
 
@@ -103,34 +95,55 @@ public class MainMenuActivity extends AppCompatActivity {
         });
         thread.start();
 
+        final Thread th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fetchDieselPrice();
+            }
+        });
+        th.start();
+
+
 
     }
 
 
 
-    public String fetchPetrolPrice() {
+    public void fetchPetrolPrice() {
         final String url = "https://www.aa.co.za/calculators-toolscol-1/fuel-pricing";
-        ArrayList<String> fuelPrices = new ArrayList<String>();
+        ArrayList<String> fuelPrices = new ArrayList<String>();//have to use an arraylist as there is a lot of prices on this page
 
         try {
             final Document document = Jsoup.connect(url).get();
-            //System.out.println(document.outerHtml());
-            for (Element row : document.select("table.active tr")) {
+
+            for (Element row : document.select("table.active tr")) {//the name of the table with the prices
                 if (row.select(" td:nth-of-type(1) ").text().equals("")) {
                     continue;
                 } else {
                     final String price = row.select(" td:nth-of-type(1) ").text();
                     fuelPrices.add(price);
-
-
-
                 }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-      return fuelPrices.get(fuelPrices.size() - 1);
+        petrolPrice= fuelPrices.get(fuelPrices.size() - 1);//we only want the most recent price
 
+    }
+
+    public void fetchDieselPrice(){
+        final String url = "https://www.globalpetrolprices.com/South-Africa/diesel_prices/";//the website we are getting the current diesel price from
+
+        try {
+            final Document document = Jsoup.connect(url).get();//returns a type document
+
+            Element row =document.selectFirst("tbody tr");//the name of the element we need is tbody and we only want it to return the first(ZAR) row from that tables
+            dieselPrice=row.text().substring(4,9);//we use substring as we don't want all the text, only the price
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     }
