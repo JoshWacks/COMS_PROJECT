@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.petrolapp">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
@@ -13,11 +14,13 @@
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
+            android:label="PetrolApp"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
+        <activity android:name=".StationsEfficiencyActivity">
+        </activity>
         <activity
                 android:name=".ViewFillUpsActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
@@ -37,9 +40,8 @@
         </activity>
         <activity
                 android:name=".popupApplication"
-                android:theme="@style/AppTheme.popTheme"
-       > </activity>
-
+                android:theme="@style/AppTheme.popTheme">
+        </activity>
         <activity
                 android:name=".MainMenuActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
@@ -50,8 +52,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
-
         </activity>
 
         <meta-data

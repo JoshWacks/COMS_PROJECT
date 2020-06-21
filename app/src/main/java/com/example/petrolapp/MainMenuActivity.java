@@ -28,6 +28,8 @@ import java.util.ArrayList;
 public class MainMenuActivity extends AppCompatActivity {
     private String petrolPrice ="";
     private String dieselPrice="";
+    
+    //TODO get username from login and send it to all other activities via intent
 
     public void atStation(View view){
         Intent i=new Intent(getApplicationContext(),AtStationActivity.class);
@@ -42,6 +44,10 @@ public class MainMenuActivity extends AppCompatActivity {
     }
     public void viewFillups(View view){
         Intent i=new Intent(getApplicationContext(),ViewFillUpsActivity.class);
+        startActivity(i);
+    }
+    public void viewStationEfficiency(View view){
+        Intent i=new Intent(getApplicationContext(),StationsEfficiencyActivity.class);
         startActivity(i);
     }
 

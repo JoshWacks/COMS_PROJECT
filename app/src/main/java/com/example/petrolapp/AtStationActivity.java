@@ -296,10 +296,6 @@ public class AtStationActivity extends AppCompatActivity {
         @Override
         public void run() {
             // Delayed display of UI elements
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.show();
-            }
             mControlsView.setVisibility(View.VISIBLE);
         }
     };
@@ -333,6 +329,7 @@ public class AtStationActivity extends AppCompatActivity {
         View decorView=getWindow().getDecorView();
         int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+
         ActionBar actionBar = getSupportActionBar();//configures the navigation bar and the name of the app at the top
         assert actionBar != null;
         actionBar.hide();
@@ -408,9 +405,7 @@ public class AtStationActivity extends AppCompatActivity {
         // Show the system bar
         mHideHandler.removeCallbacks(mHidePart2Runnable);
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.show();
+
         mVisible = true;
     }
 

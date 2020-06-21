@@ -383,10 +383,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         @Override
         public void run() {
             // Delayed display of UI elements
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.show();
-            }
+
             mControlsView.setVisibility(View.VISIBLE);
         }
     };
@@ -482,8 +479,6 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
         mHideHandler.removeCallbacks(mHidePart2Runnable);
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.show();
         mVisible = true;
 
     }

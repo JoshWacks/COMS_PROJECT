@@ -124,7 +124,7 @@
                 android:textSize="26sp"
                 android:backgroundTint="#FFEB3B"
                 android:fontFamily="sans-serif"
-                android:textStyle="bold"/>
+                android:textStyle="bold" android:onClick="viewStationEfficiency"/>
 
 
     </TableRow>
