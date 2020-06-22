@@ -25,16 +25,20 @@ import java.util.ArrayList;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
+//TODO get username from login and send it to all other activities via intent
+
 public class MainMenuActivity extends AppCompatActivity {
     private String petrolPrice ="";
     private String dieselPrice="";
+    private String username="JoshW";
     
-    //TODO get username from login and send it to all other activities via intent
+
 
     public void atStation(View view){
         Intent i=new Intent(getApplicationContext(),AtStationActivity.class);
 
         i.putExtra("price", petrolPrice);
+        i.putExtra("username",username);
         startActivity(i);
     }
     public void logOut(View view){
@@ -44,10 +48,12 @@ public class MainMenuActivity extends AppCompatActivity {
     }
     public void viewFillups(View view){
         Intent i=new Intent(getApplicationContext(),ViewFillUpsActivity.class);
+        i.putExtra("username",username);
         startActivity(i);
     }
     public void viewStationEfficiency(View view){
         Intent i=new Intent(getApplicationContext(),StationsEfficiencyActivity.class);
+        i.putExtra("username",username);
         startActivity(i);
     }
 
