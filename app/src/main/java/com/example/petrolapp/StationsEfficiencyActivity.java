@@ -6,6 +6,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,7 +28,9 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
                                                                                     //We use a HashMap to avoid implementing all the map methods
     private ArrayList<Station>Stations=new ArrayList<Station>();//An arraylist to keep track of all our stations
 
-//    Thread thread;
+    BarChart barChart;
+
+    Thread thread;
 
 
     @Override
@@ -41,14 +50,19 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
                 toggle();
             }
         });
-
         fetchData();
-//        thread=new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                viewData();
-//            }
-//        });
+
+
+
+
+
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                createGraph();
+
+            }
+        });
 
 
     }
@@ -57,7 +71,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         View decorView=getWindow().getDecorView();
         if(actionBarVisible){
 
-            int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
+            int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
             decorView.setSystemUiVisibility(uiOptions);
             actionBarVisible =false;
         }
@@ -116,6 +130,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        thread.start();//we are done fetching the data and we can now run the Graph Thread
 
     }
 
@@ -123,6 +138,51 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         for(Station s:Stations){
             System.out.println(s.getName()+"  : "+s.getAverage());
         }
+
+    }
+
+    private void createGraph(){
+
+        barChart=findViewById(R.id.bargraph);
+
+        ArrayList<BarEntry>entries=new ArrayList<>();
+        final String[]names=new String[Stations.size()];
+
+
+        for(Integer i=0;i<Stations.size();i++){
+            Station s=Stations.get(i);
+
+            float x=i.floatValue();//the default position of that bar
+            float y=s.getAverage().floatValue();//the y value of that bar
+            // x and y must be of type float
+            entries.add(new BarEntry(x,y));
+            String[] arr =s.getName().split(" ",2);//To only get the first word of the station name
+
+            names[i]=arr[0];
+
+        }
+        ValueFormatter formatter=new ValueFormatter() {
+            @Override
+            public String getAxisLabel(float value, AxisBase axis) {
+                return names[(int) value];
+            }
+        };
+        XAxis xAxis=barChart.getXAxis();
+        xAxis.setValueFormatter(formatter);//sets the values on the x-axis
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setLabelCount(Stations.size());//The total number of labels that must appear
+
+        BarDataSet set = new BarDataSet(entries, "Station Efficiencies");
+
+        BarData data = new BarData(set);
+        data.setBarWidth(0.9f); // set custom bar width
+        barChart.setData(data);
+
+        barChart.setFitBars(true); // make the x-axis fit exactly all bars
+        barChart.setTouchEnabled(true);
+        barChart.setDragEnabled(true);
+        barChart.setScaleEnabled(true);
+        barChart.postInvalidate(); // refresh
 
     }
 

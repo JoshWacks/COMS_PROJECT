@@ -7,4 +7,11 @@
         android:layout_height="match_parent"
         tools:context=".StationsEfficiencyActivity" android:id="@+id/content">
 
+    <com.github.mikephil.charting.charts.BarChart
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            android:id="@+id/bargraph"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent">
+
+    </com.github.mikephil.charting.charts.BarChart>
 </androidx.constraintlayout.widget.ConstraintLayout>
