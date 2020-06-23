@@ -38,7 +38,7 @@
         <TextView
                 android:text="AT THE STATION"
                 android:layout_width="match_parent"
-                android:layout_height="62dp" android:id="@+id/txtHeading"
+                android:layout_height="62dp" android:id="@+id/txtStationEffHeading"
                 android:textStyle="bold"
                 android:textAlignment="center" android:textSize="36sp" android:textColor="#00EC27"
                 android:fontFamily="@font/autour_one"

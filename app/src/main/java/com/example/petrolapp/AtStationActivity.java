@@ -29,12 +29,13 @@ import java.time.LocalDate;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
+//TODO check they are at a petrol station before entering data
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class AtStationActivity extends AppCompatActivity {
 
     private double x_co;
     private double y_co;
-    private String user="JoshW";//TODO get the correct username from the main menu first via intent
+    private String username;
     private String stationAt="";
     LocalDate d= LocalDate.now();//saves it for the query
     TextView txtStation;
@@ -70,7 +71,7 @@ public class AtStationActivity extends AppCompatActivity {
 
     public void getDesc(){
         ContentValues cv=new ContentValues();
-        cv.put("USERNAME",user);
+        cv.put("USERNAME",username);
         final String[] desc = {""};
 
 
@@ -169,7 +170,7 @@ public class AtStationActivity extends AppCompatActivity {
 
 
         ContentValues cv=new ContentValues();
-        cv.put("USERNAME",user);
+        cv.put("USERNAME",username);
         cv.put("STATION",stationAt);
         cv.put("COST",cost);
         cv.put("MILEAGE",mileage);
@@ -326,8 +327,11 @@ public class AtStationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_at_station);
+        Intent intent=getIntent();
+        username=intent.getStringExtra("username");
+
         View decorView=getWindow().getDecorView();
-        int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
+        int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;//makes it full screen when opened
         decorView.setSystemUiVisibility(uiOptions);
 
         ActionBar actionBar = getSupportActionBar();//configures the navigation bar and the name of the app at the top
@@ -343,9 +347,6 @@ public class AtStationActivity extends AppCompatActivity {
         if(!runtime_permissions()){
             enable_buttons();
         }
-
-
-
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);

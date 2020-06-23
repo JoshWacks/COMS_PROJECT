@@ -106,7 +106,7 @@
                 android:textSize="26sp"
                 android:backgroundTint="#00C853"
                 android:fontFamily="sans-serif"
-                android:textStyle="bold"/>
+                android:textStyle="bold" android:onClick="viewCarEfficiency"/>
     </TableRow>
     <TableRow
             android:layout_width="match_parent"

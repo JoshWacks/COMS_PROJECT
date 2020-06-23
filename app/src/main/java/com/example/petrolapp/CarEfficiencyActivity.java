@@ -1,5 +1,6 @@
 package com.example.petrolapp;
 
+import android.accessibilityservice.GestureDescription;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,11 +11,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.*;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,25 +29,27 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class StationsEfficiencyActivity extends AppCompatActivity {
-    private boolean backBtnVisible =true;
-    private HashMap<String, Integer> stationsMap=new HashMap<String, Integer>() ;//A Map is used to see if we have encountered that station before,
-                                                                                    //We use a HashMap to avoid implementing all the map methods
-    private ArrayList<Station>Stations=new ArrayList<Station>();//An arraylist to keep track of all our stations
-
+public class CarEfficiencyActivity extends AppCompatActivity {
+    String username;
     BarChart barChart;
 
-    Thread thread;
-    String username;
-
     Button btnBack;
-    //TODO show the correct screen when they have made no fill ups yet on this and on 'View My Fill Ups ' Activity
+    private boolean backBtnVisible =true;
 
+    private HashMap<String, Integer> CarTypeMap=new HashMap<String, Integer>() ;//A Map is used to see if we have encountered that car type before,
+    //We use a HashMap to avoid implementing all the map methods
+    private ArrayList<CarType> CarTypes=new ArrayList<CarType>();//An arraylist to keep track of all our car types
+
+    Thread thread;
+
+    //Todo find their specific car and show it specifically for them
+    //Todo to get more info on the car select on a bar
+    //TODO give them options for which cars they would like to see
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stations_efficiency);
+        setContentView(R.layout.activity_car_efficiency);
 
         Intent intent=getIntent();
         username=intent.getStringExtra("username");
@@ -48,19 +57,17 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         configureScreen();
         fetchData();
 
-
-
-
-
         thread=new Thread(new Runnable() {
             @Override
             public void run() {
                 createGraph();//We can only create the graph confidently once we know the data has been fetched
+                barInfo();
             }
         });
 
 
     }
+
     public void configureScreen(){
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -69,7 +76,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         decorView.setSystemUiVisibility(uiOptions);//hides the navigation bar at the bottom
 
-        btnBack=findViewById(R.id.btnEffBack);
+        btnBack=findViewById(R.id.btnCarEffBack);
 
         ConstraintLayout mContentView=findViewById(R.id.content);
         mContentView.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +86,6 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void toggle(){//sets the navigation bar at the bottom visible or not when the user touches the screen
         if(backBtnVisible){
@@ -92,6 +98,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
             backBtnVisible =true;
         }
     }
+
     public void goBack(View view){
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
         startActivity(i);
@@ -100,9 +107,9 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
     private void fetchData(){//directly fetches the raw data to be processed
         Connection connection=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
         ContentValues cv=new ContentValues();
-        cv.put("USERNAME",username);
+       // cv.put("USERNAME",username);
 
-        connection.fetchInfo(StationsEfficiencyActivity.this, "get_STATIONS_EFFICIENCY",cv, new RequestHandler() {
+        connection.fetchInfo(CarEfficiencyActivity.this, "get_CARS_EFFICIENCY",cv, new RequestHandler() {
             @Override
             public void processResponse(String response) {
 
@@ -111,60 +118,62 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         });
     }
 
-    private void processJson(String data) {
-        int stationNum=0;
-        String name;
+    private void processJson(String data){
+        String brand;
+        String model;
+        String year;
+        String type;
         Double eff;
+
+        int CarTypeNum=0;//each car type will be assigned a unique integer
 
         try {
             JSONArray jsonArray=new JSONArray(data);
 
-            for (int i=0;i<jsonArray.length();i++) {
+            for(int i=0;i<jsonArray.length();i++){
                 JSONObject item= (JSONObject) jsonArray.get(i);
-                name=item.getString("PETROL_STATION_NAME");
+                brand=item.getString("CAR_BRAND");
+                model=item.getString("CAR_MODEL");
+                year=item.getString("CAR_YEAR");
                 eff=item.getDouble("EFFICIENCY");
-                String[] arr =name.split(" ",2);//To only get the first word of the station name as we want to group them by Station Brand
 
+                type=brand+model+year;//Type is a combination of brand,model and year
 
-                if(!stationsMap.containsKey(arr[0])){//checks to see if this is the first time we are seeing this station, if so creates a station object
-                    stationsMap.put(arr[0],stationNum);
-                    stationNum++;//to ensure each station has a unique number assigned to it
+                //System.out.println(brand+"  "+model+"  "+year+" "+eff);
 
-                    Station station=new Station(arr[0]);//creates the station with that name
-                    Stations.add(station);
+                if(!CarTypeMap.containsKey(type)){//Checks to see if we have not come across that car type before
+                    CarTypeMap.put(type,CarTypeNum);
+                    CarTypeNum++;
+
+                    CarType carType=new CarType(brand,model,year);
+                    CarTypes.add(carType);
                 }
 
-                for (Station s:Stations) {// checks to find the station that entry belongs to
-
-                    if(arr[0].equals(s.getName())){
-                        s.addEntry(eff);
+                for(CarType c:CarTypes){//finds the correct CarType for which that entry belongs
+                    if(type.equals(c.getType())){
+                        c.addEntry(eff);
                         break;
                     }
                 }
 
-            }
 
+
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        thread.start();//we are done fetching the data and we can now run the Graph Thread
+        thread.start();
 
-    }
-
-    private void viewData(){
-        for(Station s:Stations){
-            System.out.println(s.getName()+"  : "+s.getAverage());
-        }
 
     }
 
     private void createGraph(){
 
-        barChart=findViewById(R.id.stationBarGraph);
+        barChart=findViewById(R.id.CarBarGraph);
 
 
         ArrayList<BarEntry>entries=new ArrayList<>();//the data values
-        final String[]names=new String[Stations.size()];//the names on the x-axis
+        final String[]names=new String[CarTypes.size()];//the names on the x-axis
 
         addDefaultData(entries,names);//method to add the default data to the entries of the graph
         BarDataSet set = new BarDataSet(entries, "Station Efficiencies");
@@ -184,16 +193,15 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
     }
 
     public void addDefaultData(ArrayList<BarEntry>entries,String[]names){
-        for(Integer i=0;i<Stations.size();i++){
-            Station s=Stations.get(i);
+        for(Integer i=0;i<CarTypes.size();i++){
+            CarType ct=CarTypes.get(i);
 
             float x=i.floatValue();//the default position of that bar
-            float y=s.getAverage().floatValue();//the y value of that bar
+            float y=ct.getAverage().floatValue();//the y value of that bar
             // x and y must be of type float
             entries.add(new BarEntry(x,y));
-            String[] arr =s.getName().split(" ",2);//To only get the first word of the station name
 
-            names[i]=arr[0].toUpperCase();
+            names[i]=ct.getModel();
 
         }
     }
@@ -207,7 +215,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
             public void run() {
 //TODO check if the background should actually be black and if I should draw grid lines
 
-                StationsEfficiencyActivity.this.runOnUiThread(new Runnable() {//To change the background colour we must run a thread on the UI Thread
+                CarEfficiencyActivity.this.runOnUiThread(new Runnable() {//To change the background colour we must run a thread on the UI Thread
                     public void run() {
 
                         barChart.setBackgroundColor(Color.BLACK);
@@ -215,7 +223,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
                     }
                 });
             }
-            });
+        });
         th.start();
         ArrayList<Integer>colorArr=new ArrayList<>();
         colorArr.add(Color.GREEN);
@@ -224,7 +232,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         colorArr.add(Color.YELLOW);
         colorArr.add(Color.RED);
         colorArr.add(Color.WHITE);//The colours that will represent the bars, will repeat if run out of colours
-        set.setValueTextSize(20f);//the text size for the inner labels
+        set.setValueTextSize(18f);//the text size for the inner labels
         set.setValueTextColor(Color.CYAN);
         set.setColors(colorArr);
 
@@ -235,8 +243,8 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         XAxis xAxis=barChart.getXAxis();
         xAxis.setValueFormatter(formatter);//sets the values on the x-axis
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setLabelCount(Stations.size());//The total number of labels that must appear
-        xAxis.setTextSize(20f);
+        xAxis.setLabelCount(CarTypes.size());//The total number of labels that must appear
+        xAxis.setTextSize(16f);
         xAxis.setTextColor(Color.CYAN);
         xAxis.setDrawGridLines(true);
 
@@ -250,15 +258,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         yAxisR.setDrawGridLines(true);
 
         float barWidth=0.3f;
-        if(Stations.size()<4){
-            barWidth=0.6f;
-        }
-        else if(Stations.size()==4) {
-            barWidth=0.5f;
-        }
-        else if(Stations.size()==5){
-             barWidth=0.4f;
-        }
+//TODO check if this barwidth will always be alright
         data.setBarWidth(barWidth); // set custom bar width
         barChart.setData(data);
 
@@ -273,6 +273,21 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
     }
 
+    public void barInfo(){
+        //Method to show extra info on the type of car when that bar is selected
 
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener(){
+
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                System.out.println(e);
+                System.out.println(h);
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        } );
+    }
 }
-

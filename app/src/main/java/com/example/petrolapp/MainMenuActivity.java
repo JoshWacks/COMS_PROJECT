@@ -56,6 +56,11 @@ public class MainMenuActivity extends AppCompatActivity {
         i.putExtra("username",username);
         startActivity(i);
     }
+    public void viewCarEfficiency(View view){
+        Intent i=new Intent(getApplicationContext(),CarEfficiencyActivity.class);
+        i.putExtra("username",username);
+        startActivity(i);
+    }
 
 
 
@@ -159,5 +164,5 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     }
-    //TODO get the current Diesel Price
+
 

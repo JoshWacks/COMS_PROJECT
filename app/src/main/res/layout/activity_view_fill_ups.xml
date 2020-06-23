@@ -22,7 +22,7 @@
                 android:text="Your Fill Ups"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
-                android:layout_height="63dp" android:id="@+id/txtHeading" android:textStyle="bold"
+                android:layout_height="63dp" android:id="@+id/txtStationEffHeading" android:textStyle="bold"
                 android:textSize="38sp" android:gravity="center|top" android:fontFamily="@font/autour_one"
                 android:textColor="#020202" android:textAllCaps="true" android:background="#FFFFFF"
                 android:textAlignment="center" android:foregroundTint="#101010"

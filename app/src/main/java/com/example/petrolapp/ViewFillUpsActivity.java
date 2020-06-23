@@ -25,13 +25,14 @@ import java.sql.SQLOutput;
  * status bar and navigation/system bar) with user interaction.
  */
 public class ViewFillUpsActivity extends AppCompatActivity {
-    private static String user="JoshW";
+    private static String username;
     private TableLayout tbl;;
     private String JSON;
+
     public void fillTable(){//method to full the table when it originally opens
 
         ContentValues cv=new ContentValues();
-        cv.put("USERNAME",user);
+        cv.put("USERNAME",username);
 
         Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
 
@@ -323,7 +324,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         tbl.removeViews(1,numViews-1);//removes all the current records being shown first
 
         ContentValues cv=new ContentValues();
-        cv.put("USERNAME",user);
+        cv.put("USERNAME",username);
         cv.put("sort",sort);
         cv.put("order",order);
 
@@ -412,9 +413,13 @@ public class ViewFillUpsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_view_fill_ups);
+
+        Intent intent=getIntent();
+        username=intent.getStringExtra("username");
+
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.hide();
         View decorView=getWindow().getDecorView();
         int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
