@@ -19,8 +19,16 @@ public class CarType {
     public String getType(){
         return type;
     }
+
+    public String getBrand(){
+        return brand;
+    }
+
     public String getModel(){
         return model;
+    }
+    public String getYear(){
+        return year;
     }
 
     public void addEntry(Double d){

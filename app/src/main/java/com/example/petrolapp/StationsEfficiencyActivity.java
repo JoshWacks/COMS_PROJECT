@@ -71,7 +71,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
         btnBack=findViewById(R.id.btnEffBack);
 
-        ConstraintLayout mContentView=findViewById(R.id.content);
+        ConstraintLayout mContentView=findViewById(R.id.stationEffContent);
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

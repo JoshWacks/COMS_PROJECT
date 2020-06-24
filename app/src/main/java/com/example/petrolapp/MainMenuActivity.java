@@ -9,6 +9,7 @@ import android.content.Intent;
 
 import android.widget.TextView;
 
+import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 ;
+import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 /**
@@ -26,12 +29,15 @@ import java.util.ArrayList;
  * status bar and navigation/system bar) with user interaction.
  */
 //TODO get username from login and send it to all other activities via intent
-
+//TODO optimise fetchPetrol and fetchDiesel code so we don't wait long for main menu
+    //Todo make sure it does not crash when not connected to the internet
 public class MainMenuActivity extends AppCompatActivity {
     private String petrolPrice ="";
     private String dieselPrice="";
     private String username="JoshW";
-    
+    TextView pTextView ;
+
+    TextView dTextView;
 
 
     public void atStation(View view){
@@ -70,7 +76,6 @@ public class MainMenuActivity extends AppCompatActivity {
         startService(i);
 
         super.onCreate(savedInstanceState);
-        fetchDieselPrice();
 
         View decorView=getWindow().getDecorView();
         int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -81,45 +86,72 @@ public class MainMenuActivity extends AppCompatActivity {
         actionBar.hide();
 
         setContentView(R.layout.activity_main_menu);
+        pTextView = findViewById(R.id.txtViewPPrice);
+        dTextView= findViewById(R.id.txtViewDPrice);
 
-
-
-        final Thread thread = new Thread(new Runnable() {
-            //network calls must be done on their own threads
-            @Override
-            public void run() {
-                try  {
-                    fetchPetrolPrice();
-                    fetchDieselPrice();//These must be run at the same time as the thread
-                    MainMenuActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            TextView pTextView = findViewById(R.id.txtViewPPrice);
-                            pTextView.setText("Current Petrol Price: "+ petrolPrice);
-                            TextView dTextView= findViewById(R.id.txtViewDPrice);
-                            dTextView.setText("Current Petrol Price: R "+ dieselPrice);
-
-                        }
-                    });
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-
-        final Thread th = new Thread(new Runnable() {
+        final Thread thD = new Thread(new Runnable() {
             @Override
             public void run() {
                 fetchDieselPrice();
             }
         });
-        th.start();
 
+        final Thread thP = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fetchPetrolPrice();
+            }
+        });
+        thD.start();
+        thP.start();
+
+        //Network calls must be done on their own threads
+
+
+
+
+//        final Thread thread = new Thread(new Runnable() {
+//            //network calls must be done on their own threads
+//            @Override
+//            public void run() {
+//                try  {
+//                    MainMenuActivity.this.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//
+//
+//                            pTextView.setText("Current Petrol Price: "+ petrolPrice);
+//                            dTextView.setText("Current Diesel Price: R "+ dieselPrice);
+//
+//                        }
+//                    });
+//
+//
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        try {
+//
+//            thP.join(4000);
+//            thD.join(4000);//Waits max 3s to get the price first before displaying
+//            if(petrolPrice.equals("")&&dieselPrice.equals(""))
+//            {
+//                Toast toast = Toast.makeText(getApplicationContext(), "You don't seem to be connected to the internet", Toast.LENGTH_LONG);//If takes too long to access website
+//                toast.show();
+//            }
+//
+//            thread.start();
+//
+//        }
+//
+//        catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
 
     }
@@ -141,10 +173,16 @@ public class MainMenuActivity extends AppCompatActivity {
                     fuelPrices.add(price);
                 }
             }
-        } catch (Exception ex) {
+        }
+
+        catch (IOException ex) {
+
             ex.printStackTrace();
         }
+
         petrolPrice= fuelPrices.get(fuelPrices.size() - 1);//we only want the most recent price
+
+        pTextView.setText("Current Petrol Price: "+ petrolPrice);
 
     }
 
@@ -157,9 +195,11 @@ public class MainMenuActivity extends AppCompatActivity {
             Element row =document.selectFirst("tbody tr");//the name of the element we need is tbody and we only want it to return the first(ZAR) row from that tables
             dieselPrice=row.text().substring(4,9);//we use substring as we don't want all the text, only the price
 
+            dTextView.setText("Current Diesel Price: R "+ dieselPrice);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+        }  catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

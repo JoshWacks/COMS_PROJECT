@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,11 +24,18 @@ import java.sql.SQLOutput;
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
+ *
  */
+//ToDo check when searching if they have two fill ups on the same day, must return both
+
 public class ViewFillUpsActivity extends AppCompatActivity {
     private static String username;
     private TableLayout tbl;;
     private String JSON;
+
+    Button btnBack;
+    private boolean backBtnVisible =true;
+    LinearLayout fullScreenContentControls;
 
     public void fillTable(){//method to full the table when it originally opens
 
@@ -77,6 +85,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Bundle extra=new Bundle();
+                        extra.putString("activity","FillUps");
                         extra.putString("name",stationFullName);
                         extra.putDouble("eff",eff);
                         extra.putBoolean("found",true);
@@ -161,6 +170,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     public void showAll(View view) throws JSONException {
         JSONArray jsonArray=new JSONArray(JSON);
         int numViews=tbl.getChildCount();
@@ -318,7 +328,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         else{
             order="DESC";
         }
-        JSONArray jsonArray=new JSONArray(JSON);
+
         int numViews=tbl.getChildCount();
 
         tbl.removeViews(1,numViews-1);//removes all the current records being shown first
@@ -338,77 +348,48 @@ public class ViewFillUpsActivity extends AppCompatActivity {
             }
         });
     }
+
     public void goBack(View view){
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
         startActivity(i);
     }
 
+    public void configureScreen(){
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.hide();//hides the name of the activity at the top
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);//hides the navigation bar at the bottom
 
+        btnBack=findViewById(R.id.btnBackFillUps);
+        fullScreenContentControls=findViewById(R.id.fullscreen_content_controls);
 
-
-    /**
-     * Whether or not the system UI should be auto-hidden after
-     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-     */
-    private static final boolean AUTO_HIDE = true;
-
-    /**
-     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-
-    /**
-     * Some older devices needs a small delay between UI widget updates
-     * and a change of the status and navigation bar.
-     */
-    private static final int UI_ANIMATION_DELAY = 300;
-    private final Handler mHideHandler = new Handler();
-    private View mContentView;
-    private final Runnable mHidePart2Runnable = new Runnable() {
-        @SuppressLint("InlinedApi")
-        @Override
-        public void run() {
-            // Delayed removal of status and navigation bar
-
-            // Note that some of these constants are new as of API 16 (Jelly Bean)
-            // and API 19 (KitKat). It is safe to use them, as they are inlined
-            // at compile-time and do nothing on earlier devices.
-            mContentView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN
-                    |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
-    };
-    private View mControlsView;
-    private final Runnable mShowPart2Runnable = new Runnable() {
-        @Override
-        public void run() {
-            // Delayed display of UI elements
-
-            mControlsView.setVisibility(View.VISIBLE);
-        }
-    };
-    private boolean mVisible;
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
+        ConstraintLayout mContentView=findViewById(R.id.FillUpsContent);
+        mContentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggle();
             }
-            return false;
+        });
+    }
+    private void toggle(){//sets the navigation bar at the bottom visible or not when the user touches the screen
+        if(backBtnVisible){
+
+            btnBack.setVisibility(View.INVISIBLE);
+            fullScreenContentControls.setVisibility(View.INVISIBLE);
+            backBtnVisible =false;
         }
-    };
+        else{
+            btnBack.setVisibility(View.VISIBLE);
+            fullScreenContentControls.setVisibility(View.VISIBLE);
+            backBtnVisible =true;
+        }
+    }
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -428,72 +409,10 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
         tbl=findViewById(R.id.tblLayout);
 
-        mVisible = true;
-        mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView = findViewById(R.id.fullscreen_content);
+        configureScreen();
 
-
-        // Set up the user interaction to manually show or hide the system UI.
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggle();
-            }
-        });
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        findViewById(R.id.btnBack).setOnTouchListener(mDelayHideTouchListener);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100);
-    }
-
-    private void toggle() {
-        if (mVisible) {
-            hide();
-        } else {
-            show();
-        }
-    }
-
-    private void hide() {
-        // Hide UI first
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
-        mControlsView.setVisibility(View.GONE);
-        mVisible = false;
-
-        // Schedule a runnable to remove the status and navigation bar after a delay
-        mHideHandler.removeCallbacks(mShowPart2Runnable);
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
-    }
-
-    @SuppressLint("InlinedApi")
-    private void show() {
-
-        mHideHandler.removeCallbacks(mHidePart2Runnable);
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
-        mVisible = true;
 
     }
 
-    /**
-     * Schedules a call to hide() in delay milliseconds, canceling any
-     * previously scheduled calls.
-     */
-    private void delayedHide(int delayMillis) {
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
-    }
+
 }

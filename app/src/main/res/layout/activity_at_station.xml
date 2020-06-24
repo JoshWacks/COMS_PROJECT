@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
 
-            android:layout_height="match_parent" android:id="@+id/fullscreen_content"
+            android:layout_height="match_parent" android:id="@+id/AtStationContent"
     >
 
         <Button
@@ -114,7 +114,7 @@
                           android:orientation="horizontal"
                           tools:ignore="UselessParent">
 
-                <Button android:id="@+id/btnBack"
+                <Button android:id="@+id/btnBackAtStation"
                         style="?metaButtonBarButtonStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -125,10 +125,6 @@
 
             </LinearLayout>
         </FrameLayout>
-        <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content"
-                                                    android:layout_height="wrap_content" android:id="@+id/guideline"
-                                                    app:layout_constraintGuide_begin="20dp"
-                                                    android:orientation="vertical"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

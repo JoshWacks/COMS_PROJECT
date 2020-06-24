@@ -41,6 +41,9 @@ public class CarEfficiencyActivity extends AppCompatActivity {
     private ArrayList<CarType> CarTypes=new ArrayList<CarType>();//An arraylist to keep track of all our car types
 
     Thread thread;
+    ArrayList<BarEntry>entries;
+    BarDataSet set;
+    BarData data;
 
     //Todo find their specific car and show it specifically for them
     //Todo to get more info on the car select on a bar
@@ -78,7 +81,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
 
         btnBack=findViewById(R.id.btnCarEffBack);
 
-        ConstraintLayout mContentView=findViewById(R.id.content);
+        ConstraintLayout mContentView=findViewById(R.id.FillUpsContent);
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,12 +175,12 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         barChart=findViewById(R.id.CarBarGraph);
 
 
-        ArrayList<BarEntry>entries=new ArrayList<>();//the data values
+        entries=new ArrayList<>();//the data values
         final String[]names=new String[CarTypes.size()];//the names on the x-axis
 
         addDefaultData(entries,names);//method to add the default data to the entries of the graph
-        BarDataSet set = new BarDataSet(entries, "Station Efficiencies");
-        BarData data = new BarData(set);
+        set = new BarDataSet(entries, "Station Efficiencies");
+        data = new BarData(set);
 
         ValueFormatter formatter=new ValueFormatter() {
             @Override
@@ -280,8 +283,20 @@ public class CarEfficiencyActivity extends AppCompatActivity {
 
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                System.out.println(e);
-                System.out.println(h);
+                int pos= (int) e.getX();
+                CarType ct=CarTypes.get(pos);
+                String brand=ct.getBrand();
+                String model=ct.getModel();
+                String year=ct.getYear();
+
+                Bundle extra=new Bundle();
+                extra.putString("activity","CarEff");
+                extra.putString("brand",brand);
+                extra.putString("model",model);
+                extra.putString("year",year);
+                Intent i=new Intent(getApplicationContext(),popupApplication.class);
+                i.putExtras(extra);
+                startActivity(i);
             }
 
             @Override

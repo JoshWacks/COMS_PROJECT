@@ -2,6 +2,7 @@ package com.example.petrolapp;
 
 import android.annotation.SuppressLint;
 import android.content.*;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -17,6 +18,7 @@ import android.os.Build;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import org.json.JSONArray;
@@ -24,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -31,10 +34,11 @@ import java.time.LocalDate;
  */
 //TODO check they are at a petrol station before entering data
 @RequiresApi(api = Build.VERSION_CODES.O)
+
 public class AtStationActivity extends AppCompatActivity {
 
-    private double x_co;
-    private double y_co;
+    private double x_co=0;
+    private double y_co=0;
     private String username;
     private String stationAt="";
     LocalDate d= LocalDate.now();//saves it for the query
@@ -42,11 +46,34 @@ public class AtStationActivity extends AppCompatActivity {
     TextView txtDate;
     TextView txtCar;
     private Button btnDone;
+    Button btnBack;
+    private boolean backBtnVisible =true;
 
-    Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");//We can use the same connection throughout as file path will be the same
 
 
+    LinearLayout fullScreenContentControls;
     private BroadcastReceiver broadcastReceiver;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_at_station);
+        Intent intent=getIntent();
+        username=intent.getStringExtra("username");
+
+        configure();
+        configureScreen();
+
+
+        btnDone=findViewById(R.id.btnDone);
+
+
+        if(!runtime_permissions()){
+            enable_buttons();
+        }
+
+    }
 
     public void goBack(View view){
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
@@ -64,8 +91,9 @@ public class AtStationActivity extends AppCompatActivity {
         //Todo check if they have 2 cars and if so, let them choose which car they are filling up
 
         txtDate.append(d+" ");//sets the current date
-        getDesc();
         getStations();
+        getDesc();
+
 
     }
 
@@ -73,7 +101,7 @@ public class AtStationActivity extends AppCompatActivity {
         ContentValues cv=new ContentValues();
         cv.put("USERNAME",username);
         final String[] desc = {""};
-
+        Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
 
         c.fetchInfo(AtStationActivity.this, "get_CAR_DESC",cv, new RequestHandler() {
             @Override
@@ -110,6 +138,7 @@ public class AtStationActivity extends AppCompatActivity {
     private void getStations(){
 
         ContentValues cv=new ContentValues();
+        Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
 
         c.fetchInfo(AtStationActivity.this, "get_STATIONS",cv, new RequestHandler() {
             @Override
@@ -120,7 +149,11 @@ public class AtStationActivity extends AppCompatActivity {
     }
 
 
-    private  void processStation(String json) {
+    private  void processStation(String json)  {
+        while(x_co==0 && y_co==0){
+            //forces us to wait
+        }
+        //TODO remove possibility of infinite loop
         String name="";
         double x=0;
         double y=0;
@@ -137,6 +170,7 @@ public class AtStationActivity extends AppCompatActivity {
                 if((x_co-0.01)<x&&x<(x_co+0.01)&&(y_co-0.01)<y&&y<(y_co+0.01)){
                     stationAt=name;
                     txtStation.append(stationAt);
+                    System.out.println("name"+name);
 
                 }
 
@@ -178,7 +212,7 @@ public class AtStationActivity extends AppCompatActivity {
         cv.put("LITRES",litres);
 
 
-
+        Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
 
         c.fetchInfo(AtStationActivity.this, "insert_CAR_LOG",cv, new RequestHandler() {
             @Override
@@ -240,7 +274,7 @@ public class AtStationActivity extends AppCompatActivity {
                     Bundle extras=intent.getExtras();//gets the co-ord's here
                     x_co=extras.getDouble("x_co");
                     y_co=extras.getDouble("y_co");
-                    System.out.println("x "+x_co+" y "+y_co);
+
 
                 }
             };
@@ -259,163 +293,40 @@ public class AtStationActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-    private static final boolean AUTO_HIDE = true;
-
-    /**
-     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-
-    /**
-     * Some older devices needs a small delay between UI widget updates
-     * and a change of the status and navigation bar.
-     */
-    private static final int UI_ANIMATION_DELAY = 300;
-    private final Handler mHideHandler = new Handler();
-    private View mContentView;
-    private final Runnable mHidePart2Runnable = new Runnable() {
-        @SuppressLint("InlinedApi")
-        @Override
-        public void run() {
-            // Delayed removal of status and navigation bar
-
-            // Note that some of these constants are new as of API 16 (Jelly Bean)
-            // and API 19 (KitKat). It is safe to use them, as they are inlined
-            // at compile-time and do nothing on earlier devices.
-            mContentView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN
-                    |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
-    };
-    private View mControlsView;
-    private final Runnable mShowPart2Runnable = new Runnable() {
-        @Override
-        public void run() {
-            // Delayed display of UI elements
-            mControlsView.setVisibility(View.VISIBLE);
-        }
-    };
-    private boolean mVisible;
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
-        }
-    };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_at_station);
-        Intent intent=getIntent();
-        username=intent.getStringExtra("username");
-
-        View decorView=getWindow().getDecorView();
-        int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;//makes it full screen when opened
-        decorView.setSystemUiVisibility(uiOptions);
-
-        ActionBar actionBar = getSupportActionBar();//configures the navigation bar and the name of the app at the top
+    public void configureScreen(){
+        ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.hide();
+        actionBar.hide();//hides the name of the activity at the top
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);//hides the navigation bar at the bottom
+        fullScreenContentControls=findViewById(R.id.fullscreen_content_controls);
+        btnBack=findViewById(R.id.btnBackAtStation);
 
-        configure();
-
-
-        btnDone=findViewById(R.id.btnDone);
-
-
-        if(!runtime_permissions()){
-            enable_buttons();
-        }
-
-        mVisible = true;
-        mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView = findViewById(R.id.fullscreen_content);
-
-
-        // Set up the user interaction to manually show or hide the system UI.
+        ConstraintLayout mContentView=findViewById(R.id.AtStationContent);
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 toggle();
             }
         });
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        findViewById(R.id.btnBack).setOnTouchListener(mDelayHideTouchListener);
-
-
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    private void toggle(){//sets the navigation bar at the bottom visible or not when the user touches the screen
+        if(backBtnVisible){
 
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100);
-    }
+            btnBack.setVisibility(View.INVISIBLE);
+            fullScreenContentControls.setVisibility(View.INVISIBLE);
+            backBtnVisible =false;
 
-    private void toggle() {
-        if (mVisible) {
-            hide();
-        } else {
-            show();
+        }
+        else{
+            btnBack.setVisibility(View.VISIBLE);
+            fullScreenContentControls.setVisibility(View.VISIBLE);
+            backBtnVisible =true;
+
         }
     }
 
-    private void hide() {
-        // Hide UI first
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
-        mControlsView.setVisibility(View.GONE);
-        mVisible = false;
 
-        // Schedule a runnable to remove the status and navigation bar after a delay
-        mHideHandler.removeCallbacks(mShowPart2Runnable);
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
-    }
-
-    @SuppressLint("InlinedApi")
-    private void show() {
-        // Show the system bar
-        mHideHandler.removeCallbacks(mHidePart2Runnable);
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
-
-        mVisible = true;
-    }
-
-    /**
-     * Schedules a call to hide() in delay milliseconds, canceling any
-     * previously scheduled calls.
-     */
-    private void delayedHide(int delayMillis) {
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
-    }
 }
