@@ -19,6 +19,8 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
+        <activity android:name=".SpecifyCarActivity">
+        </activity>
         <activity android:name=".CarEfficiencyActivity">
         </activity>
         <activity android:name=".StationsEfficiencyActivity">

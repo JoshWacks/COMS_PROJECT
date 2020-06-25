@@ -4,8 +4,11 @@ import android.accessibilityservice.GestureDescription;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,15 +41,15 @@ public class CarEfficiencyActivity extends AppCompatActivity {
 
     private HashMap<String, Integer> CarTypeMap=new HashMap<String, Integer>() ;//A Map is used to see if we have encountered that car type before,
     //We use a HashMap to avoid implementing all the map methods
-    private ArrayList<CarType> CarTypes=new ArrayList<CarType>();//An arraylist to keep track of all our car types
+    private static ArrayList<CarType> CarTypes=new ArrayList<CarType>();//An arraylist to keep track of all our car types
 
     Thread thread;
-    ArrayList<BarEntry>entries;
-    BarDataSet set;
-    BarData data;
+    private static ArrayList<BarEntry>entries;
+    private static BarDataSet set;
+    private static BarData data;
+    private static String[]names;
 
     //Todo find their specific car and show it specifically for them
-    //Todo to get more info on the car select on a bar
     //TODO give them options for which cars they would like to see
 
     @Override
@@ -176,7 +179,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
 
 
         entries=new ArrayList<>();//the data values
-        final String[]names=new String[CarTypes.size()];//the names on the x-axis
+        names=new String[CarTypes.size()];//the names on the x-axis
 
         addDefaultData(entries,names);//method to add the default data to the entries of the graph
         set = new BarDataSet(entries, "Station Efficiencies");
@@ -305,4 +308,33 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             }
         } );
     }
+    public void goToSpecify(View view){//Method to open the specify screen
+
+        Intent i=new Intent(getApplicationContext(),SpecifyCarActivity.class);
+        startActivity(i);
+
+
+    }
+
+    public ArrayList<CarType> getCarTypes(){
+
+        return  CarTypes;
+    }
+
+    public ArrayList<BarEntry> getEntries() {
+        return entries;
+    }
+
+    public BarDataSet getSet() {
+        return set;
+    }
+
+    public BarData getData() {
+        return data;
+    }
+
+    public String[] getNames() {
+        return names;
+    }
+    //Getters
 }

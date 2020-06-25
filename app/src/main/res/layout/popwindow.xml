@@ -7,20 +7,32 @@
                                                    android:id="@+id/relativeLayout">
 
     <TextView
+            android:layout_width="5dp"
+            android:layout_height="match_parent" android:id="@+id/txtLeftBorder"
+            android:background="#000000"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+            android:layout_width="5dp"
+            android:layout_height="match_parent" android:id="@+id/txtRightBorder"
+            android:background="#000000"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
             android:layout_width="200dp"
             android:layout_height="58dp" android:id="@+id/txtPopData3" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="132dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="105dp"
             android:textColor="#000000" android:textStyle="bold"
             android:textAlignment="textStart" android:textSize="16sp" android:fontFamily="@font/autour_one"
-            android:layout_marginStart="140dp"/>
+            android:layout_marginStart="130dp"/>
     <TextView
             android:layout_width="129dp"
             android:layout_height="44dp" android:id="@+id/txtPopHeading3"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="132dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="105dp"
             android:textColor="#000000" android:textStyle="bold"
             android:textAlignment="viewStart" android:textSize="18sp" android:fontFamily="@font/autour_one"
-            android:layout_marginStart="24dp"/>
+            android:layout_marginStart="15dp"/>
     <TextView
             android:layout_width="105dp"
             android:layout_height="47dp" android:id="@+id/txtPopHeading1"
@@ -40,14 +52,14 @@
     <TextView
             android:layout_width="200dp"
             android:layout_height="58dp" android:id="@+id/txtPopData2" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="61dp"
+            app:layout_constraintStart_toStartOf="parent"
             android:textColor="#000000" android:textStyle="bold"
             android:textAlignment="textStart" android:textSize="16sp" android:fontFamily="@font/autour_one"
-            android:layout_marginStart="130dp"/>
+            android:layout_marginStart="130dp" android:layout_marginTop="60dp"/>
     <TextView
             android:layout_width="210dp"
             android:layout_height="60dp" android:id="@+id/txtPopData1" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="15dp"
             android:textColor="#000000" android:textStyle="bold"
             android:textSize="16sp" android:fontFamily="@font/autour_one"
             android:layout_marginStart="130dp"/>
@@ -59,4 +71,15 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="14dp" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="16dp" android:visibility="gone" android:textAlignment="viewStart"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="5dp" android:id="@+id/txtTopBorder"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="#000000"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="5dp" android:id="@+id/txtBottomBorder"
+            android:background="#000000"
+            app:layout_constraintTop_toBottomOf="@+id/txtPopHeading2" app:layout_constraintStart_toStartOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

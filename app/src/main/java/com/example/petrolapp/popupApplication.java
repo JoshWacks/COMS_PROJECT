@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 public class popupApplication extends Activity {
     private String activity;
     double hDim;
+    double wDim;
     TextView txtH1;
     TextView txtH2;
     TextView txtH3;
@@ -44,11 +45,13 @@ public class popupApplication extends Activity {
 
         if(activity.equals("FillUps")){
             fillUpsPopUp(bundle);
-            hDim=0.13;
-            getWindow().setLayout((int) (width*(0.9)),(int) (height*hDim));
+            hDim=0.16;
+            wDim=0.9;
+            getWindow().setLayout((int) (width*wDim),(int) (height*hDim));
         }else{
-            hDim=0.40;
-            getWindow().setLayout((int) (width*(0.9)),(int) (height*hDim));
+            hDim=0.2;
+            wDim=0.7;
+            getWindow().setLayout((int) (width*wDim),(int) (height*hDim));
             carEffPopUp(bundle);
         }
 
@@ -60,6 +63,9 @@ public class popupApplication extends Activity {
     public void fillUpsPopUp(Bundle bundle){
         //Method for when the fillups activity is calling the popup window
         TextView txtFound=findViewById(R.id.txtNotFound);
+
+        TextView txtBottomBorder=findViewById(R.id.txtBottomBorder);
+        txtBottomBorder.setVisibility(View.VISIBLE);
         txtH1.setText("Station: ");
         txtH2.setText("Efficiency: ");
 
@@ -92,9 +98,12 @@ public class popupApplication extends Activity {
     }
 
     public void carEffPopUp(Bundle bundle){
-        txtH1.setText("BRAND:  ");
-        txtH2.setText("MODEL:  ");
-        txtH3.setText("YEAR:  ");
+
+        TextView txtBottomBorder=findViewById(R.id.txtBottomBorder);
+        txtBottomBorder.setVisibility(View.GONE);
+        txtH1.setText("BRAND:     ");
+        txtH2.setText("MODEL:    ");
+        txtH3.setText("YEAR:    ");
 
         String brand=bundle.getString("brand");
         String model=bundle.getString("model");

@@ -6,6 +6,69 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".CarEfficiencyActivity" android:id="@+id/FillUpsContent">
+    <TextView
+            android:text="to specify the cars"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" android:id="@+id/txtClick3" android:textStyle="bold"
+            android:textSize="18sp" android:gravity="center|top" android:fontFamily="@font/autour_one"
+            android:textColor="#000000" android:textAllCaps="false" android:background="#FFFFFF"
+            android:textAlignment="viewStart" android:foregroundTint="#101010" android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            tools:ignore="RtlCompat"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="136dp" android:layout_marginTop="562dp"/>
+    <TextView
+            android:text="here"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" android:id="@+id/txtSpecify" android:textStyle="bold"
+            android:textSize="20sp" android:gravity="center|top" android:fontFamily="@font/autour_one"
+            android:textColor="#00BFA5" android:textAllCaps="false" android:background="#FFFFFF"
+            android:textAlignment="viewStart" android:foregroundTint="#101010" android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            tools:ignore="RtlCompat"
+            android:onClick="goToSpecify"
+            app:layout_constraintTop_toBottomOf="@+id/txtCarMoreDetail"
+            app:layout_constraintStart_toEndOf="@+id/txtClick" android:layout_marginStart="17dp"
+            android:layout_marginTop="3dp"/>
+    <TextView
+            android:text="Above is a graph showing the fuel efficiencies (Mileage/Litre) of all the cars in our system"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" android:id="@+id/txtCarEffDescription" android:textStyle="bold"
+            android:textSize="16sp" android:gravity="center|top" android:fontFamily="@font/autour_one"
+            android:textColor="#000000" android:textAllCaps="false" android:background="#FFFFFF"
+            android:textAlignment="viewStart" android:foregroundTint="#101010" android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            tools:ignore="RtlCompat"
+            app:layout_constraintTop_toBottomOf="@+id/CarBarGraph" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="2dp"/>
+    <TextView
+            android:text="Click"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" android:id="@+id/txtClick" android:textStyle="bold"
+            android:textSize="18sp" android:gravity="center|top" android:fontFamily="@font/autour_one"
+            android:textColor="#000000" android:textAllCaps="false" android:background="#FFFFFF"
+            android:textAlignment="viewStart" android:foregroundTint="#101010" android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            tools:ignore="RtlCompat"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="562dp"
+            app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+            android:text="Click on a bar for more info!"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" android:id="@+id/txtCarMoreDetail" android:textStyle="bold"
+            android:textSize="16sp" android:gravity="center|top" android:fontFamily="@font/autour_one"
+            android:textColor="#DD2C00" android:textAllCaps="false" android:background="#FFFFFF"
+            android:textAlignment="center" android:foregroundTint="#101010" android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            tools:ignore="RtlCompat"
+            app:layout_constraintTop_toBottomOf="@+id/CarBarGraph" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="74dp"/>
     <Button android:id="@+id/btnCarEffBack"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
@@ -28,9 +91,10 @@
             android:paddingBottom="5dp"/>
     <com.github.mikephil.charting.charts.BarChart
             android:layout_width="match_parent"
-            android:layout_height="470dp"
+            android:layout_height="409dp"
             android:id="@+id/CarBarGraph"
-            app:layout_constraintTop_toBottomOf="@+id/txtCarEffHeading" app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/txtCarEffHeading" app:layout_constraintStart_toStartOf="parent"
+    >
 
     </com.github.mikephil.charting.charts.BarChart>
 

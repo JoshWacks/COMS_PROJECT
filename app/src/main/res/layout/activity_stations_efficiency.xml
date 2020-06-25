@@ -18,7 +18,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
     <TextView
-            android:text="Graph showing how each petrol station brand compares"
+            android:text="Above is a graph showing how each petrol station brand compares"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="wrap_content" android:id="@+id/txtEffDescription" android:textStyle="bold"
