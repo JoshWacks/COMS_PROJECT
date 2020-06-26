@@ -51,7 +51,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
     private Thread thread;
 
     //Todo find their specific car and show it specifically for them
-    //TODO give them options for which cars they would like to see
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +80,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
     }
     public void goBack(View view) {
         Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+        i.putExtra("USERNAME",username);
         startActivity(i);
     }
 
@@ -222,7 +223,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             //network calls must be done on their own threads
             @Override
             public void run() {
-//TODO check if the background should actually be black and if I should draw grid lines
+
 
                 CarEfficiencyActivity.this.runOnUiThread(new Runnable() {//To change the background colour we must run a thread on the UI Thread
                     public void run() {

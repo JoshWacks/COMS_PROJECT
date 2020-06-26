@@ -19,6 +19,19 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
+        <activity android:name=".Login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".SecutityQuestions">
+        </activity>
+        <activity android:name=".SignUp">
+        </activity>
+        <activity android:name=".Forgot_password">
+        </activity>
         <activity android:name=".CarEfficiencyActivity">
         </activity>
         <activity android:name=".StationsEfficiencyActivity">

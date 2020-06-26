@@ -28,6 +28,7 @@ import java.time.LocalDate;
  * status bar and navigation/system bar) with user interaction.
  */
 //TODO check they are at a petrol station before entering data
+    //TODO check if they have a car first if not take them to the new car page
 @RequiresApi(api = Build.VERSION_CODES.O)
 
 public class AtStationActivity extends AppCompatActivity {
@@ -45,6 +46,8 @@ public class AtStationActivity extends AppCompatActivity {
     private Button btnDone;
     private boolean backBtnVisible = true;
     private BroadcastReceiver broadcastReceiver;
+
+    private boolean nameSet=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class AtStationActivity extends AppCompatActivity {
 
     public void goBack(View view) {
         Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+        i.putExtra("USERNAME",username);
         startActivity(i);
     }
 
@@ -83,7 +87,7 @@ public class AtStationActivity extends AppCompatActivity {
         //Todo check if they have 2 cars and if so, let them choose which car they are filling up
 
         txtDate.append(d + " ");//sets the current date
-        getStations();
+
         getDesc();
 
 
@@ -142,10 +146,6 @@ public class AtStationActivity extends AppCompatActivity {
 
 
     private void processStation(String json) {
-        while (x_co == 0 && y_co == 0) {
-            //forces us to wait
-        }
-        //TODO remove possibility of infinite loop
         String name = "";
         double x = 0;
         double y = 0;
@@ -162,7 +162,7 @@ public class AtStationActivity extends AppCompatActivity {
                 if ((x_co - 0.01) < x && x < (x_co + 0.01) && (y_co - 0.01) < y && y < (y_co + 0.01)) {
                     stationAt = name;
                     txtStation.append(stationAt);
-                    System.out.println("name" + name);
+
 
                 }
 
@@ -263,6 +263,13 @@ public class AtStationActivity extends AppCompatActivity {
                     Bundle extras = intent.getExtras();//gets the co-ord's here
                     x_co = extras.getDouble("x_co");
                     y_co = extras.getDouble("y_co");
+                    if(!nameSet){
+                        getStations();
+                        nameSet=true;
+                    }
+
+
+
 
 
                 }

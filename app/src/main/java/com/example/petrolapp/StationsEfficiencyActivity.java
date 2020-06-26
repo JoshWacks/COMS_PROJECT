@@ -31,9 +31,9 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
     BarChart barChart;
 
     Thread thread;
-    String username;
 
     Button btnBack;
+    String username;
     //TODO show the correct screen when they have made no fill ups yet on this and on 'View My Fill Ups ' Activity
 
 
@@ -42,15 +42,9 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stations_efficiency);
 
-        Intent intent=getIntent();
-        username=intent.getStringExtra("username");
-
         configureScreen();
         fetchData();
-
-
-
-
+        username=getIntent().getStringExtra("username");
 
         thread=new Thread(new Runnable() {
             @Override
@@ -93,14 +87,17 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         }
     }
     public void goBack(View view){
+
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
+
+        i.putExtra("USERNAME",username);
         startActivity(i);
     }
 
     private void fetchData(){//directly fetches the raw data to be processed
         Connection connection=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
         ContentValues cv=new ContentValues();
-        cv.put("USERNAME",username);
+
 
         connection.fetchInfo(StationsEfficiencyActivity.this, "get_STATIONS_EFFICIENCY",cv, new RequestHandler() {
             @Override
@@ -205,7 +202,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
             //network calls must be done on their own threads
             @Override
             public void run() {
-//TODO check if the background should actually be black and if I should draw grid lines
+
 
                 StationsEfficiencyActivity.this.runOnUiThread(new Runnable() {//To change the background colour we must run a thread on the UI Thread
                     public void run() {

@@ -13,30 +13,25 @@
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
+    <TextView
+            android:text="View Full Ups"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="80dp" android:id="@+id/txtViewFillUpsHeading" android:textStyle="bold"
+            android:textSize="42sp" android:gravity="center|top" android:fontFamily="@font/autour_one"
+            android:textColor="#00C853" android:textAllCaps="true" android:background="#000000"
+            android:textAlignment="center" android:foregroundTint="#101010"/>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/FillUpsContent">
 
-        <TextView
-                android:text="Your Fill Ups"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="63dp" android:id="@+id/txtStationEffHeading" android:textStyle="bold"
-                android:textSize="38sp" android:gravity="center|top" android:fontFamily="@font/autour_one"
-                android:textColor="#020202" android:textAllCaps="true" android:background="#FFFFFF"
-                android:textAlignment="center" android:foregroundTint="#101010"
-                app:layout_constraintBottom_toTopOf="@+id/scrollView"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintVertical_bias="0.097"
-                android:layout_marginTop="5dp"/>
         <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="304dp"
                 android:id="@+id/scrollView"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="106dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="100dp" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
             <TableLayout android:layout_width="match_parent"
                          android:layout_height="wrap_content"

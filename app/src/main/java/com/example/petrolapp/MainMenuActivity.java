@@ -8,9 +8,11 @@ package com.example.petrolapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-//TODO get username from login and send it to all other activities via intent
+
 //TODO optimise fetchPetrol and fetchDiesel code so we don't wait long for main menu
 //Todo make sure it does not crash when not connected to the internet
 public class MainMenuActivity extends AppCompatActivity {
@@ -30,18 +32,19 @@ public class MainMenuActivity extends AppCompatActivity {
     TextView dTextView;
     private String petrolPrice = "";
     private String dieselPrice = "";
-    private final String username = "JoshW";
+    private String username ;
+    private Intent i ;
 
     public void atStation(View view) {
-        Intent i = new Intent(getApplicationContext(), AtStationActivity.class);
 
+        Intent i = new Intent(getApplicationContext(), AtStationActivity.class);
         i.putExtra("price", petrolPrice);
         i.putExtra("username", username);
         startActivity(i);
     }
 
     public void logOut(View view) {
-        Intent i = new Intent(getApplicationContext(), GPS_Service.class);
+
         stopService(i);//Ends the GPS service when the logout before the app closes
         System.exit(0);
     }
@@ -49,6 +52,7 @@ public class MainMenuActivity extends AppCompatActivity {
     public void viewFillups(View view) {
         Intent i = new Intent(getApplicationContext(), ViewFillUpsActivity.class);
         i.putExtra("username", username);
+
         startActivity(i);
     }
 
@@ -68,20 +72,19 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent i = new Intent(getApplicationContext(), GPS_Service.class);
-        startService(i);
+        i = new Intent(getApplicationContext(), GPS_Service.class);
+        startService(i);//Starts the GPS service here
 
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_menu);
 
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
+        Intent intent=getIntent();
+        username=intent.getStringExtra("USERNAME");
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.hide();
 
-        setContentView(R.layout.activity_main_menu);
         pTextView = findViewById(R.id.txtViewPPrice);
         dTextView = findViewById(R.id.txtViewDPrice);
 

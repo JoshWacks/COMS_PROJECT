@@ -38,9 +38,9 @@ public class ViewFillUpsActivity extends AppCompatActivity {
     LinearLayout fullScreenContentControls;
 
     public void fillTable(){//method to full the table when it originally opens
-
+        String user=username;
         ContentValues cv=new ContentValues();
-        cv.put("USERNAME",username);
+        cv.put("USERNAME",user);
 
         Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
 
@@ -199,7 +199,9 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
             if(date.contentEquals(req_date)){
                 try {
-                    tbl.removeViews(1,tbl.getChildCount()-1);//removes all the rows except the heading row.
+                    if(!found) {//we only remove the views once
+                        tbl.removeViews(1, tbl.getChildCount() - 1);//removes all the rows except the heading row.
+                    }
                 }
                 catch (NullPointerException | IndexOutOfBoundsException ex ){
                     processJson(JSON);
@@ -351,6 +353,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
     public void goBack(View view){
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
+        i.putExtra("USERNAME",username);
         startActivity(i);
     }
 

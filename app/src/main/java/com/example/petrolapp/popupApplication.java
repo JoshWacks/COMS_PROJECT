@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 
-//TODO make popup more readable
+
 public class popupApplication extends Activity {
     private TextView txtH1;
     private TextView txtH2;

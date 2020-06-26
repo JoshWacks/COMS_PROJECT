@@ -5,21 +5,21 @@
              android:layout_height="match_parent"
              android:background="#FFFFFF"
              tools:context=".MainMenuActivity"
->
+             android:id="@+id/mainMenuContent">
 
 
     <TableRow
             android:layout_width="match_parent"
             android:layout_height="164dp"
             android:id="@+id/tblRowHeading"
-            android:paddingStart="10dp" android:paddingTop="3dp">
+    >
         <TextView
                 android:text="Petrol Perfect"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
-                android:layout_height="60dp" android:id="@+id/txtName" android:textStyle="bold"
+                android:layout_height="wrap_content" android:id="@+id/txtName" android:textStyle="bold"
                 android:textSize="38sp" android:gravity="center|top" android:fontFamily="@font/autour_one"
-                android:textColor="#00C853" android:textAllCaps="true" android:background="#FFFFFF"
+                android:textColor="#00C853" android:textAllCaps="true" android:background="#000000"
                 android:textAlignment="center" android:foregroundTint="#101010"/>
 
 
@@ -28,13 +28,13 @@
             android:layout_width="match_parent"
             android:layout_height="164dp"
             android:id="@+id/tblRowPic"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:background="#FBFBFB">
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
-                android:layout_height="140dp"
+                android:layout_height="120dp"
                 app:srcCompat="@drawable/menu_image"
                 android:id="@+id/imageView5"/>
         <Button
@@ -45,7 +45,8 @@
 
                 android:id="@+id/btnPetrol" android:textSize="24sp"
                 android:backgroundTint="#1CE624"
-                android:fontFamily="sans-serif" android:textStyle="bold" android:onClick="atStation"/>
+                android:fontFamily="sans-serif" android:textStyle="bold" android:onClick="atStation"
+        />
 
     </TableRow>
 
@@ -204,7 +205,7 @@
                 android:text="Log Out"
                 android:layout_weight="1"
                 android:layout_width="399dp"
-                android:layout_height="80dp"
+                android:layout_height="62dp"
 
                 android:id="@+id/btnExit"
                 android:textSize="30sp"
