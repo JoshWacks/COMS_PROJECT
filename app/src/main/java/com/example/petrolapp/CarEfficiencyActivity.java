@@ -1,17 +1,13 @@
 package com.example.petrolapp;
 
-import android.accessibilityservice.GestureDescription;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Parcelable;
+import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.*;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -30,24 +26,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class CarEfficiencyActivity extends AppCompatActivity {
-    String username;
-    BarChart barChart;
+    private static String username;
+    private static BarChart barChart;
 
-    Button btnBack;
-    private boolean backBtnVisible =true;
-
-    private HashMap<String, Integer> CarTypeMap=new HashMap<String, Integer>() ;//A Map is used to see if we have encountered that car type before,
+    private final HashMap<String, Integer> CarTypeMap = new HashMap<String, Integer>();//A Map is used to see if we have encountered that car type before,
     //We use a HashMap to avoid implementing all the map methods
-    private static ArrayList<CarType> CarTypes=new ArrayList<CarType>();//An arraylist to keep track of all our car types
-
-    Thread thread;
-    private static ArrayList<BarEntry>entries;
+    private static final ArrayList<CarType> CarTypes = new ArrayList<CarType>();//An arraylist to keep track of all our car types
+    private static ArrayList<BarEntry> entries;
     private static BarDataSet set;
     private static BarData data;
-    private static String[]names;
+    private static String[] names;
+
+    private Button btnBack;
+    private boolean backBtnVisible = true;
+
+    private Spinner spnrBrand;
+    private Spinner spnrModel;
+    private Spinner spnrYear;
+
+    private Thread thread;
 
     //Todo find their specific car and show it specifically for them
     //TODO give them options for which cars they would like to see
@@ -57,24 +58,32 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_efficiency);
 
-        Intent intent=getIntent();
-        username=intent.getStringExtra("username");
+        Intent intent = getIntent();
 
-        configureScreen();
+        username = intent.getStringExtra("username");
+
+
         fetchData();
 
-        thread=new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 createGraph();//We can only create the graph confidently once we know the data has been fetched
                 barInfo();
+
             }
         });
 
+        configureScreen();
+
 
     }
+    public void goBack(View view) {
+        Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+        startActivity(i);
+    }
 
-    public void configureScreen(){
+    private void configureScreen() {
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.hide();//hides the name of the activity at the top
@@ -82,9 +91,9 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         decorView.setSystemUiVisibility(uiOptions);//hides the navigation bar at the bottom
 
-        btnBack=findViewById(R.id.btnCarEffBack);
+        btnBack = findViewById(R.id.btnCarEffBack);
 
-        ConstraintLayout mContentView=findViewById(R.id.FillUpsContent);
+        ConstraintLayout mContentView = findViewById(R.id.FillUpsContent);
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,29 +102,25 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         });
     }
 
-    private void toggle(){//sets the navigation bar at the bottom visible or not when the user touches the screen
-        if(backBtnVisible){
+    private void toggle() {//sets the navigation bar at the bottom visible or not when the user touches the screen
+        if (backBtnVisible) {
 
             btnBack.setVisibility(View.INVISIBLE);
-            backBtnVisible =false;
-        }
-        else{
+            backBtnVisible = false;
+        } else {
             btnBack.setVisibility(View.VISIBLE);
-            backBtnVisible =true;
+            backBtnVisible = true;
         }
     }
 
-    public void goBack(View view){
-        Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
-        startActivity(i);
-    }
 
-    private void fetchData(){//directly fetches the raw data to be processed
-        Connection connection=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
-        ContentValues cv=new ContentValues();
-       // cv.put("USERNAME",username);
 
-        connection.fetchInfo(CarEfficiencyActivity.this, "get_CARS_EFFICIENCY",cv, new RequestHandler() {
+    private void fetchData() {//directly fetches the raw data to be processed
+        Connection connection = new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
+        ContentValues cv = new ContentValues();
+        // cv.put("USERNAME",username);
+
+        connection.fetchInfo(CarEfficiencyActivity.this, "get_CARS_EFFICIENCY", cv, new RequestHandler() {
             @Override
             public void processResponse(String response) {
 
@@ -124,44 +129,43 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         });
     }
 
-    private void processJson(String data){
+    private void processJson(String data) {
         String brand;
         String model;
         String year;
         String type;
         Double eff;
 
-        int CarTypeNum=0;//each car type will be assigned a unique integer
+        int CarTypeNum = 0;//each car type will be assigned a unique integer
 
         try {
-            JSONArray jsonArray=new JSONArray(data);
+            JSONArray jsonArray = new JSONArray(data);
 
-            for(int i=0;i<jsonArray.length();i++){
-                JSONObject item= (JSONObject) jsonArray.get(i);
-                brand=item.getString("CAR_BRAND");
-                model=item.getString("CAR_MODEL");
-                year=item.getString("CAR_YEAR");
-                eff=item.getDouble("EFFICIENCY");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject item = (JSONObject) jsonArray.get(i);
+                brand = item.getString("CAR_BRAND");
+                model = item.getString("CAR_MODEL");
+                year = item.getString("CAR_YEAR");
+                eff = item.getDouble("EFFICIENCY");
 
-                type=brand+model+year;//Type is a combination of brand,model and year
+                type = brand + model + year;//Type is a combination of brand,model and year
 
                 //System.out.println(brand+"  "+model+"  "+year+" "+eff);
 
-                if(!CarTypeMap.containsKey(type)){//Checks to see if we have not come across that car type before
-                    CarTypeMap.put(type,CarTypeNum);
+                if (!CarTypeMap.containsKey(type)) {//Checks to see if we have not come across that car type before
+                    CarTypeMap.put(type, CarTypeNum);
                     CarTypeNum++;
 
-                    CarType carType=new CarType(brand,model,year);
+                    CarType carType = new CarType(brand, model, year);
                     CarTypes.add(carType);
                 }
 
-                for(CarType c:CarTypes){//finds the correct CarType for which that entry belongs
-                    if(type.equals(c.getType())){
+                for (CarType c : CarTypes) {//finds the correct CarType for which that entry belongs
+                    if (type.equals(c.getType())) {
                         c.addEntry(eff);
                         break;
                     }
                 }
-
 
 
             }
@@ -169,50 +173,49 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         thread.start();
-
+        fillDropDowns();//Only once all the data has been collected should we create the dropdowns
 
     }
 
-    private void createGraph(){
+    private void createGraph() {//Boolean to check if w we are using it for the default data or not
 
-        barChart=findViewById(R.id.CarBarGraph);
+        barChart = findViewById(R.id.CarBarGraph);
+        entries = new ArrayList<>();//the data values
+        names = new String[CarTypes.size()];//the names on the x-axis
+
+        addDefaultData(entries, names);//method to add the default data to the entries of the graph
 
 
-        entries=new ArrayList<>();//the data values
-        names=new String[CarTypes.size()];//the names on the x-axis
-
-        addDefaultData(entries,names);//method to add the default data to the entries of the graph
         set = new BarDataSet(entries, "Station Efficiencies");
         data = new BarData(set);
 
-        ValueFormatter formatter=new ValueFormatter() {
+
+        ValueFormatter formatter = new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
                 return names[(int) value];//sets the names on the X-Axis to our stations
             }
         };
-
-        formatDefaultBarGraph(set,data,formatter);
-
+        formatDefaultBarGraph(set, data, formatter);
 
 
     }
 
-    public void addDefaultData(ArrayList<BarEntry>entries,String[]names){
-        for(Integer i=0;i<CarTypes.size();i++){
-            CarType ct=CarTypes.get(i);
+    private void addDefaultData(ArrayList<BarEntry> entries, String[] names) {
+        for (Integer i = 0; i < CarTypes.size(); i++) {
+            CarType ct = CarTypes.get(i);
 
-            float x=i.floatValue();//the default position of that bar
-            float y=ct.getAverage().floatValue();//the y value of that bar
+            float x = i.floatValue();//the default position of that bar
+            float y = ct.getAverage().floatValue();//the y value of that bar
             // x and y must be of type float
-            entries.add(new BarEntry(x,y));
+            entries.add(new BarEntry(x, y));
 
-            names[i]=ct.getModel();
+            names[i] = ct.getModel();
 
         }
     }
 
-    public void formatDefaultBarGraph(BarDataSet set,BarData data,ValueFormatter formatter){
+    private void formatDefaultBarGraph(BarDataSet set, BarData data, ValueFormatter formatter) {
         //method to do all the layout associated code for the bargraph
 
         final Thread th = new Thread(new Runnable() {
@@ -231,7 +234,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             }
         });
         th.start();
-        ArrayList<Integer>colorArr=new ArrayList<>();
+        ArrayList<Integer> colorArr = new ArrayList<>();
         colorArr.add(Color.GREEN);
         colorArr.add(Color.MAGENTA);
         colorArr.add(Color.BLUE);
@@ -242,11 +245,11 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         set.setValueTextColor(Color.CYAN);
         set.setColors(colorArr);
 
-        Legend legend=barChart.getLegend();
+        Legend legend = barChart.getLegend();
         legend.setEnabled(false);//no need for a legend on a bar graph
 
         barChart.setExtraBottomOffset(10f);//Prevents the bottom of the x-axis labels from being cut off
-        XAxis xAxis=barChart.getXAxis();
+        XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(formatter);//sets the values on the x-axis
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setLabelCount(CarTypes.size());//The total number of labels that must appear
@@ -254,8 +257,8 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         xAxis.setTextColor(Color.CYAN);
         xAxis.setDrawGridLines(true);
 
-        YAxis yAxisL=barChart.getAxisLeft();
-        YAxis yAxisR=barChart.getAxisRight();
+        YAxis yAxisL = barChart.getAxisLeft();
+        YAxis yAxisR = barChart.getAxisRight();
         yAxisL.setTextSize(18f);
         yAxisR.setTextSize(18f);
         yAxisL.setTextColor(Color.CYAN);
@@ -263,7 +266,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         yAxisL.setDrawGridLines(true);
         yAxisR.setDrawGridLines(true);
 
-        float barWidth=0.3f;
+        float barWidth = 0.3f;
 //TODO check if this barwidth will always be alright
         data.setBarWidth(barWidth); // set custom bar width
         barChart.setData(data);
@@ -275,29 +278,31 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         barChart.setTouchEnabled(true);
         barChart.setDragEnabled(true);
         barChart.setScaleEnabled(true);
-        barChart.postInvalidate(); // refresh
+
+        barChart.postInvalidate();
+
 
     }
 
-    public void barInfo(){
+    private void barInfo() {
         //Method to show extra info on the type of car when that bar is selected
 
-        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener(){
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
 
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                int pos= (int) e.getX();
-                CarType ct=CarTypes.get(pos);
-                String brand=ct.getBrand();
-                String model=ct.getModel();
-                String year=ct.getYear();
+                int pos = (int) e.getX();
+                CarType ct = CarTypes.get(pos);
+                String brand = ct.getBrand();
+                String model = ct.getModel();
+                String year = ct.getYear();
 
-                Bundle extra=new Bundle();
-                extra.putString("activity","CarEff");
-                extra.putString("brand",brand);
-                extra.putString("model",model);
-                extra.putString("year",year);
-                Intent i=new Intent(getApplicationContext(),popupApplication.class);
+                Bundle extra = new Bundle();
+                extra.putString("activity", "CarEff");
+                extra.putString("brand", brand);
+                extra.putString("model", model);
+                extra.putString("year", year);
+                Intent i = new Intent(getApplicationContext(), popupApplication.class);
                 i.putExtras(extra);
                 startActivity(i);
             }
@@ -306,35 +311,141 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             public void onNothingSelected() {
 
             }
-        } );
-    }
-    public void goToSpecify(View view){//Method to open the specify screen
-
-        Intent i=new Intent(getApplicationContext(),SpecifyCarActivity.class);
-        startActivity(i);
-
-
+        });
     }
 
-    public ArrayList<CarType> getCarTypes(){
+    private void fillDropDowns() {
+        spnrBrand = findViewById(R.id.spnrBrand);
+        spnrModel = findViewById(R.id.spnrModel);
+        spnrYear = findViewById(R.id.spnrYear);
 
-        return  CarTypes;
+        ArrayList<String> arrayListBrand = new ArrayList<>();
+        arrayListBrand.add("Brand");
+        ArrayList<String> arrayListModel = new ArrayList<>();
+        arrayListModel.add("Model");
+        ArrayList<String> arrayListYear = new ArrayList<>();
+        arrayListYear.add("Year");
+
+        for (CarType ct : CarTypes) {
+            arrayListBrand.add(ct.getBrand());
+            arrayListYear.add(ct.getYear());
+        }
+
+
+        ArrayAdapter<String> arrayAdapterBrand = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListBrand);
+        ArrayAdapter<String> arrayAdapterModel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListModel);
+        ArrayAdapter<String> arrayAdapterYear = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListYear);
+
+        spnrBrand.setAdapter(arrayAdapterBrand);
+        spnrModel.setAdapter(arrayAdapterModel);
+        spnrYear.setAdapter(arrayAdapterYear);
+
+        spnrBrand.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                onBrandSelected();
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                spnrModel.setAdapter(arrayAdapterModel);
+
+            }
+        });
+
+
+
+
     }
 
-    public ArrayList<BarEntry> getEntries() {
-        return entries;
+    private void onBrandSelected(){
+        String brand= (String) spnrBrand.getSelectedItem();
+
+        ArrayList<String>arrayListModel=new ArrayList<>();
+        for (CarType ct:CarTypes){
+            if(ct.getBrand().equals(brand)){
+                arrayListModel.add(ct.getModel());
+            }
+        }
+        ArrayAdapter<String> arrayAdapterModel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListModel);
+        spnrModel.setAdapter(arrayAdapterModel);
+
     }
 
-    public BarDataSet getSet() {
-        return set;
+
+
+    private boolean checkValidChoice(){
+        String brandSelected= (String) spnrBrand.getSelectedItem();
+
+        if(brandSelected.equals("Brand")){
+            Toast toast = Toast.makeText(getApplicationContext(), "Please select a brand first", Toast.LENGTH_LONG);
+            toast.show();
+            return false;
+        }
+
+        String modelSelected= (String) spnrModel.getSelectedItem();
+        if(modelSelected.equals("Model")){
+            Toast toast = Toast.makeText(getApplicationContext(), "Please select a model first", Toast.LENGTH_LONG);
+            toast.show();
+            return false;
+        }
+
+        String yearSelected= (String) spnrYear.getSelectedItem();
+        if(yearSelected.equals("Year")){
+            Toast toast = Toast.makeText(getApplicationContext(), "Please select a year first", Toast.LENGTH_LONG);
+            toast.show();
+            return false;
+        }
+
+        String typeSelected=brandSelected+modelSelected+yearSelected;
+        if(!CarTypeMap.containsKey(typeSelected)){
+            Toast toast = Toast.makeText(getApplicationContext(), "Please select a valid car first", Toast.LENGTH_LONG);
+            toast.show();
+            return false;
+        }
+        return  true;
+
     }
 
-    public BarData getData() {
-        return data;
-    }
 
-    public String[] getNames() {
-        return names;
+
+    public void carEffSearch(View view) {
+        boolean validChoice=checkValidChoice();
+
+        if(validChoice){
+            String brandSelected= (String) spnrBrand.getSelectedItem();
+            String modelSelected= (String) spnrModel.getSelectedItem();
+            String yearSelected= (String) spnrYear.getSelectedItem();
+
+            String typeSelected=brandSelected+modelSelected+yearSelected;
+
+            int pos=0;
+            for(CarType ct:CarTypes){
+                if(ct.getType().equals(typeSelected)){
+                    pos=CarTypes.indexOf(ct);
+
+                    break;
+                }
+            }
+            barChart.highlightValue(pos,0,-1);
+
+            Bundle extra = new Bundle();
+            extra.putString("activity", "CarEff");
+            extra.putString("brand", brandSelected);
+            extra.putString("model", modelSelected);
+            extra.putString("year", yearSelected);
+            Intent i = new Intent(getApplicationContext(), popupApplication.class);//We show that popup Activity
+            i.putExtras(extra);
+            startActivity(i);
+
+
+
+
+
+        }
+
     }
-    //Getters
 }

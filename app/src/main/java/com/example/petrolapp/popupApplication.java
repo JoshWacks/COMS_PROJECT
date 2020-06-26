@@ -10,16 +10,13 @@ import androidx.annotation.Nullable;
 
 //TODO make popup more readable
 public class popupApplication extends Activity {
-    private String activity;
-    double hDim;
-    double wDim;
-    TextView txtH1;
-    TextView txtH2;
-    TextView txtH3;
+    private TextView txtH1;
+    private TextView txtH2;
+    private TextView txtH3;
 
-    TextView txtData1;
-    TextView txtData2;
-    TextView txtData3;
+    private TextView txtData1;
+    private TextView txtData2;
+    private TextView txtData3;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,17 +38,20 @@ public class popupApplication extends Activity {
 
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
-        activity=bundle.getString("activity");//checks which activity is calling it
+        String activity = bundle.getString("activity");//checks which activity is calling it
 
+        assert activity != null;
+        double hDim;
+        double wDim;
         if(activity.equals("FillUps")){
             fillUpsPopUp(bundle);
-            hDim=0.16;
-            wDim=0.9;
-            getWindow().setLayout((int) (width*wDim),(int) (height*hDim));
+            hDim =0.16;
+            wDim =0.9;
+            getWindow().setLayout((int) (width* wDim),(int) (height* hDim));
         }else{
-            hDim=0.2;
-            wDim=0.7;
-            getWindow().setLayout((int) (width*wDim),(int) (height*hDim));
+            hDim =0.2;
+            wDim =0.7;
+            getWindow().setLayout((int) (width* wDim),(int) (height* hDim));
             carEffPopUp(bundle);
         }
 
