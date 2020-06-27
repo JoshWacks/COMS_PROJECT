@@ -40,10 +40,10 @@
         <Button
                 android:text="I Am At The Petrol Station"
                 android:layout_weight="1"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
 
-                android:id="@+id/btnPetrol" android:textSize="24sp"
+                android:id="@+id/btnPetrol" android:textSize="22sp"
                 android:backgroundTint="#1CE624"
                 android:fontFamily="sans-serif" android:textStyle="bold" android:onClick="atStation"
         />

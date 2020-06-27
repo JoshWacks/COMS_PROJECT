@@ -28,13 +28,13 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
                                                                                     //We use a HashMap to avoid implementing all the map methods
     private ArrayList<Station>Stations=new ArrayList<Station>();//An arraylist to keep track of all our stations
 
-    BarChart barChart;
+    private BarChart barChart;
 
-    Thread thread;
+    private Thread thread;
 
-    Button btnBack;
-    String username;
-    //TODO show the correct screen when they have made no fill ups yet on this and on 'View My Fill Ups ' Activity
+    private Button btnBack;
+
+    //TODO try and show only petrol stations they have been to
 
 
     @Override
@@ -44,7 +44,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
         configureScreen();
         fetchData();
-        username=getIntent().getStringExtra("username");
+
 
         thread=new Thread(new Runnable() {
             @Override
@@ -90,7 +90,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
 
-        i.putExtra("USERNAME",username);
+
         startActivity(i);
     }
 

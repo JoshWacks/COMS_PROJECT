@@ -303,7 +303,7 @@ public class Login extends AppCompatActivity {
         String username = textInputUsername.getEditText().getText().toString().trim();
 
         Intent intent = new Intent(this,MainMenuActivity.class);
-        intent.putExtra("USERNAME", username);
+        appInformation.setUsername(username);
         startActivity(intent);
     }
 

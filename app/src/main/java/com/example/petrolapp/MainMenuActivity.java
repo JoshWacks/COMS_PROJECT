@@ -1,8 +1,5 @@
 package com.example.petrolapp;
-//To-do
-//Get Current Diesal Price
-//Re-do Main menu layout
-//consider 2 screens and simple layout with paint backround
+
 
 
 import android.content.Intent;
@@ -28,46 +25,12 @@ import java.util.ArrayList;
 //TODO optimise fetchPetrol and fetchDiesel code so we don't wait long for main menu
 //Todo make sure it does not crash when not connected to the internet
 public class MainMenuActivity extends AppCompatActivity {
-    TextView pTextView;
-    TextView dTextView;
+    private TextView pTextView;
+    private TextView dTextView;
     private String petrolPrice = "";
     private String dieselPrice = "";
-    private String username ;
+    private final String username=appInformation.getUsername() ;
     private Intent i ;
-
-    public void atStation(View view) {
-
-        Intent i = new Intent(getApplicationContext(), AtStationActivity.class);
-        i.putExtra("price", petrolPrice);
-        i.putExtra("username", username);
-        startActivity(i);
-    }
-
-    public void logOut(View view) {
-
-        stopService(i);//Ends the GPS service when the logout before the app closes
-        System.exit(0);
-    }
-
-    public void viewFillups(View view) {
-        Intent i = new Intent(getApplicationContext(), ViewFillUpsActivity.class);
-        i.putExtra("username", username);
-
-        startActivity(i);
-    }
-
-    public void viewStationEfficiency(View view) {
-        Intent i = new Intent(getApplicationContext(), StationsEfficiencyActivity.class);
-        i.putExtra("username", username);
-        startActivity(i);
-    }
-
-    public void viewCarEfficiency(View view) {
-        Intent i = new Intent(getApplicationContext(), CarEfficiencyActivity.class);
-        i.putExtra("username", username);
-        i.putExtra("activity", "M");
-        startActivity(i);
-    }
 
 
     @Override
@@ -77,9 +40,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
-        Intent intent=getIntent();
-        username=intent.getStringExtra("USERNAME");
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -104,54 +64,39 @@ public class MainMenuActivity extends AppCompatActivity {
         thD.start();
         thP.start();
 
-        //Network calls must be done on their own threads
-
-
-//        final Thread thread = new Thread(new Runnable() {
-//            //network calls must be done on their own threads
-//            @Override
-//            public void run() {
-//                try  {
-//                    MainMenuActivity.this.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//
-//
-//                            pTextView.setText("Current Petrol Price: "+ petrolPrice);
-//                            dTextView.setText("Current Diesel Price: R "+ dieselPrice);
-//
-//                        }
-//                    });
-//
-//
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//
-//        try {
-//
-//            thP.join(4000);
-//            thD.join(4000);//Waits max 3s to get the price first before displaying
-//            if(petrolPrice.equals("")&&dieselPrice.equals(""))
-//            {
-//                Toast toast = Toast.makeText(getApplicationContext(), "You don't seem to be connected to the internet", Toast.LENGTH_LONG);//If takes too long to access website
-//                toast.show();
-//            }
-//
-//            thread.start();
-//
-//        }
-//
-//        catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
 
 
     }
+
+    public void atStation(View view) {
+        Intent i = new Intent(getApplicationContext(), AtStationActivity.class);
+        startActivity(i);
+    }
+
+    public void logOut(View view) {
+        stopService(i);//Ends the GPS service when the logout before the app closes
+        System.exit(0);
+    }
+
+    public void viewFillups(View view) {
+        Intent i = new Intent(getApplicationContext(), ViewFillUpsActivity.class);
+        startActivity(i);
+    }
+
+    public void viewStationEfficiency(View view) {
+        Intent i = new Intent(getApplicationContext(), StationsEfficiencyActivity.class);
+
+        startActivity(i);
+    }
+
+    public void viewCarEfficiency(View view) {
+        Intent i = new Intent(getApplicationContext(), CarEfficiencyActivity.class);
+
+        startActivity(i);
+    }
+
+
+
 
 
     public void fetchPetrolPrice() {
@@ -175,7 +120,7 @@ public class MainMenuActivity extends AppCompatActivity {
         }
 
         petrolPrice = fuelPrices.get(fuelPrices.size() - 1);//we only want the most recent price
-
+        appInformation.setPetrolPrice(petrolPrice);
         pTextView.setText("Current Petrol Price: " + petrolPrice);
 
     }

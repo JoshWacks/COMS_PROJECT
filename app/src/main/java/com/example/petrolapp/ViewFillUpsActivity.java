@@ -29,7 +29,7 @@ import java.sql.SQLOutput;
 //ToDo check when searching if they have two fill ups on the same day, must return both
 
 public class ViewFillUpsActivity extends AppCompatActivity {
-    private static String username;
+    private String username=appInformation.getUsername() ;
     private TableLayout tbl;;
     private String JSON;
 
@@ -37,10 +37,31 @@ public class ViewFillUpsActivity extends AppCompatActivity {
     private boolean backBtnVisible =true;
     LinearLayout fullScreenContentControls;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_view_fill_ups);
+
+
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.hide();
+        View decorView=getWindow().getDecorView();
+        int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        fillTable();
+
+        tbl=findViewById(R.id.tblLayout);
+
+        configureScreen();
+
+
+    }
+
     public void fillTable(){//method to full the table when it originally opens
-        String user=username;
         ContentValues cv=new ContentValues();
-        cv.put("USERNAME",user);
+        cv.put("USERNAME",username);
 
         Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
 
@@ -353,7 +374,6 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
     public void goBack(View view){
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
-        i.putExtra("USERNAME",username);
         startActivity(i);
     }
 
@@ -394,28 +414,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_fill_ups);
 
-        Intent intent=getIntent();
-        username=intent.getStringExtra("username");
-
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.hide();
-        View decorView=getWindow().getDecorView();
-        int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-        fillTable();
-
-        tbl=findViewById(R.id.tblLayout);
-
-        configureScreen();
-
-
-    }
 
 
 }

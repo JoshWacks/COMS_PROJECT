@@ -26,16 +26,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class CarEfficiencyActivity extends AppCompatActivity {
-    private static String username;
-    private static BarChart barChart;
+    private final String username=appInformation.getUsername() ;
 
+    private static final ArrayList<CarType> CarTypes = new ArrayList<CarType>();//An arraylist to keep track of all our car types
     private final HashMap<String, Integer> CarTypeMap = new HashMap<String, Integer>();//A Map is used to see if we have encountered that car type before,
     //We use a HashMap to avoid implementing all the map methods
-    private static final ArrayList<CarType> CarTypes = new ArrayList<CarType>();//An arraylist to keep track of all our car types
+    private static BarChart barChart;
     private static ArrayList<BarEntry> entries;
     private static BarDataSet set;
     private static BarData data;
@@ -58,12 +57,9 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_efficiency);
 
-        Intent intent = getIntent();
-
-        username = intent.getStringExtra("username");
-
-
         fetchData();
+        configureScreen();
+
 
         thread = new Thread(new Runnable() {
             @Override
@@ -74,14 +70,21 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             }
         });
 
-        configureScreen();
-
 
     }
+
     public void goBack(View view) {
         Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
-        i.putExtra("USERNAME",username);
         startActivity(i);
+        barChart.clear();
+        CarTypes.clear();
+        CarTypeMap.clear();
+        entries.clear();
+        data.clearValues();
+        set.clear();
+        names=new String[names.length];//Clears all the data from the previous bargraph first
+
+
     }
 
     private void configureScreen() {
@@ -113,7 +116,6 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             backBtnVisible = true;
         }
     }
-
 
 
     private void fetchData() {//directly fetches the raw data to be processed
@@ -358,16 +360,14 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         });
 
 
-
-
     }
 
-    private void onBrandSelected(){
-        String brand= (String) spnrBrand.getSelectedItem();
+    private void onBrandSelected() {
+        String brand = (String) spnrBrand.getSelectedItem();
 
-        ArrayList<String>arrayListModel=new ArrayList<>();
-        for (CarType ct:CarTypes){
-            if(ct.getBrand().equals(brand)){
+        ArrayList<String> arrayListModel = new ArrayList<>();
+        for (CarType ct : CarTypes) {
+            if (ct.getBrand().equals(brand)) {
                 arrayListModel.add(ct.getModel());
             }
         }
@@ -377,61 +377,59 @@ public class CarEfficiencyActivity extends AppCompatActivity {
     }
 
 
+    private boolean checkValidChoice() {
+        String brandSelected = (String) spnrBrand.getSelectedItem();
 
-    private boolean checkValidChoice(){
-        String brandSelected= (String) spnrBrand.getSelectedItem();
-
-        if(brandSelected.equals("Brand")){
+        if (brandSelected.equals("Brand")) {
             Toast toast = Toast.makeText(getApplicationContext(), "Please select a brand first", Toast.LENGTH_LONG);
             toast.show();
             return false;
         }
 
-        String modelSelected= (String) spnrModel.getSelectedItem();
-        if(modelSelected.equals("Model")){
+        String modelSelected = (String) spnrModel.getSelectedItem();
+        if (modelSelected.equals("Model")) {
             Toast toast = Toast.makeText(getApplicationContext(), "Please select a model first", Toast.LENGTH_LONG);
             toast.show();
             return false;
         }
 
-        String yearSelected= (String) spnrYear.getSelectedItem();
-        if(yearSelected.equals("Year")){
+        String yearSelected = (String) spnrYear.getSelectedItem();
+        if (yearSelected.equals("Year")) {
             Toast toast = Toast.makeText(getApplicationContext(), "Please select a year first", Toast.LENGTH_LONG);
             toast.show();
             return false;
         }
 
-        String typeSelected=brandSelected+modelSelected+yearSelected;
-        if(!CarTypeMap.containsKey(typeSelected)){
+        String typeSelected = brandSelected + modelSelected + yearSelected;
+        if (!CarTypeMap.containsKey(typeSelected)) {
             Toast toast = Toast.makeText(getApplicationContext(), "Please select a valid car first", Toast.LENGTH_LONG);
             toast.show();
             return false;
         }
-        return  true;
+        return true;
 
     }
 
 
-
     public void carEffSearch(View view) {
-        boolean validChoice=checkValidChoice();
+        boolean validChoice = checkValidChoice();
 
-        if(validChoice){
-            String brandSelected= (String) spnrBrand.getSelectedItem();
-            String modelSelected= (String) spnrModel.getSelectedItem();
-            String yearSelected= (String) spnrYear.getSelectedItem();
+        if (validChoice) {
+            String brandSelected = (String) spnrBrand.getSelectedItem();
+            String modelSelected = (String) spnrModel.getSelectedItem();
+            String yearSelected = (String) spnrYear.getSelectedItem();
 
-            String typeSelected=brandSelected+modelSelected+yearSelected;
+            String typeSelected = brandSelected + modelSelected + yearSelected;
 
-            int pos=0;
-            for(CarType ct:CarTypes){
-                if(ct.getType().equals(typeSelected)){
-                    pos=CarTypes.indexOf(ct);
+            int pos = 0;
+            for (CarType ct : CarTypes) {
+                if (ct.getType().equals(typeSelected)) {
+                    pos = CarTypes.indexOf(ct);
 
                     break;
                 }
             }
-            barChart.highlightValue(pos,0,-1);
+            barChart.highlightValue(pos, 0, -1);
 
             Bundle extra = new Bundle();
             extra.putString("activity", "CarEff");
@@ -441,9 +439,6 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), popupApplication.class);//We show that popup Activity
             i.putExtras(extra);
             startActivity(i);
-
-
-
 
 
         }

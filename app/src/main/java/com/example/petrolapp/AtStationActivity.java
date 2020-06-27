@@ -32,6 +32,8 @@ import java.time.LocalDate;
 @RequiresApi(api = Build.VERSION_CODES.O)
 
 public class AtStationActivity extends AppCompatActivity {
+    private static final String username=appInformation.getUsername() ;
+
 
     LocalDate d = LocalDate.now();//saves it for the query
     TextView txtStation;
@@ -41,7 +43,7 @@ public class AtStationActivity extends AppCompatActivity {
     LinearLayout fullScreenContentControls;
     private double x_co = 0;
     private double y_co = 0;
-    private String username;
+
     private String stationAt = "";
     private Button btnDone;
     private boolean backBtnVisible = true;
@@ -49,20 +51,20 @@ public class AtStationActivity extends AppCompatActivity {
 
     private boolean nameSet=false;
 
+    private String strPrice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_at_station);
-        Intent intent = getIntent();
-        username = intent.getStringExtra("username");
+
+        strPrice=appInformation.getPetrolPrice();
 
         configure();
         configureScreen();
 
-
         btnDone = findViewById(R.id.btnDone);
-
 
         if (!runtime_permissions()) {
             enable_buttons();
@@ -72,7 +74,6 @@ public class AtStationActivity extends AppCompatActivity {
 
     public void goBack(View view) {
         Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
-        i.putExtra("USERNAME",username);
         startActivity(i);
     }
 
@@ -174,7 +175,7 @@ public class AtStationActivity extends AppCompatActivity {
     }
 
     public void insert() {
-        String strPrice = getIntent().getStringExtra("price");//gets the price from the main menu
+
         double price = Double.parseDouble(strPrice.substring(2));//we use substring to remove the R in front of the price
 
         TextView txtLitres = findViewById(R.id.txtInLitres);
