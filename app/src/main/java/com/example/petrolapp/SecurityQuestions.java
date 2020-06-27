@@ -1,15 +1,13 @@
 package com.example.petrolapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class SecutityQuestions extends AppCompatActivity {
+public class SecurityQuestions extends AppCompatActivity {
     private TextInputLayout textinputPetName;
     private TextInputLayout textinputMaidenName;
     private TextInputLayout textinputStreetName;
@@ -89,7 +87,7 @@ public class SecutityQuestions extends AppCompatActivity {
 
             Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
 
-            c.fetchInfo(SecutityQuestions.this, "SecQuestions",params, new RequestHandler() {
+            c.fetchInfo(SecurityQuestions.this, "SecQuestions",params, new RequestHandler() {
                 @Override
                 public void processResponse(String response) {
 

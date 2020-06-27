@@ -1,32 +1,27 @@
 package com.example.petrolapp;
 //To-DO
 //Finish Sort and Search Methods
-import android.annotation.SuppressLint;
+
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
-import android.view.View;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.sql.Date;
-import java.sql.SQLOutput;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  *
  */
-//ToDo check when searching if they have two fill ups on the same day, must return both
+
 
 public class ViewFillUpsActivity extends AppCompatActivity {
     private String username=appInformation.getUsername() ;
@@ -100,13 +95,13 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                 double eff=item.getDouble("EFFICIENCY");
 
                 TableRow tr = new TableRow(this);
-                tr.setId(42);
+
                 tr.setLayoutParams(tableRowParams);
                 tr.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Bundle extra=new Bundle();
-                        extra.putString("activity","FillUps");
+                        appInformation.setActivity("FillUps");
                         extra.putString("name",stationFullName);
                         extra.putDouble("eff",eff);
                         extra.putBoolean("found",true);
@@ -119,7 +114,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
 
                 TextView stationView = new TextView(this);
-                stationView.setTextAlignment(4);
+                stationView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     stationView.setText(station);
                 stationView.setLayoutParams(param);
                 stationView.setTextAppearance(R.style.fontForTextViews);
@@ -130,7 +125,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                 blankLine.addView(temp0);
 
                 TextView dateView = new TextView(this);
-                dateView.setTextAlignment(4);
+                dateView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 dateView.setBackgroundColor(Color.rgb(0, 170, 240));
                     dateView.setText(date);
                 dateView.setLayoutParams(param);
@@ -144,7 +139,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
                 TextView litresView = new TextView(this);
                 litresView.setBackgroundColor(Color.GREEN);
-                litresView.setTextAlignment(4);
+                litresView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     litresView.setText(litres+"");
                 litresView.setLayoutParams(param);
                 litresView.setTextAppearance(R.style.fontForTextViews);
@@ -159,7 +154,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                 costView.setBackgroundColor(Color.rgb(240, 100, 100));
                     costView.setText(cost+"");
                 costView.setLayoutParams(param);
-                costView.setTextAlignment(4);
+                costView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 costView.setTextAppearance(R.style.fontForTextViews);
                 tr.addView(costView);
 
@@ -170,7 +165,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
                 TextView mileageView = new TextView(this);
                 mileageView.setBackgroundColor(Color.rgb(255, 170, 0));
-                mileageView.setTextAlignment(4);
+                mileageView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     mileageView.setText(mileage+"");
                 mileageView.setLayoutParams(param);
                 mileageView.setTextAppearance(R.style.fontForTextViews);
@@ -245,7 +240,9 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                 tr.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        appInformation.setActivity("FillUps");
                         Bundle extra=new Bundle();
+
                         extra.putString("name",stationFullName);
                         extra.putDouble("eff",eff);
                         extra.putBoolean("found",true);
@@ -258,7 +255,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
 
                 TextView stationView = new TextView(this);
-                stationView.setTextAlignment(4);
+                stationView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 stationView.setText(station);
                 stationView.setLayoutParams(param);
                 stationView.setTextAppearance(R.style.fontForTextViews);
@@ -269,7 +266,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                 blankLine.addView(temp0);
 
                 TextView dateView = new TextView(this);
-                dateView.setTextAlignment(4);
+                dateView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 dateView.setBackgroundColor(Color.rgb(0, 170, 240));
                 dateView.setText(date);
                 dateView.setLayoutParams(param);
@@ -283,7 +280,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
                 TextView litresView = new TextView(this);
                 litresView.setBackgroundColor(Color.GREEN);
-                litresView.setTextAlignment(4);
+                litresView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 litresView.setText(litres+"");
                 litresView.setLayoutParams(param);
                 litresView.setTextAppearance(R.style.fontForTextViews);
@@ -298,7 +295,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                 costView.setBackgroundColor(Color.rgb(240, 100, 100));
                 costView.setText(cost+"");
                 costView.setLayoutParams(param);
-                costView.setTextAlignment(4);
+                costView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 costView.setTextAppearance(R.style.fontForTextViews);
                 tr.addView(costView);
 
@@ -309,7 +306,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
                 TextView mileageView = new TextView(this);
                 mileageView.setBackgroundColor(Color.rgb(255, 170, 0));
-                mileageView.setTextAlignment(4);
+                mileageView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 mileageView.setText(mileage+"");
                 mileageView.setLayoutParams(param);
                 mileageView.setTextAppearance(R.style.fontForTextViews);
@@ -328,6 +325,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
         }
         if(!found){
+            appInformation.setActivity("FillUps");
             Bundle extra=new Bundle();
             extra.putBoolean("found",found);
             Intent i=new Intent(getApplicationContext(),popupApplication.class);

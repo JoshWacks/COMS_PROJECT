@@ -8,7 +8,7 @@
         tools:context=".CarEfficiencyActivity" android:id="@+id/FillUpsContent">
     <Spinner
             android:layout_width="wrap_content"
-            android:layout_height="40dp" android:id="@+id/spnrYear"
+            android:layout_height="60dp" android:id="@+id/spnrYear"
             style="@style/dropDownStyle"
             android:layout_marginTop="3dp"
             app:layout_constraintTop_toBottomOf="@+id/txtCarMoreDetail"
@@ -23,8 +23,9 @@
             android:textAlignment="viewStart" android:foregroundTint="#101010" android:paddingTop="5dp"
             android:paddingBottom="5dp"
             tools:ignore="RtlCompat"
-            app:layout_constraintTop_toBottomOf="@+id/CarBarGraph" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="2dp" android:layout_marginStart="3dp"/>
+            android:layout_marginTop="3dp" app:layout_constraintTop_toBottomOf="@+id/btnCarSearch"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="3dp"/>
     <TextView
             android:text="Click on a bar for more info!"
             android:layout_width="match_parent"
@@ -36,7 +37,7 @@
             android:paddingBottom="5dp"
             tools:ignore="RtlCompat"
             app:layout_constraintTop_toBottomOf="@+id/CarBarGraph" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="76dp"/>
+            android:layout_marginStart="16dp" android:layout_marginTop="2dp"/>
     <Button android:id="@+id/btnCarEffBack"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
@@ -69,22 +70,22 @@
             android:text="Search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/btnCarSearch"
-            android:fontFamily="@font/autour_one" android:backgroundTint="#000000" android:textColor="#00BFA5"
+            android:fontFamily="@font/autour_one" android:backgroundTint="#000000" android:textColor="#0091EA"
             android:textStyle="bold" android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="35dp"
-            app:layout_constraintTop_toBottomOf="@+id/txtCarMoreDetail" android:onClick="carEffSearch"/>
+            android:onClick="carEffSearch"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="530dp"
+            app:layout_constraintEnd_toEndOf="parent"/>
     <Spinner
             android:layout_width="wrap_content"
-            android:layout_height="40dp" android:id="@+id/spnrBrand"
+            android:layout_height="60dp" android:id="@+id/spnrBrand"
             style="@style/dropDownStyle"
             android:layout_marginTop="3dp"
             app:layout_constraintTop_toBottomOf="@+id/txtCarMoreDetail" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="3dp"/>
     <Spinner
             android:layout_width="wrap_content"
-            android:layout_height="40dp" android:id="@+id/spnrModel"
-            style="@style/dropDownStyle"
+            android:layout_height="60dp" android:id="@+id/spnrModel"
+            style="@style/Widget.AppCompat.Spinner.DropDown"
             android:layout_marginTop="3dp"
             app:layout_constraintTop_toBottomOf="@+id/txtCarMoreDetail"
             app:layout_constraintStart_toEndOf="@+id/spnrBrand" android:layout_marginStart="5dp"/>

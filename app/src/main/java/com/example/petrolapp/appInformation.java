@@ -1,11 +1,14 @@
 package com.example.petrolapp;
 
 public class appInformation {
-    private static String username;
-    private static String activity;
-    private static String petrolPrice;
+    //Class to share all the information needed by each different activty
 
-    public static String getUsername() {
+    private static String username;
+    private static String pastActivity;
+    private static String petrolPrice;
+    private static String newStationName="";
+
+    public static String getUsername() {//when the username is needed
         return username;
     }
 
@@ -13,19 +16,27 @@ public class appInformation {
         username = u;
     }
 
-    public static String getActivity() {
-        return activity;
+    public static String getActivity() {//some classes need to know which activity it came from
+        return pastActivity;
     }
 
     public static void setActivity(String activity) {
-        appInformation.activity = activity;
+        appInformation.pastActivity = activity;
     }
 
-    public static String getPetrolPrice() {
+    public static String getPetrolPrice() {//if the petrol price is needed
         return petrolPrice;
     }
 
     public static void setPetrolPrice(String petrolPrice) {
         appInformation.petrolPrice = petrolPrice;
+    }
+
+    public static String getNewStationName() {
+        return newStationName;
+    }
+
+    public static void setNewStationName(String newStationName) {
+        appInformation.newStationName = newStationName;
     }
 }

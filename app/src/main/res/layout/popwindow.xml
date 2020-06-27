@@ -7,6 +7,15 @@
                                                    android:id="@+id/relativeLayout">
 
     <TextView
+            android:layout_width="350dp"
+            android:layout_height="wrap_content" android:id="@+id/txtPopHeading4"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="15dp"
+            android:textColor="#000000" android:textStyle="bold"
+            android:textAlignment="viewStart" android:textSize="18sp" android:fontFamily="@font/autour_one"
+            android:layout_marginStart="15dp" android:text="It seems you are at a petrol station not on our system"
+            tools:visibility="gone"/>
+    <TextView
             android:layout_width="5dp"
             android:layout_height="match_parent" android:id="@+id/txtLeftBorder"
             android:background="#000000"
@@ -81,5 +90,26 @@
             android:layout_width="match_parent"
             android:layout_height="5dp" android:id="@+id/txtBottomBorder"
             android:background="#000000"
-            app:layout_constraintTop_toBottomOf="@+id/txtPopHeading2" app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/txtPopHeading2" app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="gone"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/etxtName" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="60dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="12dp" android:hint="Name Of Station Here" android:fontFamily="@font/autour_one"
+            android:textSize="20sp" android:textColor="#000000" android:textColorHint="#000000"
+    />
+    <Button
+            android:text="Done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/btnPopDone"
+            android:backgroundTint="#00BFA5"
+            android:fontFamily="@font/autour_one" android:textSize="18sp" android:textStyle="bold"
+            android:textColor="#020202"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="55dp" app:layout_constraintEnd_toStartOf="@+id/txtRightBorder"
+            android:layout_marginEnd="5dp" android:onClick="btnDone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

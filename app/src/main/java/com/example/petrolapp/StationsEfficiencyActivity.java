@@ -3,14 +3,17 @@ package com.example.petrolapp;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.*;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class StationsEfficiencyActivity extends AppCompatActivity {
+    private final String username=appInformation.getUsername() ;
     private boolean backBtnVisible =true;
     private HashMap<String, Integer> stationsMap=new HashMap<String, Integer>() ;//A Map is used to see if we have encountered that station before,
                                                                                     //We use a HashMap to avoid implementing all the map methods
@@ -33,9 +37,6 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
     private Thread thread;
 
     private Button btnBack;
-
-    //TODO try and show only petrol stations they have been to
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +98,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
     private void fetchData(){//directly fetches the raw data to be processed
         Connection connection=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
         ContentValues cv=new ContentValues();
+        cv.put("USERNAME",username);
 
 
         connection.fetchInfo(StationsEfficiencyActivity.this, "get_STATIONS_EFFICIENCY",cv, new RequestHandler() {

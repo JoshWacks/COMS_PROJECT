@@ -121,7 +121,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
     private void fetchData() {//directly fetches the raw data to be processed
         Connection connection = new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
         ContentValues cv = new ContentValues();
-        // cv.put("USERNAME",username);
+
 
         connection.fetchInfo(CarEfficiencyActivity.this, "get_CARS_EFFICIENCY", cv, new RequestHandler() {
             @Override
@@ -299,9 +299,9 @@ public class CarEfficiencyActivity extends AppCompatActivity {
                 String brand = ct.getBrand();
                 String model = ct.getModel();
                 String year = ct.getYear();
+                appInformation.setActivity("CarEff");
 
                 Bundle extra = new Bundle();
-                extra.putString("activity", "CarEff");
                 extra.putString("brand", brand);
                 extra.putString("model", model);
                 extra.putString("year", year);
@@ -432,7 +432,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             barChart.highlightValue(pos, 0, -1);
 
             Bundle extra = new Bundle();
-            extra.putString("activity", "CarEff");
+            appInformation.setActivity("CarEff");
             extra.putString("brand", brandSelected);
             extra.putString("model", modelSelected);
             extra.putString("year", yearSelected);

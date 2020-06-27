@@ -1,31 +1,21 @@
 package com.example.petrolapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
-
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputLayout;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.regex.Pattern;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class SignUp extends AppCompatActivity {
     //below is the Password regex pattern created and used to take sure the users' password meets basic password strength requirements
@@ -86,6 +76,7 @@ public class SignUp extends AppCompatActivity {
                 }
             }
         });
+        System.out.println("Value" +value[0]);
         return value[0];
 
 
@@ -100,8 +91,8 @@ public class SignUp extends AppCompatActivity {
         for (int i = 0 ;i<jsonArray.length()-1; i++ ){
 
             JSONObject item = jsonArray.getJSONObject(i);
-            System.out.println("username "+item.getString("USERNAME"));
             users = users +item.getString("USERNAME")+",";
+            System.out.println("Username:  "+item.getString("USERNAME"));
         }
 
         JSONObject last = jsonArray.getJSONObject(jsonArray.length()-1);
@@ -109,13 +100,12 @@ public class SignUp extends AppCompatActivity {
 
         allTheUsers =users + temp;
         list = new ArrayList<>(Arrays.asList(allTheUsers.split(","))); // converts the single string of usernames into an Arraylist
-        boolean value=checkUsernameAvailability();
-        return value;
+        return checkUsernameAvailability();
     }
     //this method below checks whether or not the username the user has entered is taken by another user
     private boolean checkUsernameAvailability(){
         String username = textInputUsername.getEditText().getText().toString().trim();
-
+        System.out.println("Contains  "+list.contains(username));
         if(list.contains(username)){
             textInputUsername.setError("This username is taken, please use a different one");
             return false;
@@ -309,7 +299,7 @@ public class SignUp extends AppCompatActivity {
 
     private void openNextPage(){
         String username = textInputUsername.getEditText().getText().toString().trim();
-        Intent intent = new Intent(this, SecutityQuestions.class);
+        Intent intent = new Intent(this, SecurityQuestions.class);
         intent.putExtra("USERNAME", username);
         startActivity(intent);
     }

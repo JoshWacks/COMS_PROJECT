@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80FFEB3B" android:visibility="visible"
+        android:backgroundTint="#FFEB3B"
+        tools:context=".AddCars">
+    <TextView
+            android:layout_width="283dp"
+            android:layout_height="74dp"
+            android:text="CAR DETAILS"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.023" android:textSize="30sp" android:lineSpacingExtra="12sp"
+            android:textAlignment="center" android:textStyle="bold" android:textAllCaps="false"
+            android:gravity="center" android:visibility="visible" tools:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent" android:id="@+id/textView16"
+            android:fontFamily="monospace"/>
+    <ImageView
+            android:layout_width="102dp"
+            android:layout_height="97dp" app:srcCompat="@drawable/caricon" android:id="@+id/imageView4"
+            app:layout_constraintEnd_toEndOf="@+id/textView16"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.051"
+            app:layout_constraintVertical_bias="0.023"/>
+    <TextView
+            android:text="Please enter the details of your new car below"
+            android:layout_width="362dp"
+            android:layout_height="38dp" android:id="@+id/textView"
+            android:fontFamily="monospace" android:textStyle="bold" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.489"
+            app:layout_constraintVertical_bias="0.189" android:textAlignment="center" android:textAllCaps="true"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="LISCENCE PLATE"
+            android:ems="10"
+            android:id="@+id/editLiscPlate" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintVertical_bias="0.307"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="YEAR"
+            android:ems="10"
+            android:id="@+id/editYear" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintVertical_bias="0.645"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="MODEL"
+            android:ems="10"
+            android:id="@+id/editModel" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintVertical_bias="0.532"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="BRAND"
+            android:ems="10"
+            android:id="@+id/editBrand" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintVertical_bias="0.412"/>
+    <Button
+            android:text="Back to main menu"
+            android:layout_width="144dp"
+            android:onClick="bttnBack"
+            android:textStyle="bold" android:textSize="18sp"
+            android:textAlignment="center" android:gravity="center"
+            android:layout_height="61dp" android:id="@+id/bttnAdd"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.498" app:layout_constraintVertical_bias="0.9"
+            tools:ignore="OnClick"/>
+    <Button
+            android:text="Add Information"
+            android:layout_width="wrap_content"
+            android:onClick="doAdd"
+            android:textStyle="bold" android:textSize="18sp"
+            android:textAlignment="center" android:gravity="center"
+            android:layout_height="wrap_content" android:id="@+id/bttnAdd2"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.497" app:layout_constraintVertical_bias="0.784"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

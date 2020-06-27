@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80FFEB3B" android:visibility="visible"
+        android:backgroundTint="#FFEB3B"
+        tools:context=".CarDetails">
+
+    <TextView
+            android:layout_width="283dp"
+            android:layout_height="74dp"
+            android:text="CAR DETAILS"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.023" android:textSize="30sp" android:lineSpacingExtra="12sp"
+            android:textAlignment="center" android:textStyle="bold" android:textAllCaps="false"
+            android:gravity="center" android:visibility="visible" tools:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent" android:id="@+id/textView16"
+            android:fontFamily="monospace"/>
+    <Button
+            android:text="BACK TO MAIN MENU"
+            android:layout_width="167dp"
+            android:layout_height="70dp"
+            android:id="@+id/BackBttn"
+            android:onClick="goBack2"
+            android:textStyle="bold" android:textSize="18sp"
+            android:textAlignment="center" android:gravity="center" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.524"
+            app:layout_constraintVertical_bias="0.942"/>
+    <Button
+            android:text="ADD NEW CAR DETAILS"
+            android:layout_width="186dp"
+            android:layout_height="68dp"
+            android:id="@+id/backBttn"
+            android:onClick="addNewCar"
+            android:textStyle="bold" android:textSize="18sp"
+            android:textAlignment="center" android:gravity="center" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.524"
+            app:layout_constraintVertical_bias="0.794"/>
+    <ImageView
+            android:layout_width="102dp"
+            android:layout_height="97dp" app:srcCompat="@drawable/caricon" android:id="@+id/imageView4"
+            app:layout_constraintEnd_toEndOf="@+id/textView16"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.051"
+            app:layout_constraintVertical_bias="0.023"/>
+    <ScrollView
+            android:layout_width="375dp"
+            android:id="@+id/Scroll"
+            android:layout_height="304dp"
+            tools:ignore="MissingConstraints" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.397"
+            android:scrollbarStyle="insideOverlay" android:orientation="vertical"
+            app:layout_constraintHorizontal_bias="0.41">
+
+
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

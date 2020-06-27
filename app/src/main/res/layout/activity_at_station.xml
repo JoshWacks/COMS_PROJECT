@@ -28,13 +28,6 @@
                 app:layout_constraintStart_toEndOf="@+id/frameLayout" app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintEnd_toStartOf="@+id/frameLayout" app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="547dp"/>
-        <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="636dp" app:srcCompat="@drawable/at_station_image2"
-                android:id="@+id/img"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="97dp" app:layout_constraintStart_toStartOf="parent"
-                android:background="#FFFFFF" android:tintMode="src_over"/>
         <TextView
                 android:text="AT THE STATION"
                 android:layout_width="match_parent"
@@ -43,8 +36,9 @@
                 android:textAlignment="center" android:textSize="36sp" android:textColor="#00EC27"
                 android:fontFamily="@font/autour_one"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="4dp" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" android:backgroundTint="#070707"
+                android:background="#000000"/>
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="74dp"
@@ -52,24 +46,25 @@
                 android:ems="10"
                 android:id="@+id/txtInMileage"
                 android:hint="Enter  Your Mileage" android:textStyle="bold"
-                android:textColor="#FFAB00" app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="298dp"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="2dp"
-                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="359dp"
+                android:textColor="#FF6D00"
                 android:fontFamily="serif" android:textSize="34sp"
-                android:textColorHint="#FFAB00" android:textAlignment="center" android:textColorHighlight="#FFAB00"
-                android:textColorLink="#FFAB00"/>
+                android:textColorHint="#FF6D00" android:textAlignment="center" android:textColorHighlight="#FF6D00"
+                android:textColorLink="#FF6D00"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="325dp"/>
         <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="88dp"
                 android:ems="10"
                 android:id="@+id/txtInLitres"
                 android:hint="Enter Your Litres" android:textStyle="bold"
-                android:textColor="#FFAB00"
+                android:textColor="#FF6D00"
                 android:fontFamily="serif" android:textSize="34sp"
                 android:textAlignment="center"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="405dp"
-                app:layout_constraintStart_toStartOf="parent" android:inputType="numberDecimal"
-                android:textColorHint="#FFAB00"/>
+                android:inputType="numberDecimal"
+                android:textColorHint="#FF6D00"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="405dp"/>
         <TextView
                 android:text=" You Are At     :       "
                 android:layout_width="match_parent"
@@ -103,7 +98,8 @@
                      android:id="@+id/frameLayout"
                      app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
                      app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-                     app:layout_constraintHorizontal_bias="0.501" app:layout_constraintVertical_bias="1.0">
+                     app:layout_constraintHorizontal_bias="0.501" app:layout_constraintVertical_bias="1.0"
+                     android:backgroundTint="#000000">
 
             <LinearLayout android:id="@+id/fullscreen_content_controls"
                           style="?metaButtonBarStyle"

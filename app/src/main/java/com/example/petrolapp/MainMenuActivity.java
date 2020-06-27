@@ -1,15 +1,19 @@
 package com.example.petrolapp;
 
+//TODO Videos code ,app,DBF and put videos together
+//TODO Project document
+//TODO compiled app
 
+//TODO Business rules
+//TODO Problems with Database
+//TODO Implementation
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,24 +26,23 @@ import java.util.ArrayList;
  * status bar and navigation/system bar) with user interaction.
  */
 
-//TODO optimise fetchPetrol and fetchDiesel code so we don't wait long for main menu
+
 //Todo make sure it does not crash when not connected to the internet
 public class MainMenuActivity extends AppCompatActivity {
     private TextView pTextView;
     private TextView dTextView;
     private String petrolPrice = "";
     private String dieselPrice = "";
-    private final String username=appInformation.getUsername() ;
     private Intent i ;
-
+    private Intent gpsIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        i = new Intent(getApplicationContext(), GPS_Service.class);
-        startService(i);//Starts the GPS service here
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+        gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
+        startService(gpsIntent);//Starts the GPS service here
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -69,31 +72,48 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void atStation(View view) {
-        Intent i = new Intent(getApplicationContext(), AtStationActivity.class);
+        i = new Intent(getApplicationContext(), AtStationActivity.class);
         startActivity(i);
     }
 
     public void logOut(View view) {
-        stopService(i);//Ends the GPS service when the logout before the app closes
-        System.exit(0);
+        stopService(gpsIntent);//Ends the GPS service when the logout before the app closes
+        i = new Intent(getApplicationContext(), Login.class);
+        startActivity(i);
     }
 
     public void viewFillups(View view) {
-        Intent i = new Intent(getApplicationContext(), ViewFillUpsActivity.class);
+        i = new Intent(getApplicationContext(), ViewFillUpsActivity.class);
         startActivity(i);
     }
 
     public void viewStationEfficiency(View view) {
-        Intent i = new Intent(getApplicationContext(), StationsEfficiencyActivity.class);
+        i = new Intent(getApplicationContext(), StationsEfficiencyActivity.class);
 
         startActivity(i);
     }
 
     public void viewCarEfficiency(View view) {
-        Intent i = new Intent(getApplicationContext(), CarEfficiencyActivity.class);
-
+        i = new Intent(getApplicationContext(), CarEfficiencyActivity.class);
         startActivity(i);
     }
+
+    public void goToCars(View view){
+        i = new Intent(getApplicationContext(), CarDetails.class);
+        startActivity(i);
+    }
+
+    public void goToCards(View view){
+        i = new Intent(getApplicationContext(), CardDetails.class);
+        startActivity(i);
+    }
+
+    public void goToAccount(View view){
+        i = new Intent(getApplicationContext(), AccDetails.class);
+        startActivity(i);
+    }
+
+
 
 
 

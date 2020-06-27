@@ -67,7 +67,7 @@
                 android:textSize="26sp"
                 android:backgroundTint="#DF2222"
                 android:fontFamily="sans-serif"
-                android:textStyle="bold"/>
+                android:textStyle="bold" android:onClick="goToCards"/>
     </TableRow>
     <TableRow
             android:layout_width="match_parent"
@@ -85,7 +85,7 @@
                 android:textSize="26sp"
                 android:backgroundTint="#FF6D00"
                 android:fontFamily="sans-serif"
-                android:textStyle="bold"/>
+                android:textStyle="bold" android:onClick="goToCars"/>
 
 
     </TableRow>
@@ -165,7 +165,7 @@
                 android:textSize="26sp"
                 android:backgroundTint="#000000"
                 android:fontFamily="sans-serif"
-                android:textStyle="bold" android:textColor="#FFFFFF"/>
+                android:textStyle="bold" android:textColor="#FFFFFF" android:onClick="goToAccount"/>
 
 
     </TableRow>

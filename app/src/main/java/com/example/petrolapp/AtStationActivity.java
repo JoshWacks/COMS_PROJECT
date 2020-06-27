@@ -27,7 +27,7 @@ import java.time.LocalDate;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-//TODO check they are at a petrol station before entering data
+
     //TODO check if they have a car first if not take them to the new car page
 @RequiresApi(api = Build.VERSION_CODES.O)
 
@@ -35,16 +35,16 @@ public class AtStationActivity extends AppCompatActivity {
     private static final String username=appInformation.getUsername() ;
 
 
-    LocalDate d = LocalDate.now();//saves it for the query
-    TextView txtStation;
-    TextView txtDate;
-    TextView txtCar;
-    Button btnBack;
-    LinearLayout fullScreenContentControls;
+    private LocalDate d = LocalDate.now();//saves it for the query
+    public  static TextView txtStation;
+    private TextView txtDate;
+    private TextView txtCar;
+    private Button btnBack;
+    private LinearLayout fullScreenContentControls;
     private double x_co = 0;
     private double y_co = 0;
 
-    private String stationAt = "";
+    public static  String stationAt =appInformation.getNewStationName();
     private Button btnDone;
     private boolean backBtnVisible = true;
     private BroadcastReceiver broadcastReceiver;
@@ -74,6 +74,8 @@ public class AtStationActivity extends AppCompatActivity {
 
     public void goBack(View view) {
         Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+        stationAt="";
+        appInformation.setNewStationName("");//resets the station name
         startActivity(i);
     }
 
@@ -121,7 +123,7 @@ public class AtStationActivity extends AppCompatActivity {
         JSONArray jsonArray = new JSONArray(json);
         String brand = "";
         String model = "";
-        for (int i = 0; i < jsonArray.length(); i++) {//check if they have 2 cars
+        for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject item = jsonArray.getJSONObject(i);
 
             brand = item.getString("CAR_BRAND");
@@ -140,6 +142,7 @@ public class AtStationActivity extends AppCompatActivity {
         c.fetchInfo(AtStationActivity.this, "get_STATIONS", cv, new RequestHandler() {
             @Override
             public void processResponse(String response) {
+
                 processStation(response);
             }
         });
@@ -163,53 +166,98 @@ public class AtStationActivity extends AppCompatActivity {
                 if ((x_co - 0.01) < x && x < (x_co + 0.01) && (y_co - 0.01) < y && y < (y_co + 0.01)) {
                     stationAt = name;
                     txtStation.append(stationAt);
+                    appInformation.setNewStationName(name);
+                    break;//found the station , we can exit
 
 
                 }
 
 
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        if(stationAt.equals("")){
+
+            insertNewStation();
+
+        }
+    }
+
+    public void insertNewStation(){
+        appInformation.setActivity("AtStation");
+
+        Intent intent=new Intent(getApplicationContext(),popupApplication.class);
+        Bundle bundle=new Bundle();
+        bundle.putDouble("x_co",x_co);
+        bundle.putDouble("y_co",y_co);
+        intent.putExtras(bundle);
+
+        startActivity(intent);
+
     }
 
     public void insert() {
-
-        double price = Double.parseDouble(strPrice.substring(2));//we use substring to remove the R in front of the price
-
         TextView txtLitres = findViewById(R.id.txtInLitres);
         CharSequence charLitres = txtLitres.getText();
         String strLitres = charLitres.toString();
-        double litres = Double.parseDouble(strLitres);
-        txtLitres.setText(" ");//we clear the text to ensure they don't enter the same record twice
-
-        double cost = litres * price;//cost is calculated via multiplying litres by price
 
         TextView txtMileage = findViewById(R.id.txtInMileage);
         CharSequence charMileage = txtMileage.getText();
         String strMileage = charMileage.toString();
-        double mileage = Double.parseDouble(strMileage);
-        txtMileage.setText(" ");//we clear the text to ensure they don't enter the same record twice
+
+        if(stationAt.equals("")){
+
+            insertNewStation();
+            txtStation.append(appInformation.getNewStationName());
+            stationAt=appInformation.getNewStationName();
+        }
+        else if(strLitres.equals("")){
+            Toast toast = Toast.makeText(getApplicationContext(), "Please enter your litres first", Toast.LENGTH_LONG);
+            toast.show();
+        }
+        else if(strMileage.equals("")){
+            Toast toast = Toast.makeText(getApplicationContext(), "Please enter your mileage first", Toast.LENGTH_LONG);
+            toast.show();
+        }
 
 
-        ContentValues cv = new ContentValues();
-        cv.put("USERNAME", username);
-        cv.put("STATION", stationAt);
-        cv.put("COST", cost);
-        cv.put("MILEAGE", mileage);
-        cv.put("DATE", String.valueOf(d));//the date is found earlier
-        cv.put("LITRES", litres);
+        else {
+
+            double price = Double.parseDouble(strPrice.substring(2));//we use substring to remove the R in front of the price
 
 
-        Connection c = new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
+            double litres = Double.parseDouble(strLitres);
+            txtLitres.setText(" ");//we clear the text to ensure they don't enter the same record twice
 
-        c.fetchInfo(AtStationActivity.this, "insert_CAR_LOG", cv, new RequestHandler() {
-            @Override
-            public void processResponse(String response) {
+            double cost = litres * price;//cost is calculated via multiplying litres by price
 
-            }
-        });
+
+            double mileage = Double.parseDouble(strMileage);
+            txtMileage.setText(" ");//we clear the text to ensure they don't enter the same record twice
+
+
+            ContentValues cv = new ContentValues();
+            cv.put("USERNAME", username);
+            cv.put("STATION", stationAt);
+            cv.put("COST", cost);
+            cv.put("MILEAGE", mileage);
+            cv.put("DATE", String.valueOf(d));//the date is found earlier
+            cv.put("LITRES", litres);
+
+
+            Connection c = new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
+
+            c.fetchInfo(AtStationActivity.this, "insert_CAR_LOG", cv, new RequestHandler() {
+                @Override
+                public void processResponse(String response) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Successfully Added Full Up", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            });
+        }
 
 
     }
@@ -246,8 +294,7 @@ public class AtStationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 insert();// we do the insert here or the onclick is overwritten
-                Toast toast = Toast.makeText(getApplicationContext(), "Successfully Added Full Up", Toast.LENGTH_LONG);
-                toast.show();
+
                 Intent i = new Intent(getApplicationContext(), GPS_Service.class);
                 stopService(i);
             }
