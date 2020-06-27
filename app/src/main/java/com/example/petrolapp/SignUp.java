@@ -41,6 +41,8 @@ public class SignUp extends AppCompatActivity {
     private ArrayList<String> list;
     private String allTheUsers ="";
 
+    private boolean usernameNotAvailable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,8 @@ public class SignUp extends AppCompatActivity {
         textInputPassword = findViewById(R.id.text_input_Password);
         textInputConfirmPassword = findViewById(R.id.text_input_ConfirmPassword);
 
+        getAllUsers();
+
     }
 
     /*this method gets a list of all the usernames of other users from the database and this list will
@@ -60,30 +64,32 @@ public class SignUp extends AppCompatActivity {
      * the basic okhttp request was used instead of using the Connection and RequestHandler classes
      * because there are no post parameters included for requesting all of the usernames
      * and felt that the basic okhttp request was more relevant and effective for this purpose*/
-    public boolean getAllUsers(){
+    public void getAllUsers(){
         Connection c = new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
         ContentValues cv = new ContentValues();
         final boolean[] value = new boolean[1];
+
         c.fetchInfo(SignUp.this, "getAllUsers", cv, new RequestHandler() {
             @Override
             public void processResponse(String response) {
 
                 try {
-                    value[0] =processUserNames(response);
+                    processUserNames(response);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
-        System.out.println("Value" +value[0]);
-        return value[0];
+
+
+
 
 
     }
 
     /*this method processes the json response when the request for all the usernames is made */
-    public boolean processUserNames(String json) throws JSONException {
+    public void processUserNames(String json) throws JSONException {
         JSONArray jsonArray = new JSONArray(json);
         String users ="";
         String temp = "";
@@ -100,17 +106,20 @@ public class SignUp extends AppCompatActivity {
 
         allTheUsers =users + temp;
         list = new ArrayList<>(Arrays.asList(allTheUsers.split(","))); // converts the single string of usernames into an Arraylist
-        return checkUsernameAvailability();
+
     }
     //this method below checks whether or not the username the user has entered is taken by another user
     private boolean checkUsernameAvailability(){
         String username = textInputUsername.getEditText().getText().toString().trim();
-        System.out.println("Contains  "+list.contains(username));
+        usernameNotAvailable=list.contains(username);
+        System.out.println("Contains "+usernameNotAvailable);
         if(list.contains(username)){
             textInputUsername.setError("This username is taken, please use a different one");
-            return false;
+            return true;
+
         }
-        return true;
+        return false;
+
     }
 
     /*a basic validation check is done to just check if a first name is entered*/
@@ -256,7 +265,9 @@ public class SignUp extends AppCompatActivity {
     public void signup(View v){
 
         //the input entered by the user gets validated and if any input is invalid the function escapes
-        if(!validFirstName() | !validLastName() | !validateEmail() | !validateUsername() | !validatePassword() | !validateConfirmPassword() | !getAllUsers()){
+
+        System.out.println("Value" +usernameNotAvailable);
+        if(!validFirstName() | !validLastName() | !validateEmail() | !validateUsername() | !validatePassword() | !validateConfirmPassword() | checkUsernameAvailability()){
             return;
         }else{
 
