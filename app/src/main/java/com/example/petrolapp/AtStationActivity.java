@@ -7,10 +7,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -61,6 +58,9 @@ public class AtStationActivity extends AppCompatActivity {
     private TextView carChoice2;
     private TextView carChoice3;
 
+    private ImageView image;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +105,8 @@ public class AtStationActivity extends AppCompatActivity {
         carChoice1=findViewById(R.id.txtCarChoice1);
         carChoice2=findViewById(R.id.txtCarChoice2);
         carChoice3=findViewById(R.id.txtCarChoice3);
+
+        image=findViewById(R.id.imageAtStation);
 
         //their current petrol station is found in processStation
         getDesc();
@@ -155,7 +157,7 @@ public class AtStationActivity extends AppCompatActivity {
 
     private void processCar(String json) throws JSONException {
         JSONArray jsonArray = new JSONArray(json);
-
+        image.setVisibility(View.GONE);
         if(jsonArray.length()==0){
             Toast toast = Toast.makeText(getApplicationContext(), "Please add your car first", Toast.LENGTH_LONG);
             toast.show();
@@ -189,6 +191,7 @@ public class AtStationActivity extends AppCompatActivity {
         }
         else {//only one car
             txtInstructions.setVisibility(View.GONE);
+            image.setVisibility(View.VISIBLE);
             Toast toast = Toast.makeText(getApplicationContext(), "Remember it is the mileage for your last trip", Toast.LENGTH_LONG);
             toast.show();
 

@@ -51,7 +51,7 @@
                 android:textColorHint="#FF6D00" android:textAlignment="center" android:textColorHighlight="#FF6D00"
                 android:textColorLink="#FF6D00"
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="380dp"/>
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="385dp"/>
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -120,13 +120,20 @@
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="245dp"
                 app:layout_constraintStart_toStartOf="parent" android:textStyle="bold" android:textSize="16sp"
                 android:fontFamily="@font/autour_one" android:textColor="#000000"/>
+        <ImageView
+                android:layout_width="381dp"
+                android:layout_height="118dp" app:srcCompat="@drawable/at_station_image3"
+                android:id="@+id/imageAtStation"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="263dp" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"/>
         <FrameLayout android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:fitsSystemWindows="true"
                      android:id="@+id/frameLayout"
                      app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
                      app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-                     app:layout_constraintHorizontal_bias="0.501" app:layout_constraintVertical_bias="1.0"
+                     app:layout_constraintHorizontal_bias="1.0" app:layout_constraintVertical_bias="0.0"
                      android:backgroundTint="#000000">
 
             <LinearLayout android:id="@+id/fullscreen_content_controls"

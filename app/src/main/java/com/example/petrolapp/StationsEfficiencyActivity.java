@@ -27,6 +27,7 @@ import java.util.HashMap;
 
 public class StationsEfficiencyActivity extends AppCompatActivity {
     private static String username;
+    private Button btnBack;
     private boolean backBtnVisible =true;
     private HashMap<String, Integer> stationsMap=new HashMap<String, Integer>() ;//A Map is used to see if we have encountered that station before,
                                                                                     //We use a HashMap to avoid implementing all the map methods
@@ -35,9 +36,6 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
     private BarChart barChart;
 
     private Thread thread;
-
-
-    private Button btnBack;
 
     private int numCars;
     private static String selectedPlate;
@@ -159,8 +157,15 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
     public void goBack(View view){
 
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
+        startActivity(i);
+        barChart.clear();
+        Stations.clear();
+        stationsMap.clear();
+        //Clears all the data from the previous bargraph first
+        userCars.clear();//Clears the users array first so we don't add to it again
         finish();
-        appInformation.setNewStationName("");
+
+
         startActivity(i);
 
     }

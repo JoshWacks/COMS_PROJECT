@@ -120,7 +120,7 @@
             app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="55dp" android:textSize="16sp"
             android:textColor="#020202" android:textStyle="bold" android:fontFamily="@font/autour_one"
             app:layout_constraintEnd_toStartOf="@+id/txtRightBorder" android:layout_marginEnd="2dp"
-            tools:visibility="gone" android:onClick="onCarSelected"/>
+            tools:visibility="gone" android:onClick="onCarSelected" android:textAlignment="center"/>
     <TextView
             android:layout_width="360dp"
             android:layout_height="30dp" android:id="@+id/txtCarChoice2"
@@ -128,7 +128,7 @@
             app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="90dp" android:textSize="16sp"
             android:textColor="#020202" android:textStyle="bold" android:fontFamily="@font/autour_one"
             app:layout_constraintEnd_toStartOf="@+id/txtRightBorder" android:layout_marginEnd="2dp"
-            tools:visibility="gone" android:onClick="onCarSelected"/>
+            tools:visibility="gone" android:onClick="onCarSelected" android:textAlignment="center"/>
     <TextView
             android:layout_width="360dp"
             android:layout_height="30dp" android:id="@+id/txtCarChoice3"
@@ -136,5 +136,5 @@
             app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="125dp" android:textSize="16sp"
             android:textColor="#020202" android:textStyle="bold" android:fontFamily="@font/autour_one"
             app:layout_constraintEnd_toStartOf="@+id/txtRightBorder" android:layout_marginEnd="2dp"
-            tools:visibility="gone" android:onClick="onCarSelected"/>
+            tools:visibility="gone" android:onClick="onCarSelected" android:textAlignment="center"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

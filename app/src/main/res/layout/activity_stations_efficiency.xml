@@ -10,7 +10,7 @@
     <Button android:id="@+id/btnEffBack"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="back" android:backgroundTint="#EF5350" android:textSize="24sp"
             android:textStyle="bold" android:fontFamily="monospace" android:textColor="#000000"
