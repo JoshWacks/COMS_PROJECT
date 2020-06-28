@@ -33,7 +33,7 @@ android {
 
 repositories {
     maven { url 'https://jitpack.io' }
-    maven { url 'https://jitpack.io' }
+
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -51,4 +51,5 @@ dependencies {
     implementation 'com.jjoe64:graphview:4.2.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.github.MrNtlu:Toastie:1.1.0'
 }

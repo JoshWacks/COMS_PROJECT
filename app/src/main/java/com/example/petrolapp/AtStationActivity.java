@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import com.mrntlu.toastie.Toastie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,34 +26,29 @@ import java.time.LocalDate;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-
-//TODO add an image when only one/two cars
 @RequiresApi(api = Build.VERSION_CODES.O)
 
 public class AtStationActivity extends AppCompatActivity {
+    public static TextView txtStation;
+    public static String stationAt;
     private static String username;
-
     private LocalDate d = LocalDate.now();//saves it for the query
-    public    static TextView txtStation;
     private TextView txtDate;
-    private TextView txtLitres ;
-    private TextView txtMileage ;
+    private TextView txtLitres;
+    private TextView txtMileage;
     private TextView txtInstructions;
-
     private Button btnBack;
     private LinearLayout fullScreenContentControls;
     private double x_co = 0;
     private double y_co = 0;
-
-    public static  String stationAt ;
     private Button btnDone;
     private boolean backBtnVisible = true;
     private BroadcastReceiver broadcastReceiver;
 
-    private boolean nameSet=false;
+    private boolean nameSet = false;
 
     private String strPrice;
-    private String selected_liscencePlate="";
+    private String selected_liscencePlate = "";
 
     private TextView carChoice1;
     private TextView carChoice2;
@@ -67,10 +63,10 @@ public class AtStationActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_at_station);
 
-        username=appInformation.getUsername() ;
+        username = appInformation.getUsername();
         System.out.println(username);
-        stationAt =appInformation.getNewStationName();
-        strPrice=appInformation.getPetrolPrice();
+        stationAt = appInformation.getNewStationName();
+        strPrice = appInformation.getPetrolPrice();
 
         configure();
 
@@ -82,14 +78,14 @@ public class AtStationActivity extends AppCompatActivity {
         }
 
     }
+
     public void goBack(View view) {
         Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
-        stationAt="";
+        stationAt = "";
         appInformation.setNewStationName("");//resets the station name
         finish();
         startActivity(i);
     }
-
 
 
     private void configure() {
@@ -97,39 +93,36 @@ public class AtStationActivity extends AppCompatActivity {
         txtStation = findViewById(R.id.txtViewStation);
         txtLitres = findViewById(R.id.txtInLitres);
         txtMileage = findViewById(R.id.txtInMileage);
-        txtInstructions=findViewById(R.id.txtInstructions);
+        txtInstructions = findViewById(R.id.txtInstructions);
 
         txtDate = findViewById(R.id.txtViewDate);
         txtDate.append(d + " ");//sets the current date
 
-        carChoice1=findViewById(R.id.txtCarChoice1);
-        carChoice2=findViewById(R.id.txtCarChoice2);
-        carChoice3=findViewById(R.id.txtCarChoice3);
+        carChoice1 = findViewById(R.id.txtCarChoice1);
+        carChoice2 = findViewById(R.id.txtCarChoice2);
+        carChoice3 = findViewById(R.id.txtCarChoice3);
 
-        image=findViewById(R.id.imageAtStation);
+        image = findViewById(R.id.imageAtStation);
 
         //their current petrol station is found in processStation
         getDesc();
 
     }
 
-    public void selectCar(View view){
+    public void selectCar(View view) {
         carChoice1.setBackgroundColor(Color.WHITE);
         carChoice2.setBackgroundColor(Color.WHITE);
         carChoice3.setBackgroundColor(Color.WHITE);//Resets all previous selections first
 
-        TextView temp= (TextView) view;
+        TextView temp = (TextView) view;
         temp.setBackgroundColor(Color.CYAN);
 
-        String txt= (String) temp.getText();
-        int pos=txt.indexOf(",");
-        selected_liscencePlate=txt.substring(pos+2);
-
-
+        String txt = (String) temp.getText();
+        int pos = txt.indexOf(",");
+        selected_liscencePlate = txt.substring(pos + 2);
 
 
     }
-
 
 
     private void getDesc() {
@@ -158,51 +151,47 @@ public class AtStationActivity extends AppCompatActivity {
     private void processCar(String json) throws JSONException {
         JSONArray jsonArray = new JSONArray(json);
         image.setVisibility(View.GONE);
-        if(jsonArray.length()==0){
-            Toast toast = Toast.makeText(getApplicationContext(), "Please add your car first", Toast.LENGTH_LONG);
-            toast.show();
+        if (jsonArray.length() == 0) {
+            Toastie.topInfo(getApplicationContext(),"Please add your car first",Toast.LENGTH_LONG).show();
+
             finish();//makes sure they cannot go back to their old activity before adding a car
-            Intent intent=new Intent(getApplicationContext(),CarDetails.class);
+            Intent intent = new Intent(getApplicationContext(), CarDetails.class);
             startActivity(intent);//takes them to add their car first before filling up for a car not on our system
-        }
-        else if(jsonArray.length()>1){//they have more than one car and we need to know which car they are filling up first
+        } else if (jsonArray.length() > 1) {//they have more than one car and we need to know which car they are filling up first
             txtInstructions.setVisibility(View.VISIBLE);
-            Toast toast = Toast.makeText(getApplicationContext(), "Remember it is the mileage for your last trip", Toast.LENGTH_LONG);
-            toast.show();
-            String brand,model,plate="";
-            for(int i=0;i<jsonArray.length();i++){
+            Toastie.centerInfo(getApplicationContext(), "Remember it is the mileage for your last trip \n and to full up to the same point each time", Toast.LENGTH_LONG).show();
+
+            String brand, model, plate = "";
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
                 brand = item.getString("CAR_BRAND");
                 model = item.getString("CAR_MODEL");
-                plate=item.getString("LISCENCE_PLATE");
+                plate = item.getString("LISCENCE_PLATE");
 
-                if(i==0){
-                    carChoice1.setText(brand + " " + model+", "+plate);
-                }
-                else if(i==1){
-                    carChoice2.setText(brand + " " + model+", "+plate);
-                }
-                else{
-                    carChoice3.setText(brand + " " + model+", "+plate);
+                if (i == 0) {
+                    carChoice1.setText(brand + " " + model + ", " + plate);
+                } else if (i == 1) {
+                    carChoice2.setText(brand + " " + model + ", " + plate);
+                } else {
+                    carChoice3.setText(brand + " " + model + ", " + plate);
                 }
             }
 
 
-        }
-        else {//only one car
+        } else {//only one car
             txtInstructions.setVisibility(View.GONE);
             image.setVisibility(View.VISIBLE);
-            Toast toast = Toast.makeText(getApplicationContext(), "Remember it is the mileage for your last trip", Toast.LENGTH_LONG);
-            toast.show();
+
+            Toastie.centerInfo(getApplicationContext(), "Remember it is the mileage for your last trip \n and to full up to the same point each time", Toast.LENGTH_LONG).show();
 
             JSONObject item = jsonArray.getJSONObject(0);
 
             String brand = item.getString("CAR_BRAND");
             String model = item.getString("CAR_MODEL");
-            String plate=item.getString("LISCENCE_PLATE");
+            String plate = item.getString("LISCENCE_PLATE");
 
-            selected_liscencePlate=plate;
-            carChoice1.setText(brand + " " + model+", "+plate);
+            selected_liscencePlate = plate;
+            carChoice1.setText(brand + " " + model + ", " + plate);
             carChoice1.setBackgroundColor(Color.CYAN);
 
         }
@@ -253,20 +242,20 @@ public class AtStationActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if(stationAt.equals("")){
+        if (stationAt.equals("")) {
 
             insertNewStation();
 
         }
     }
 
-    private void insertNewStation(){
+    private void insertNewStation() {
         appInformation.setActivity("AtStation");
 
-        Intent intent=new Intent(getApplicationContext(),popupApplication.class);
-        Bundle bundle=new Bundle();
-        bundle.putDouble("x_co",x_co);
-        bundle.putDouble("y_co",y_co);
+        Intent intent = new Intent(getApplicationContext(), popupApplication.class);
+        Bundle bundle = new Bundle();
+        bundle.putDouble("x_co", x_co);
+        bundle.putDouble("y_co", y_co);
         intent.putExtras(bundle);
 
         startActivity(intent);
@@ -275,47 +264,41 @@ public class AtStationActivity extends AppCompatActivity {
 
     private void insert() {
 
-        CharSequence charLitres = txtLitres.getText();
+        CharSequence charLitres = txtLitres.getText();//fetched their entered mileage and litres
         String strLitres = charLitres.toString();
-
 
         CharSequence charMileage = txtMileage.getText();
         String strMileage = charMileage.toString();
 
-        if(stationAt.equals("")){
+        //Validation Checks before entering are done here
+
+        if (stationAt.equals("")) {
 
             insertNewStation();
             txtStation.append(appInformation.getNewStationName());
-            stationAt=appInformation.getNewStationName();
-        }
-        else if(selected_liscencePlate.equals("")){
-            Toast toast = Toast.makeText(getApplicationContext(), "Please select a car first", Toast.LENGTH_LONG);
-            toast.show();
-        }
-        else if(strLitres.equals("")){
-            Toast toast = Toast.makeText(getApplicationContext(), "Please enter your litres first", Toast.LENGTH_LONG);
-            toast.show();
-        }
-        else if(strMileage.equals("")){
-            Toast toast = Toast.makeText(getApplicationContext(), "Please enter your mileage first", Toast.LENGTH_LONG);
-            toast.show();
-        }
+            stationAt = appInformation.getNewStationName();
+        } else if (selected_liscencePlate.equals("")) {
 
+            Toastie.centerWarning(getApplicationContext(), "Please select a car first", Toast.LENGTH_LONG).show();
 
-        else {
+        } else if (strLitres.equals("")) {
+
+            Toastie.centerWarning(getApplicationContext(), "Please enter your litres first", Toast.LENGTH_LONG).show();
+
+        } else if (strMileage.equals("")) {
+
+            Toastie.centerWarning(getApplicationContext() , "Please enter your mileage first", Toast.LENGTH_LONG).show();
+
+        } else {
 
             double price = Double.parseDouble(strPrice.substring(2));//we use substring to remove the R in front of the price
-
-
             double litres = Double.parseDouble(strLitres);
+
             txtLitres.setText(" ");//we clear the text to ensure they don't enter the same record twice
-
             double cost = litres * price;//cost is calculated via multiplying litres by price
-
 
             double mileage = Double.parseDouble(strMileage);
             txtMileage.setText(" ");//we clear the text to ensure they don't enter the same record twice
-
 
             ContentValues cv = new ContentValues();
             cv.put("LISCENCE_PLATE", selected_liscencePlate);
@@ -331,15 +314,13 @@ public class AtStationActivity extends AppCompatActivity {
             c.fetchInfo(AtStationActivity.this, "insert_CAR_LOG", cv, new RequestHandler() {
                 @Override
                 public void processResponse(String response) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Successfully Added Full Up", Toast.LENGTH_LONG);
-                    toast.show();
+
+                    Toastie.centerSuccess(getApplicationContext(),"Successfully Added Full Up",Toast.LENGTH_LONG).show();
                 }
             });
         }
 
-
     }
-
 
     private boolean runtime_permissions() {
 
@@ -352,7 +333,6 @@ public class AtStationActivity extends AppCompatActivity {
 
         }
         return false;
-
     }
 
     @Override
@@ -373,7 +353,7 @@ public class AtStationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 insert();// we do the insert here or the onclick is overwritten
 
-                Intent i = new Intent(getApplicationContext(), GPS_Service.class);
+                Intent i = new Intent(getApplicationContext(), GPS_Service.class);//Stops the service, stops checking for x and y co-ords
                 stopService(i);
             }
         });
@@ -389,15 +369,10 @@ public class AtStationActivity extends AppCompatActivity {
                     Bundle extras = intent.getExtras();//gets the co-ord's here
                     x_co = extras.getDouble("x_co");
                     y_co = extras.getDouble("y_co");
-                    if(!nameSet){
-                        getStations();
-                        nameSet=true;
+                    if (!nameSet) {
+                        getStations();//We only call get stations once we have the x and y co-ords
+                        nameSet = true;
                     }
-
-
-
-
-
                 }
             };
             registerReceiver(broadcastReceiver, new IntentFilter("location_update"));
@@ -411,7 +386,6 @@ public class AtStationActivity extends AppCompatActivity {
             unregisterReceiver(broadcastReceiver);
         }
     }
-
 
     private void configureScreen() {
         ActionBar actionBar = getSupportActionBar();
@@ -446,7 +420,5 @@ public class AtStationActivity extends AppCompatActivity {
 
         }
     }
-
-
 
 }

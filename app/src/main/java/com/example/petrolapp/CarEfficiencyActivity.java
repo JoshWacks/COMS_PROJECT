@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.mrntlu.toastie.Toastie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,8 +48,6 @@ public class CarEfficiencyActivity extends AppCompatActivity {
     private Spinner spnrYear;
 
     private Thread thread;
-    //TODO fix the model spinner
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +91,8 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         decorView.setSystemUiVisibility(uiOptions);//hides the navigation bar at the bottom
+
+        Toastie.topSuccess(getApplicationContext(),"Click on a bar for more info",Toast.LENGTH_LONG).show();
 
         btnBack = findViewById(R.id.btnCarEffBack);
 
@@ -268,7 +269,6 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         yAxisR.setDrawGridLines(true);
 
         float barWidth = 0.3f;
-//TODO check if this barwidth will always be alright
         data.setBarWidth(barWidth); // set custom bar width
         barChart.setData(data);
 
@@ -331,10 +331,12 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             if(!arrayListBrand.contains(ct.getBrand())){
                 arrayListBrand.add(ct.getBrand());
             }
+            if(!arrayListModel.contains(ct.getModel())){
+                arrayListModel.add(ct.getModel());
+            }
             if(!arrayListYear.contains(ct.getYear())){
                 arrayListYear.add(ct.getYear());
             }
-
 
         }
 
@@ -351,14 +353,26 @@ public class CarEfficiencyActivity extends AppCompatActivity {
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                onBrandSelected();
-
+                onBrandSelected(arrayListModel);
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
-                spnrModel.setAdapter(arrayAdapterModel);
+
+            }
+        });
+
+        spnrModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                onModelSelected(arrayListYear);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
 
             }
         });
@@ -366,18 +380,41 @@ public class CarEfficiencyActivity extends AppCompatActivity {
 
     }
 
-    private void onBrandSelected() {
+    private void onBrandSelected(ArrayList<String>arr) {
         String brand = (String) spnrBrand.getSelectedItem();
-
         ArrayList<String> arrayListModel = new ArrayList<>();
-        for (CarType ct : CarTypes) {
-            if (ct.getBrand().equals(brand)) {
-                arrayListModel.add(ct.getModel());
+        if (brand.equals("Brand")) {
+            arrayListModel=arr;
+        }
+       else {
+            for (CarType ct : CarTypes) {
+                if (ct.getBrand().equals(brand)) {
+                    arrayListModel.add(ct.getModel());
+                }
             }
+
         }
         ArrayAdapter<String> arrayAdapterModel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListModel);
         spnrModel.setAdapter(arrayAdapterModel);
 
+    }
+
+    private void onModelSelected(ArrayList<String>arr){
+        String model=(String)spnrModel.getSelectedItem();
+        ArrayList<String> arrayListYear = new ArrayList<>();
+
+        if(model.equals("Model")){
+            arrayListYear=arr;
+        }
+        else {
+            for (CarType ct : CarTypes) {
+                if (ct.getModel().equals(model)) {
+                    arrayListYear.add(ct.getYear());
+                }
+            }
+        }
+        ArrayAdapter<String> arrayAdapterYear = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListYear);
+        spnrYear.setAdapter(arrayAdapterYear);
     }
 
 
@@ -385,29 +422,26 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         String brandSelected = (String) spnrBrand.getSelectedItem();
 
         if (brandSelected.equals("Brand")) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Please select a brand first", Toast.LENGTH_LONG);
-            toast.show();
+
+            Toastie.centerError(this,"Please select a brand first", Toast.LENGTH_LONG).show();
             return false;
         }
 
         String modelSelected = (String) spnrModel.getSelectedItem();
         if (modelSelected.equals("Model")) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Please select a model first", Toast.LENGTH_LONG);
-            toast.show();
+            Toastie.centerError(this,"Please select a model first", Toast.LENGTH_LONG).show();
             return false;
         }
 
         String yearSelected = (String) spnrYear.getSelectedItem();
         if (yearSelected.equals("Year")) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Please select a year first", Toast.LENGTH_LONG);
-            toast.show();
+            Toastie.centerError(this,"Please select a year first", Toast.LENGTH_LONG).show();
             return false;
         }
 
         String typeSelected = brandSelected + modelSelected + yearSelected;
         if (!CarTypeMap.containsKey(typeSelected)) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Please select a valid car first", Toast.LENGTH_LONG);
-            toast.show();
+            Toastie.centerError(this,"Please select a valid car first", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;

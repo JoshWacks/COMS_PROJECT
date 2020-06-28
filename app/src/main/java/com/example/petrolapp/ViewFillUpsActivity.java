@@ -12,6 +12,7 @@ import android.widget.*;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import com.mrntlu.toastie.Toastie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -198,8 +199,17 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         TextView txtDate=findViewById(R.id.txtDate);
         JSONArray jsonArray=new JSONArray(JSON);
 
-        CharSequence req_date= txtDate.getText();
+        CharSequence req_date= ","+txtDate.getText();
+
+
         txtDate.setText("");
+        if (req_date.equals(",")) {
+           Toastie.centerError(this,"The search query cannot be empty",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else{
+            req_date=req_date.subSequence(1,req_date.length());
+        }
 
         boolean found=false;//keeps track of if we found a record or not
 
@@ -377,6 +387,8 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         decorView.setSystemUiVisibility(uiOptions);//hides the navigation bar at the bottom
+
+        Toastie.topSuccess(getApplicationContext(),"Click on a record for more info",Toast.LENGTH_LONG).show();
 
         btnBack=findViewById(R.id.btnBackFillUps);
         fullScreenContentControls=findViewById(R.id.fullscreen_content_controls);

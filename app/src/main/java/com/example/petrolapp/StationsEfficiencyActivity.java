@@ -52,14 +52,12 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
         configureScreen();
 
-
         thread=new Thread(new Runnable() {
             @Override
             public void run() {
                 createGraph();//We can only create the graph confidently once we know the data has been fetched
             }
         });
-
 
     }
     public void checkNumCars(){
@@ -92,7 +90,6 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
             ct.setLiscence_plate(item.getString("LISCENCE_PLATE"));
             userCars.add(ct);
 
-
         }
 
         numCars=userCars.size();
@@ -113,15 +110,11 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
             fetchDataManyCars();
         }
 
-
     }
 
     public ArrayList<CarType> getUserCars() {
         return userCars;
     }
-
-
-
 
     public void configureScreen(){
         ActionBar actionBar = getSupportActionBar();
@@ -142,7 +135,6 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         });
     }
 
-
     private void toggle(){//sets the navigation bar at the bottom visible or not when the user touches the screen
         if(backBtnVisible){
 
@@ -154,6 +146,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
             backBtnVisible =true;
         }
     }
+
     public void goBack(View view){
 
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
@@ -165,7 +158,6 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         userCars.clear();//Clears the users array first so we don't add to it again
         finish();
 
-
         startActivity(i);
 
     }
@@ -175,7 +167,6 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         ContentValues cv=new ContentValues();
         cv.put("USERNAME",username);
 
-
         connection.fetchInfo(StationsEfficiencyActivity.this, "get_STATIONS_EFFICIENCY",cv, new RequestHandler() {
             @Override
             public void processResponse(String response) {
@@ -184,6 +175,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
             }
         });
     }
+
     public void fetchDataManyCars(){
         Connection connection=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
         ContentValues cv=new ContentValues();
@@ -212,7 +204,6 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
                 eff=item.getDouble("EFFICIENCY");
                 String[] arr =name.split(" ",2);//To only get the first word of the station name as we want to group them by Station Brand
 
-
                 if(!stationsMap.containsKey(arr[0])){//checks to see if this is the first time we are seeing this station, if so creates a station object
                     stationsMap.put(arr[0],stationNum);
                     stationNum++;//to ensure each station has a unique number assigned to it
@@ -228,7 +219,6 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
                         break;
                     }
                 }
-
             }
 
         } catch (JSONException e) {
@@ -238,17 +228,8 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
     }
 
-    private void viewData(){
-        for(Station s:Stations){
-            System.out.println(s.getName()+"  : "+s.getAverage());
-        }
-
-    }
-
     private void createGraph(){
-
         barChart=findViewById(R.id.stationBarGraph);
-
 
         ArrayList<BarEntry>entries=new ArrayList<>();//the data values
         final String[]names=new String[Stations.size()];//the names on the x-axis
@@ -265,9 +246,6 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         };
 
         formatDefaultBarGraph(set,data,formatter);
-
-
-
     }
 
     public void addDefaultData(ArrayList<BarEntry>entries,String[]names){
@@ -292,7 +270,6 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
             //network calls must be done on their own threads
             @Override
             public void run() {
-
 
                 StationsEfficiencyActivity.this.runOnUiThread(new Runnable() {//To change the background colour we must run a thread on the UI Thread
                     public void run() {
@@ -357,9 +334,5 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         barChart.setDragEnabled(true);
         barChart.setScaleEnabled(true);
         barChart.postInvalidate(); // refresh
-
     }
-
-
 }
-

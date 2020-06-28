@@ -25,9 +25,6 @@ import java.util.ArrayList;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-
-
-//Todo make sure it does not crash when not connected to the internet
 public class MainMenuActivity extends AppCompatActivity {
     private TextView pTextView;
     private TextView dTextView;
@@ -80,7 +77,6 @@ public class MainMenuActivity extends AppCompatActivity {
         stopService(gpsIntent);//Ends the GPS service when they logout before the app closes
 
         System.exit(0);
-        //check if i can go back to login screen
 //        i = new Intent(getApplicationContext(),Login.class);
 //        startActivity(i);
 
@@ -118,12 +114,6 @@ public class MainMenuActivity extends AppCompatActivity {
         i = new Intent(getApplicationContext(), AccDetails.class);
         startActivity(i);
     }
-
-
-
-
-
-
 
     public void fetchPetrolPrice() {
         final String url = "https://www.aa.co.za/calculators-toolscol-1/fuel-pricing";
