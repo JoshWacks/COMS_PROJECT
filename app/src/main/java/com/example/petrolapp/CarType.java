@@ -8,6 +8,7 @@ public class CarType {
     private final String type;
     private final String year;
     private final ArrayList<Double> entries = new ArrayList<Double>();
+    private String liscence_plate;
 
     public CarType(String b, String m, String y) {
         brand = b;
@@ -44,5 +45,11 @@ public class CarType {
         return (sum / entries.size());
     }
 
+    public void setLiscence_plate(String plate){
+        liscence_plate=plate;
+    }
 
+    public String getLiscence_plate() {
+        return liscence_plate;
+    }
 }

@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CarEfficiencyActivity extends AppCompatActivity {
-    private final String username=appInformation.getUsername() ;
 
     private static final ArrayList<CarType> CarTypes = new ArrayList<CarType>();//An arraylist to keep track of all our car types
     private final HashMap<String, Integer> CarTypeMap = new HashMap<String, Integer>();//A Map is used to see if we have encountered that car type before,
@@ -48,8 +47,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
     private Spinner spnrYear;
 
     private Thread thread;
-
-    //Todo find their specific car and show it specifically for them
+    //TODO fix the model spinner
 
 
     @Override
@@ -330,8 +328,14 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         arrayListYear.add("Year");
 
         for (CarType ct : CarTypes) {
-            arrayListBrand.add(ct.getBrand());
-            arrayListYear.add(ct.getYear());
+            if(!arrayListBrand.contains(ct.getBrand())){
+                arrayListBrand.add(ct.getBrand());
+            }
+            if(!arrayListYear.contains(ct.getYear())){
+                arrayListYear.add(ct.getYear());
+            }
+
+
         }
 
 

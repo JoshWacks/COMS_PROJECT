@@ -7,6 +7,7 @@ public class appInformation {
     private static String pastActivity;
     private static String petrolPrice;
     private static String newStationName="";
+    private static String liscence_plate="";
 
     public static String getUsername() {//when the username is needed
         return username;
@@ -38,5 +39,13 @@ public class appInformation {
 
     public static void setNewStationName(String newStationName) {
         appInformation.newStationName = newStationName;
+    }
+
+    public static String getLiscence_plate() {
+        return liscence_plate;
+    }
+
+    public static void setLiscence_plate(String liscence_plate) {
+        appInformation.liscence_plate = liscence_plate;
     }
 }

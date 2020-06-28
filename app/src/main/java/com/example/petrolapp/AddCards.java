@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 public class AddCards extends AppCompatActivity {
 
-    private static final String username=appInformation.getUsername();
+    private static String username;
     String company,card_number,exp_date,cardid;
     String allTheCardNos;
     ArrayList<String> Card_Nos;
@@ -26,6 +26,7 @@ public class AddCards extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_cards);
+        username=appInformation.getUsername() ;
 
         ContentValues cv=new ContentValues();
         cv.put("USERNAME",username);

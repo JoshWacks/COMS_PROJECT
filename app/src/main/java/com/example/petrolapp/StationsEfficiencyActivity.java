@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class StationsEfficiencyActivity extends AppCompatActivity {
-    private final String username=appInformation.getUsername() ;
+    private static String username;
     private boolean backBtnVisible =true;
     private HashMap<String, Integer> stationsMap=new HashMap<String, Integer>() ;//A Map is used to see if we have encountered that station before,
                                                                                     //We use a HashMap to avoid implementing all the map methods
@@ -36,15 +36,23 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
     private Thread thread;
 
+
     private Button btnBack;
+
+    private int numCars;
+    private static String selectedPlate;
+    private static ArrayList<CarType>userCars=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stations_efficiency);
 
+        username=appInformation.getUsername();
+        selectedPlate=appInformation.getLiscence_plate();
+        checkNumCars();
+
         configureScreen();
-        fetchData();
 
 
         thread=new Thread(new Runnable() {
@@ -56,6 +64,67 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
 
     }
+    public void checkNumCars(){
+        ContentValues cv = new ContentValues();
+
+        cv.put("USERNAME", username);
+
+        Connection c = new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
+
+        c.fetchInfo(StationsEfficiencyActivity.this, "get_CAR_DESC", cv, new RequestHandler() {
+            @Override
+            public void processResponse(String response) {
+
+                try {
+                    fillUserCars(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void fillUserCars(String json) throws JSONException {
+        JSONArray jsonArray = new JSONArray(json);
+
+        for(int i=0;i<jsonArray.length();i++){
+            JSONObject item= (JSONObject) jsonArray.get(i);
+
+            CarType ct=new CarType(item.getString("CAR_BRAND"),item.getString("CAR_MODEL"),item.getString("CAR_YEAR"));
+            ct.setLiscence_plate(item.getString("LISCENCE_PLATE"));
+            userCars.add(ct);
+
+
+        }
+
+        numCars=userCars.size();
+        if(numCars==0){
+            Intent intent=new Intent(getApplicationContext(),CarDetails.class);
+            finish();
+            startActivity(intent);
+        }
+        else if(numCars==1){
+            fetchData();
+        }else if(numCars>1&appInformation.getLiscence_plate().equals("")){
+            appInformation.setActivity("selectCarEff");
+            Intent intent=new Intent(getApplicationContext(),popupApplication.class);
+            finish();
+            startActivity(intent);
+        }
+        else{
+            fetchDataManyCars();
+        }
+
+
+    }
+
+    public ArrayList<CarType> getUserCars() {
+        return userCars;
+    }
+
+
+
+
     public void configureScreen(){
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -90,9 +159,10 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
     public void goBack(View view){
 
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
-
-
+        finish();
+        appInformation.setNewStationName("");
         startActivity(i);
+
     }
 
     private void fetchData(){//directly fetches the raw data to be processed
@@ -102,6 +172,19 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
 
         connection.fetchInfo(StationsEfficiencyActivity.this, "get_STATIONS_EFFICIENCY",cv, new RequestHandler() {
+            @Override
+            public void processResponse(String response) {
+
+                processJson(response);
+            }
+        });
+    }
+    public void fetchDataManyCars(){
+        Connection connection=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
+        ContentValues cv=new ContentValues();
+        cv.put("LISCENCE_PLATE",selectedPlate);
+
+        connection.fetchInfo(StationsEfficiencyActivity.this, "get_STATIONS_EFFICIENCY2",cv, new RequestHandler() {
             @Override
             public void processResponse(String response) {
 

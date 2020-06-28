@@ -11,12 +11,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AccDetails extends AppCompatActivity {
-    private static final String username=appInformation.getUsername();
+    private static String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acc_details);
+        username=appInformation.getUsername() ;
 
         ContentValues cv=new ContentValues();
         cv.put("USERNAME",username);

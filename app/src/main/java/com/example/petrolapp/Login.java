@@ -1,34 +1,23 @@
 package com.example.petrolapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.TextView;
-
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputLayout;
-
+import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class Login extends AppCompatActivity {
     //below is the Password regex pattern created and used to take sure the users' password meets basic password strength requirements
@@ -301,9 +290,11 @@ public class Login extends AppCompatActivity {
 
     public void gotoSuccessPage(){
         String username = textInputUsername.getEditText().getText().toString().trim();
+        appInformation.setUsername(username);
 
         Intent intent = new Intent(this,MainMenuActivity.class);
-        appInformation.setUsername(username);
+
+
         startActivity(intent);
     }
 

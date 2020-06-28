@@ -24,30 +24,25 @@ import org.json.JSONObject;
 
 
 public class ViewFillUpsActivity extends AppCompatActivity {
-    private String username=appInformation.getUsername() ;
+    private static String username;
     private TableLayout tbl;;
     private String JSON;
 
-    Button btnBack;
+    private Button btnBack;
     private boolean backBtnVisible =true;
-    LinearLayout fullScreenContentControls;
+    private LinearLayout fullScreenContentControls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_fill_ups);
 
-
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.hide();
-        View decorView=getWindow().getDecorView();
-        int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
+        username=appInformation.getUsername();
+        tbl=findViewById(R.id.tblLayout);
 
         fillTable();
 
-        tbl=findViewById(R.id.tblLayout);
+
 
         configureScreen();
 
@@ -87,7 +82,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
                 String stationFullName=item.getString("PETROL_STATION_NAME");
                 String words[]=stationFullName.split(" ");
-                String station=words[0];
+                String station=words[0];//only want the first name of the station
                 double cost=item.getDouble("COST");
                 double mileage=item.getDouble("MILEAGE");
                 String date=item.getString("DATE");

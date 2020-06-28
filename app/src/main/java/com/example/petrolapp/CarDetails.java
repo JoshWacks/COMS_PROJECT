@@ -14,13 +14,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CarDetails extends AppCompatActivity {
-    private static final String username=appInformation.getUsername();
+    private static String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_details);
-
+        username=appInformation.getUsername();
 
 
         ContentValues cv=new ContentValues();
@@ -87,7 +87,7 @@ public class CarDetails extends AppCompatActivity {
             VLisc_Values.setText(lisc_plate);
             VBrand.setText(brand);
             VModel.setText(model);
-            VYear.setText(lisc_plate);
+            VYear.setText(year);
 
             lVertical.addView(hCarIndex);
 

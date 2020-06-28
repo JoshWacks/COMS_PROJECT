@@ -77,9 +77,15 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void logOut(View view) {
-        stopService(gpsIntent);//Ends the GPS service when the logout before the app closes
-        i = new Intent(getApplicationContext(), Login.class);
-        startActivity(i);
+        stopService(gpsIntent);//Ends the GPS service when they logout before the app closes
+
+        System.exit(0);
+        //check if i can go back to login screen
+//        i = new Intent(getApplicationContext(),Login.class);
+//        startActivity(i);
+
+
+
     }
 
     public void viewFillups(View view) {

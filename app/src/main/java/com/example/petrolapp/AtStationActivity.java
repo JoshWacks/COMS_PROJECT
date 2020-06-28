@@ -3,6 +3,7 @@ package com.example.petrolapp;
 import android.Manifest;
 import android.content.*;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -28,23 +29,25 @@ import java.time.LocalDate;
  * status bar and navigation/system bar) with user interaction.
  */
 
-    //TODO check if they have a car first if not take them to the new car page
+//TODO add an image when only one/two cars
 @RequiresApi(api = Build.VERSION_CODES.O)
 
 public class AtStationActivity extends AppCompatActivity {
-    private static final String username=appInformation.getUsername() ;
-
+    private static String username;
 
     private LocalDate d = LocalDate.now();//saves it for the query
-    public  static TextView txtStation;
+    public    static TextView txtStation;
     private TextView txtDate;
-    private TextView txtCar;
+    private TextView txtLitres ;
+    private TextView txtMileage ;
+    private TextView txtInstructions;
+
     private Button btnBack;
     private LinearLayout fullScreenContentControls;
     private double x_co = 0;
     private double y_co = 0;
 
-    public static  String stationAt =appInformation.getNewStationName();
+    public static  String stationAt ;
     private Button btnDone;
     private boolean backBtnVisible = true;
     private BroadcastReceiver broadcastReceiver;
@@ -52,6 +55,11 @@ public class AtStationActivity extends AppCompatActivity {
     private boolean nameSet=false;
 
     private String strPrice;
+    private String selected_liscencePlate="";
+
+    private TextView carChoice1;
+    private TextView carChoice2;
+    private TextView carChoice3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +67,13 @@ public class AtStationActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_at_station);
 
+        username=appInformation.getUsername() ;
+        System.out.println(username);
+        stationAt =appInformation.getNewStationName();
         strPrice=appInformation.getPetrolPrice();
 
         configure();
-        configureScreen();
+
 
         btnDone = findViewById(R.id.btnDone);
 
@@ -71,35 +82,59 @@ public class AtStationActivity extends AppCompatActivity {
         }
 
     }
-
     public void goBack(View view) {
         Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
         stationAt="";
         appInformation.setNewStationName("");//resets the station name
+        finish();
         startActivity(i);
     }
 
-    public void configure() {
+
+
+    private void configure() {
+        configureScreen();
         txtStation = findViewById(R.id.txtViewStation);
+        txtLitres = findViewById(R.id.txtInLitres);
+        txtMileage = findViewById(R.id.txtInMileage);
+        txtInstructions=findViewById(R.id.txtInstructions);
+
         txtDate = findViewById(R.id.txtViewDate);
-
-        Toast toast = Toast.makeText(getApplicationContext(), "Remember it is the mileage for your last trip", Toast.LENGTH_LONG);
-        toast.show();
-
-        //their current petrol station is found in processStation
-        //Todo check if they have 2 cars and if so, let them choose which car they are filling up
-
         txtDate.append(d + " ");//sets the current date
 
+        carChoice1=findViewById(R.id.txtCarChoice1);
+        carChoice2=findViewById(R.id.txtCarChoice2);
+        carChoice3=findViewById(R.id.txtCarChoice3);
+
+        //their current petrol station is found in processStation
         getDesc();
+
+    }
+
+    public void selectCar(View view){
+        carChoice1.setBackgroundColor(Color.WHITE);
+        carChoice2.setBackgroundColor(Color.WHITE);
+        carChoice3.setBackgroundColor(Color.WHITE);//Resets all previous selections first
+
+        TextView temp= (TextView) view;
+        temp.setBackgroundColor(Color.CYAN);
+
+        String txt= (String) temp.getText();
+        int pos=txt.indexOf(",");
+        selected_liscencePlate=txt.substring(pos+2);
+
+
 
 
     }
 
-    public void getDesc() {
+
+
+    private void getDesc() {
         ContentValues cv = new ContentValues();
+
         cv.put("USERNAME", username);
-        final String[] desc = {""};
+
         Connection c = new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
 
         c.fetchInfo(AtStationActivity.this, "get_CAR_DESC", cv, new RequestHandler() {
@@ -107,9 +142,8 @@ public class AtStationActivity extends AppCompatActivity {
             public void processResponse(String response) {
 
                 try {
-                    desc[0] = processJson(response);
-                    txtCar = findViewById(R.id.txtViewCar);
-                    txtCar.append(desc[0]);
+                    processCar(response);
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -119,19 +153,56 @@ public class AtStationActivity extends AppCompatActivity {
 
     }
 
-    public String processJson(String json) throws JSONException {
+    private void processCar(String json) throws JSONException {
         JSONArray jsonArray = new JSONArray(json);
-        String brand = "";
-        String model = "";
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject item = jsonArray.getJSONObject(i);
 
-            brand = item.getString("CAR_BRAND");
-            model = item.getString("CAR_MODEL");
+        if(jsonArray.length()==0){
+            Toast toast = Toast.makeText(getApplicationContext(), "Please add your car first", Toast.LENGTH_LONG);
+            toast.show();
+            finish();//makes sure they cannot go back to their old activity before adding a car
+            Intent intent=new Intent(getApplicationContext(),CarDetails.class);
+            startActivity(intent);//takes them to add their car first before filling up for a car not on our system
+        }
+        else if(jsonArray.length()>1){//they have more than one car and we need to know which car they are filling up first
+            txtInstructions.setVisibility(View.VISIBLE);
+            Toast toast = Toast.makeText(getApplicationContext(), "Remember it is the mileage for your last trip", Toast.LENGTH_LONG);
+            toast.show();
+            String brand,model,plate="";
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject item = jsonArray.getJSONObject(i);
+                brand = item.getString("CAR_BRAND");
+                model = item.getString("CAR_MODEL");
+                plate=item.getString("LISCENCE_PLATE");
+
+                if(i==0){
+                    carChoice1.setText(brand + " " + model+", "+plate);
+                }
+                else if(i==1){
+                    carChoice2.setText(brand + " " + model+", "+plate);
+                }
+                else{
+                    carChoice3.setText(brand + " " + model+", "+plate);
+                }
+            }
+
 
         }
+        else {//only one car
+            txtInstructions.setVisibility(View.GONE);
+            Toast toast = Toast.makeText(getApplicationContext(), "Remember it is the mileage for your last trip", Toast.LENGTH_LONG);
+            toast.show();
 
-        return brand + " " + model;
+            JSONObject item = jsonArray.getJSONObject(0);
+
+            String brand = item.getString("CAR_BRAND");
+            String model = item.getString("CAR_MODEL");
+            String plate=item.getString("LISCENCE_PLATE");
+
+            selected_liscencePlate=plate;
+            carChoice1.setText(brand + " " + model+", "+plate);
+            carChoice1.setBackgroundColor(Color.CYAN);
+
+        }
     }
 
     private void getStations() {
@@ -186,7 +257,7 @@ public class AtStationActivity extends AppCompatActivity {
         }
     }
 
-    public void insertNewStation(){
+    private void insertNewStation(){
         appInformation.setActivity("AtStation");
 
         Intent intent=new Intent(getApplicationContext(),popupApplication.class);
@@ -199,12 +270,12 @@ public class AtStationActivity extends AppCompatActivity {
 
     }
 
-    public void insert() {
-        TextView txtLitres = findViewById(R.id.txtInLitres);
+    private void insert() {
+
         CharSequence charLitres = txtLitres.getText();
         String strLitres = charLitres.toString();
 
-        TextView txtMileage = findViewById(R.id.txtInMileage);
+
         CharSequence charMileage = txtMileage.getText();
         String strMileage = charMileage.toString();
 
@@ -213,6 +284,10 @@ public class AtStationActivity extends AppCompatActivity {
             insertNewStation();
             txtStation.append(appInformation.getNewStationName());
             stationAt=appInformation.getNewStationName();
+        }
+        else if(selected_liscencePlate.equals("")){
+            Toast toast = Toast.makeText(getApplicationContext(), "Please select a car first", Toast.LENGTH_LONG);
+            toast.show();
         }
         else if(strLitres.equals("")){
             Toast toast = Toast.makeText(getApplicationContext(), "Please enter your litres first", Toast.LENGTH_LONG);
@@ -240,7 +315,7 @@ public class AtStationActivity extends AppCompatActivity {
 
 
             ContentValues cv = new ContentValues();
-            cv.put("USERNAME", username);
+            cv.put("LISCENCE_PLATE", selected_liscencePlate);
             cv.put("STATION", stationAt);
             cv.put("COST", cost);
             cv.put("MILEAGE", mileage);
@@ -335,7 +410,7 @@ public class AtStationActivity extends AppCompatActivity {
     }
 
 
-    public void configureScreen() {
+    private void configureScreen() {
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.hide();//hides the name of the activity at the top
@@ -368,6 +443,7 @@ public class AtStationActivity extends AppCompatActivity {
 
         }
     }
+
 
 
 }
