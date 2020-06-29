@@ -37,45 +37,15 @@
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.489"
             app:layout_constraintVertical_bias="0.189" android:textAlignment="center" android:textAllCaps="true"/>
     <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="223dp"
+            android:layout_height="52dp"
             android:inputType="textPersonName"
             android:hint="LISCENCE PLATE"
             android:ems="10"
             android:id="@+id/editLiscPlate" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.454"
-            app:layout_constraintVertical_bias="0.307"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="YEAR"
-            android:ems="10"
-            android:id="@+id/editYear" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.454"
-            app:layout_constraintVertical_bias="0.645"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="MODEL"
-            android:ems="10"
-            android:id="@+id/editModel" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.454"
-            app:layout_constraintVertical_bias="0.532"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="BRAND"
-            android:ems="10"
-            android:id="@+id/editBrand" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.454"
-            app:layout_constraintVertical_bias="0.412"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.331"/>
     <Button
             android:text="Back to main menu"
             android:layout_width="144dp"
@@ -97,5 +67,23 @@
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_bias="0.497" app:layout_constraintVertical_bias="0.784"/>
+    <Spinner
+            android:layout_width="242dp"
+            android:layout_height="46dp" android:id="@+id/spinner1"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.43" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.486"/>
+    <Spinner
+            android:layout_width="242dp"
+            android:layout_height="46dp" android:id="@+id/spinner2"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.534" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.497"/>
+    <Spinner
+            android:layout_width="242dp"
+            android:layout_height="46dp" android:id="@+id/spinner3"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.642" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.497"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
