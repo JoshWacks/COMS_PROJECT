@@ -48,10 +48,9 @@
     <ImageView
             android:layout_width="102dp"
             android:layout_height="97dp" app:srcCompat="@drawable/cardicon" android:id="@+id/imageView4"
-            app:layout_constraintEnd_toEndOf="@+id/textView16"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.051"
-            app:layout_constraintVertical_bias="0.023"/>
+            app:layout_constraintEnd_toStartOf="@+id/textView16"
+            android:layout_marginEnd="10dp" app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="12dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="7dp"/>
 
     <ScrollView
             android:layout_width="375dp"
@@ -61,7 +60,7 @@
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.388"
             android:scrollbarStyle="insideOverlay" android:orientation="vertical"
-    >
+            android:layout_marginStart="15dp">
 
 
     </ScrollView>

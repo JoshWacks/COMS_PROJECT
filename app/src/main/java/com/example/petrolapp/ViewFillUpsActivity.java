@@ -377,6 +377,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
     public void goBack(View view){
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
+        finish();
         startActivity(i);
     }
 

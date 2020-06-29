@@ -162,6 +162,19 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
+        startActivity(i);
+        barChart.clear();
+        Stations.clear();
+        stationsMap.clear();
+        //Clears all the data from the previous bargraph first
+        userCars.clear();//Clears the users array first so we don't add to it again
+        finish();
+        startActivity(i);
+    }
+
     private void fetchData(){//directly fetches the raw data to be processed
         Connection connection=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
         ContentValues cv=new ContentValues();

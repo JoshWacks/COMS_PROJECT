@@ -55,6 +55,7 @@ public class AtStationActivity extends AppCompatActivity {
     private TextView carChoice3;
 
     private ImageView image;
+    private Intent gpsIntent;
 
 
     @Override
@@ -62,6 +63,8 @@ public class AtStationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_at_station);
+
+
 
         username = appInformation.getUsername();
         System.out.println(username);
@@ -75,6 +78,7 @@ public class AtStationActivity extends AppCompatActivity {
 
         if (!runtime_permissions()) {
             enable_buttons();
+
         }
 
     }
@@ -341,6 +345,8 @@ public class AtStationActivity extends AppCompatActivity {
         if (requestCode == 100) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 enable_buttons();
+                gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
+                startService(gpsIntent);//Starts the GPS service here
             } else {
                 runtime_permissions();
             }

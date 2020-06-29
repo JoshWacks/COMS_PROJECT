@@ -38,8 +38,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
-        startService(gpsIntent);//Starts the GPS service here
+//        gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
+//        startService(gpsIntent);//Starts the GPS service here
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -74,7 +74,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void logOut(View view) {
-        stopService(gpsIntent);//Ends the GPS service when they logout before the app closes
+
 
         System.exit(0);
 //        i = new Intent(getApplicationContext(),Login.class);

@@ -105,7 +105,8 @@ public class CardDetails extends AppCompatActivity {
 
     public void goBack3(View view) {
 
-        Intent myIntent = new Intent(CardDetails.this, MainMenuActivity.class);        //go back to main menu
+        Intent myIntent = new Intent(CardDetails.this, MainMenuActivity.class);
+        finish();//go back to main menu
         startActivity(myIntent);
     }
 

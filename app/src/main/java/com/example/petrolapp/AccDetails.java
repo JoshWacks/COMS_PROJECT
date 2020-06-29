@@ -63,8 +63,9 @@ public class AccDetails extends AppCompatActivity {
 
     public void goBack1(View view) {
 
-        Intent myIntent = new Intent(AccDetails.this, MainMenuActivity.class);        //go back to main menu
-        startActivity(myIntent);
+        Intent myIntent = new Intent(AccDetails.this, MainMenuActivity.class);
+        finish();
+        startActivity(myIntent);//go back to main menu
 
     }
 }

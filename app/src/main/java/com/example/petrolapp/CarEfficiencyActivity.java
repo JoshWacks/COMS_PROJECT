@@ -80,8 +80,23 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         data.clearValues();
         set.clear();
         names=new String[names.length];//Clears all the data from the previous bargraph first
+        finish();
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+        startActivity(i);
+        barChart.clear();
+        CarTypes.clear();
+        CarTypeMap.clear();
+        entries.clear();
+        data.clearValues();
+        set.clear();
+        names=new String[names.length];//Clears all the data from the previous bargraph first
+        finish();
     }
 
     private void configureScreen() {

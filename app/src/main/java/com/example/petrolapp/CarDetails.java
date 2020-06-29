@@ -117,7 +117,7 @@ public class CarDetails extends AppCompatActivity {
 
     public void goBack2(View view) {
         Intent myIntent = new Intent(CarDetails.this, MainMenuActivity.class);        //go back to main menu
-
+        finish();
         startActivity(myIntent);
 
     }

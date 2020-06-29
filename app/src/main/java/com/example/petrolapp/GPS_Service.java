@@ -56,6 +56,7 @@ public class GPS_Service extends Service {
         };
         locationManager=(LocationManager)getApplication().getSystemService(Context.LOCATION_SERVICE);
 
+        assert locationManager != null;
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,0,listener);
     }
 

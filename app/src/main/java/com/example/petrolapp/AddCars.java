@@ -205,7 +205,8 @@ public class AddCars extends AppCompatActivity {
 
 
     public void bttnBack(View view) {
-        Intent myIntent = new Intent(AddCars.this, MainMenuActivity.class);        //go back to main menu
+        Intent myIntent = new Intent(AddCars.this, MainMenuActivity.class);
+        finish();//go back to main menu
         startActivity(myIntent);
     }
 }

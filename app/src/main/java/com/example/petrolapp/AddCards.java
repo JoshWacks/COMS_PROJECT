@@ -162,7 +162,7 @@ public class AddCards extends AppCompatActivity {
 
     public void bttnBack(View view) {
         Intent myIntent = new Intent(AddCards.this, MainMenuActivity.class);        //go back to main menu
-
+        finish();
         startActivity(myIntent);
     }
 
