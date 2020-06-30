@@ -32,7 +32,8 @@
                 android:id="@+id/scrollView"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="60dp" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintEnd_toEndOf="parent" android:scrollIndicators="right"
+                android:soundEffectsEnabled="true">
             <TableLayout android:layout_width="match_parent"
                          android:layout_height="wrap_content"
                          android:id="@+id/tblLayout">

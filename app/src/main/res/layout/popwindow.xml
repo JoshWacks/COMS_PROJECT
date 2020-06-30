@@ -14,7 +14,7 @@
             android:textColor="#000000" android:textStyle="bold"
             android:textAlignment="viewStart" android:textSize="18sp" android:fontFamily="@font/autour_one"
             android:layout_marginStart="15dp" android:text="It seems you are at a petrol station not on our system"
-            tools:visibility="gone"/>
+    />
     <TextView
             android:layout_width="5dp"
             android:layout_height="match_parent" android:id="@+id/txtLeftBorder"
@@ -137,4 +137,14 @@
             android:textColor="#020202" android:textStyle="bold" android:fontFamily="@font/autour_one"
             app:layout_constraintEnd_toStartOf="@+id/txtRightBorder" android:layout_marginEnd="2dp"
             tools:visibility="gone" android:onClick="onCarSelected" android:textAlignment="center"/>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="65dp" android:id="@+id/scrollCarChoice" android:scrollIndicators="left|right"
+            android:layout_marginStart="16dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical" android:id="@+id/scrollLinearLayout"/>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,6 +28,15 @@
         <item name="android:textStyle">bold</item>
 
     </style>
+    <style name="fontForTextViews2">
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
 
     <style name="AppTheme.popTheme">
         <item name="android:windowIsTranslucent">true</item>

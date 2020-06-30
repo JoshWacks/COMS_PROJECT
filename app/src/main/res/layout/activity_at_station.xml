@@ -51,7 +51,7 @@
                 android:textColorHint="#FF6D00" android:textAlignment="center" android:textColorHighlight="#FF6D00"
                 android:textColorLink="#FF6D00"
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="385dp"/>
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="400dp"/>
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -64,7 +64,7 @@
                 android:inputType="numberDecimal"
                 android:textColorHint="#FF6D00"
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="460dp"/>
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="480dp"/>
         <TextView
                 android:text=" You Are At     :       "
                 android:layout_width="match_parent"
@@ -93,40 +93,29 @@
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="200dp"/>
         <TextView
-                android:layout_width="330dp"
-                android:layout_height="40dp" android:id="@+id/txtCarChoice1"
-                android:layout_marginStart="5dp"
-                app:layout_constraintStart_toEndOf="@+id/txtViewCar" app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="200dp" android:fontFamily="@font/autour_one" android:textStyle="bold"
-                android:textColor="#000000" android:textSize="16dp" android:onClick="selectCar"/>
-        <TextView
-                android:layout_width="330dp"
-                android:layout_height="40dp" android:id="@+id/txtCarChoice2"
-                android:layout_marginStart="5dp"
-                app:layout_constraintStart_toEndOf="@+id/txtViewCar" app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="260dp" android:fontFamily="@font/autour_one" android:textStyle="bold"
-                android:textColor="#000000" android:textSize="16dp" android:onClick="selectCar"/>
-        <TextView
-                android:layout_width="330dp"
-                android:layout_height="40dp" android:id="@+id/txtCarChoice3"
-                android:layout_marginStart="5dp"
-                app:layout_constraintStart_toEndOf="@+id/txtViewCar" app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="320dp" android:fontFamily="@font/autour_one" android:textStyle="bold"
-                android:textColor="#000000" android:textSize="16dp" android:onClick="selectCar"/>
-        <TextView
                 android:text="Please select a car first"
                 android:layout_width="96dp"
                 android:layout_height="104dp" android:id="@+id/txtInstructions"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="245dp"
                 app:layout_constraintStart_toStartOf="parent" android:textStyle="bold" android:textSize="16sp"
-                android:fontFamily="@font/autour_one" android:textColor="#000000"/>
+                android:fontFamily="@font/autour_one" android:textColor="#000000" android:layout_marginStart="3dp"/>
         <ImageView
                 android:layout_width="381dp"
                 android:layout_height="118dp" app:srcCompat="@drawable/at_station_image3"
                 android:id="@+id/imageAtStation"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="263dp" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"/>
+                android:layout_marginTop="270dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="45dp" app:layout_constraintEnd_toEndOf="parent"/>
+        <ScrollView
+                android:layout_width="263dp"
+                android:layout_height="53dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="200dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="165dp" app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/scrollSelectCar" android:scrollIndicators="right">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:orientation="vertical" android:id="@+id/selectCarLinearLayout"/>
+        </ScrollView>
         <FrameLayout android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:fitsSystemWindows="true"
