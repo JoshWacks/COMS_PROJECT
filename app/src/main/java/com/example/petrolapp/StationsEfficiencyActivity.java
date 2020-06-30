@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,6 +19,8 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.mrntlu.toastie.Toastie;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,9 +32,9 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
     private static String username;
     private Button btnBack;
     private boolean backBtnVisible =true;
-    private HashMap<String, Integer> stationsMap=new HashMap<String, Integer>() ;//A Map is used to see if we have encountered that station before,
+    private final HashMap<String, Integer> stationsMap=new HashMap<String, Integer>() ;//A Map is used to see if we have encountered that station before,
                                                                                     //We use a HashMap to avoid implementing all the map methods
-    private ArrayList<Station>Stations=new ArrayList<Station>();//An arraylist to keep track of all our stations
+    private final ArrayList<Station>Stations=new ArrayList<Station>();//An arraylist to keep track of all our stations
 
     private BarChart barChart;
 
@@ -39,7 +42,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
     private int numCars;
     private static String selectedPlate;
-    private static ArrayList<CarType>userCars=new ArrayList<>();
+    private static final ArrayList<CarType>userCars=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +97,8 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
         numCars=userCars.size();
         if(numCars==0){
-            Intent intent=new Intent(getApplicationContext(),CarDetails.class);
+            Toastie.centerInfo(getApplicationContext(),"Please add your car first", Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),AddCars.class);
             finish();
             startActivity(intent);
         }
@@ -116,7 +120,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         return userCars;
     }
 
-    public void configureScreen(){
+    private  void configureScreen(){
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.hide();//hides the name of the activity at the top
@@ -156,7 +160,9 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         stationsMap.clear();
         //Clears all the data from the previous bargraph first
         userCars.clear();//Clears the users array first so we don't add to it again
+        appInformation.setLiscence_plate("");
         finish();
+
 
         startActivity(i);
 
@@ -171,6 +177,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         stationsMap.clear();
         //Clears all the data from the previous bargraph first
         userCars.clear();//Clears the users array first so we don't add to it again
+        appInformation.setLiscence_plate("");//
         finish();
         startActivity(i);
     }
@@ -276,7 +283,7 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
         }
     }
 
-    public void formatDefaultBarGraph(BarDataSet set,BarData data,ValueFormatter formatter){
+    private void formatDefaultBarGraph(@NotNull BarDataSet set, BarData data, ValueFormatter formatter){
         //method to do all the layout associated code for the bargraph
 
         final Thread th = new Thread(new Runnable() {
