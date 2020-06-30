@@ -82,10 +82,6 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
-
-
-
-
     }
 
     /*this method processes the json response when the request for all the usernames is made */
@@ -116,10 +112,8 @@ public class SignUp extends AppCompatActivity {
         if(list.contains(username)){
             textInputUsername.setError("This username is taken, please use a different one");
             return true;
-
         }
         return false;
-
     }
 
     /*a basic validation check is done to just check if a first name is entered*/
@@ -140,7 +134,7 @@ public class SignUp extends AppCompatActivity {
         String lastnameInput = textInputLastName.getEditText().getText().toString().trim();
 
         if(lastnameInput.isEmpty()){
-            textInputLastName.setError("Please enter your first name");
+            textInputLastName.setError("Please enter your last name, this field cannot be empty");
             return false;
         }else{
             textInputLastName.setError(null);
@@ -203,7 +197,7 @@ public class SignUp extends AppCompatActivity {
             textInputPassword.setError("Field can't be empty");
             return false;
         }else if(!PASSWORD_PATTERN.matcher(passwordInput).matches()){
-            textInputPassword.setError("Password is to weak");
+            textInputPassword.setError("Password is too weak");
             return false;
         }else{
             textInputPassword.setError(null);

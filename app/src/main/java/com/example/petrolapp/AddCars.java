@@ -175,9 +175,9 @@ public class AddCars extends AppCompatActivity {
             case "GP": temp=checkTypes(spl,"GP");  break;
             case "FS": temp=checkTypes(spl,"FS");  break;
             case "NW": temp=checkTypes(spl,"NW");  break;
+            default: Toast.makeText(AddCars.this, "Enter Valid Liscence Plate number", Toast.LENGTH_LONG).show();
 
         }
-        Toast.makeText(AddCars.this, "Enter Valid Liscence Plate number", Toast.LENGTH_LONG).show();
         return temp;
 
 
@@ -193,6 +193,9 @@ public class AddCars extends AppCompatActivity {
             } else if ((Pattern.matches("[a-zA-Z]+", spl[0]) && spl[0].length() == 2) && (spl[1].matches("^[0-9]*$") && spl[1].length() == 2) && (Pattern.matches("[a-zA-Z]+", spl[2]) && spl[2].length() == 2)) {
 
                 return true;
+            }
+            else{
+                Toast.makeText(AddCars.this, "Enter Valid Liscence Plate number", Toast.LENGTH_LONG).show();
             }
         }
 

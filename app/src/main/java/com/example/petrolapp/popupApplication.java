@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import com.mrntlu.toastie.Toastie;
 
 import java.util.ArrayList;
 
@@ -78,27 +79,32 @@ public class popupApplication extends Activity {
 
         double hDim;
         double wDim;
-        if (activity.equals("FillUps")) {
-            fillUpsPopUp(bundle);
-            hDim = 0.16;
-            wDim = 0.9;
-            getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
-        } else if (activity.equals("AtStation")) {
-            hDim = 0.18;
-            wDim = 0.9;
-            atStationPopup(bundle);
-            getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
-        } else if(activity.equals("CarEff")) {
-            hDim = 0.2;
-            wDim = 0.7;
-            getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
-            carEffPopUp(bundle);
-        }else if(activity.equals("selectCarEff")){
-            hDim = 0.25;
-            wDim = 1;
-            getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
-            selectCarPopup();
+        switch (activity) {
+            case "FillUps":
+                fillUpsPopUp(bundle);
+                hDim = 0.16;
+                wDim = 0.9;
+                getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
+                break;
+            case "AtStation":
+                hDim = 0.18;
+                wDim = 1;
+                atStationPopup(bundle);
+                getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
+                break;
+            case "CarEff":
+                hDim = 0.2;
+                wDim = 0.7;
+                getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
+                carEffPopUp(bundle);
+                break;
+            case "selectCarEff":
+                hDim = 0.25;
+                wDim = 1;
+                getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
+                selectCarPopup();
 
+                break;
         }
 
 
@@ -150,19 +156,17 @@ public class popupApplication extends Activity {
         x_co = bundle.getDouble("x_co");
         y_co = bundle.getDouble("y_co");
 
-
         txtData1.setVisibility(View.GONE);
         txtH2.setVisibility(View.GONE);
         txtData2.setVisibility(View.GONE);
         txtCarChoice1.setVisibility(View.GONE);
         txtCarChoice2.setVisibility(View.GONE);
         txtCarChoice3.setVisibility(View.GONE);
+        txtBottomBorder.setVisibility(View.GONE);
+
         btnPopDone.setVisibility(View.VISIBLE);
         txtStationName.setVisibility(View.VISIBLE);
         txtH4.setVisibility(View.VISIBLE);
-        txtBottomBorder.setVisibility(View.VISIBLE);
-
-
 
     }
 
@@ -250,13 +254,13 @@ public class popupApplication extends Activity {
         String stationName="";
         stationName =txtStationName.getEditableText().toString().trim();
         if (stationName.equals("")) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Please enter a station name first", Toast.LENGTH_LONG);
-            toast.show();
+            Toastie.error(getApplicationContext(),"Please enter a station name first",Toast.LENGTH_SHORT).show();
         }
         else {
 
             Connection connection = new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
             ContentValues cv = new ContentValues();
+            stationName=stationName+"_"+x_co+"_"+y_co;//We ensure that station name is unique by using the x an u co-ords
             cv.put("STATION", stationName);
             cv.put("X_CO", x_co);
             cv.put("Y_CO", y_co);
@@ -266,8 +270,8 @@ public class popupApplication extends Activity {
             connection.fetchInfo(popupApplication.this, "insert_STATION", cv, new RequestHandler() {
                 @Override
                 public void processResponse(String response) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Successfully Added Station \n Press anywhere else to close this", Toast.LENGTH_LONG);
-                    toast.show();
+                    Toastie.success(getApplicationContext(),"Successfully Added Station \nPress anywhere else to close this",Toast.LENGTH_LONG).show();
+
                     appInformation.setNewStationName(finalStationName);
                     AtStationActivity.txtStation.append(appInformation.getNewStationName());
                     AtStationActivity.stationAt=appInformation.getNewStationName();

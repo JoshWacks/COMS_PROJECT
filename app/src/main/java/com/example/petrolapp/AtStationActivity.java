@@ -67,7 +67,7 @@ public class AtStationActivity extends AppCompatActivity {
 
 
         username = appInformation.getUsername();
-        System.out.println(username);
+
         stationAt = appInformation.getNewStationName();
         strPrice = appInformation.getPetrolPrice();
 
@@ -156,14 +156,14 @@ public class AtStationActivity extends AppCompatActivity {
         JSONArray jsonArray = new JSONArray(json);
         image.setVisibility(View.GONE);
         if (jsonArray.length() == 0) {
-            Toastie.topInfo(getApplicationContext(),"Please add your car first",Toast.LENGTH_LONG).show();
+            Toastie.info(getApplicationContext(),"Please add your car first",Toast.LENGTH_LONG).show();
 
             finish();//makes sure they cannot go back to their old activity before adding a car
-            Intent intent = new Intent(getApplicationContext(), CarDetails.class);
+            Intent intent = new Intent(getApplicationContext(), AddCars.class);
             startActivity(intent);//takes them to add their car first before filling up for a car not on our system
         } else if (jsonArray.length() > 1) {//they have more than one car and we need to know which car they are filling up first
             txtInstructions.setVisibility(View.VISIBLE);
-            Toastie.centerInfo(getApplicationContext(), "Remember it is the mileage for your last trip \n and to full up to the same point each time", Toast.LENGTH_LONG).show();
+            Toastie.centerWarning(getApplicationContext(), "Remember it is the mileage for your last trip \nAnd to full up to the same point each time", Toast.LENGTH_SHORT).show();
 
             String brand, model, plate = "";
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -186,7 +186,7 @@ public class AtStationActivity extends AppCompatActivity {
             txtInstructions.setVisibility(View.GONE);
             image.setVisibility(View.VISIBLE);
 
-            Toastie.centerInfo(getApplicationContext(), "Remember it is the mileage for your last trip \n and to full up to the same point each time", Toast.LENGTH_LONG).show();
+            Toastie.centerWarning(getApplicationContext(), "Remember it is the mileage for your last trip \nAnd to full up to the same point each time", Toast.LENGTH_SHORT).show();
 
             JSONObject item = jsonArray.getJSONObject(0);
 
@@ -328,14 +328,18 @@ public class AtStationActivity extends AppCompatActivity {
 
     private boolean runtime_permissions() {
 
-        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)
+        {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
                     .ACCESS_COARSE_LOCATION}, 100);
+
             return true;
 
-        }
+        }//Even if the user already has permissions enables we begin the GPS service here
+        gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
+        startService(gpsIntent);//Starts the GPS service here
         return false;
     }
 
@@ -343,7 +347,7 @@ public class AtStationActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 100) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {//Once the user has granted permissions we begin the GPS service here
                 enable_buttons();
                 gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
                 startService(gpsIntent);//Starts the GPS service here
@@ -375,6 +379,7 @@ public class AtStationActivity extends AppCompatActivity {
                     Bundle extras = intent.getExtras();//gets the co-ord's here
                     x_co = extras.getDouble("x_co");
                     y_co = extras.getDouble("y_co");
+
                     if (!nameSet) {
                         getStations();//We only call get stations once we have the x and y co-ords
                         nameSet = true;
