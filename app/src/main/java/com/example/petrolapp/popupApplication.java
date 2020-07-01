@@ -31,7 +31,6 @@ public class popupApplication extends Activity {
 
     private String activity;
 
-    private TextView txtBottomBorder ;
     private TextView txtStationName ;
 
     private Button btnPopDone;
@@ -40,6 +39,7 @@ public class popupApplication extends Activity {
     Double y_co;
 
     private static StationsEfficiencyActivity stationsEfficiencyActivity;
+    private static ViewFillUpsActivity viewFillUpsActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +89,14 @@ public class popupApplication extends Activity {
                 selectCarPopup();
 
                 break;
+            case "selectCarFillUps":
+                viewFillUpsActivity=new ViewFillUpsActivity();
+                hDim = 0.25;
+                wDim = 1;
+                getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
+                selectCarPopup();
+
+                break;
         }
 
 
@@ -102,7 +110,6 @@ public class popupApplication extends Activity {
         txtH3 = findViewById(R.id.txtPopHeading3);
         txtH4 = findViewById(R.id.txtPopHeading4);
 
-
         txtData1 = findViewById(R.id.txtPopData1);
         txtData2 = findViewById(R.id.txtPopData2);
         txtData3 = findViewById(R.id.txtPopData3);
@@ -110,7 +117,6 @@ public class popupApplication extends Activity {
         linearLayout=findViewById(R.id.scrollLinearLayout);
         scrollView=findViewById(R.id.scrollCarChoice);
 
-        txtBottomBorder = findViewById(R.id.txtBottomBorder);
         txtStationName = findViewById(R.id.etxtName);
 
         btnPopDone=findViewById(R.id.btnPopDone);
@@ -118,42 +124,38 @@ public class popupApplication extends Activity {
 
     public void fillUpsPopUp(Bundle bundle) {
         //Method for when the fillups activity is calling the popup window
-        TextView txtFound = findViewById(R.id.txtNotFound);
-
+        txtData3.setVisibility(View.GONE);
         btnPopDone.setVisibility(View.GONE);
         txtH4.setVisibility(View.GONE);
+        txtH3.setVisibility(View.GONE);
         txtStationName.setVisibility(View.GONE);
         linearLayout.setVisibility(View.GONE);
         scrollView.setVisibility(View.GONE);
 
-        txtBottomBorder.setVisibility(View.VISIBLE);
         txtH1.setText("Station: ");
         txtH2.setText("Efficiency: ");
 
-        boolean f = bundle.getBoolean("found");
-        if (!f) {
-            txtData1.setVisibility(View.GONE);
-            txtData2.setVisibility(View.GONE);
-            txtH2.setVisibility(View.GONE);
-            txtH1.setVisibility(View.GONE);
 
-            txtFound.setText("We were unable to find any records on that date \n \nPlease re-enter your search query");
-            txtFound.setVisibility(View.VISIBLE);
-        } else {
-            txtData1.setVisibility(View.VISIBLE);
-            txtData2.setVisibility(View.VISIBLE);
-            txtH2.setVisibility(View.VISIBLE);
-            txtH1.setVisibility(View.VISIBLE);
-            txtFound.setVisibility(View.GONE);
+        txtData1.setVisibility(View.VISIBLE);
+        txtData2.setVisibility(View.VISIBLE);
+        txtH2.setVisibility(View.VISIBLE);
+        txtH1.setVisibility(View.VISIBLE);
 
-            String name = bundle.getString("name");
-            double eff = bundle.getDouble("eff");
+        String name = bundle.getString("name");
+        double eff = bundle.getDouble("eff");
 
-            txtData1.setText(name);
-            txtData2.setText(eff + "   (Mileage/Litres)");
+        txtData1.setText(name);
 
-
+        txtData2.setText(eff + "   (Mileage/Litres)");
+        if(eff==-1){
+            Toastie.topInfo(getApplicationContext(),"The Efficiency is -1 as this trip is not yet completed",Toast.LENGTH_SHORT).show();
         }
+
+
+
+
+
+
     }
 
     public void atStationPopup(Bundle bundle) {
@@ -162,11 +164,16 @@ public class popupApplication extends Activity {
         y_co = bundle.getDouble("y_co");
 
         txtData1.setVisibility(View.GONE);
-        txtH2.setVisibility(View.GONE);
         txtData2.setVisibility(View.GONE);
+        txtData3.setVisibility(View.GONE);
+
+        txtH1.setVisibility(View.GONE);
+        txtH2.setVisibility(View.GONE);
+        txtH3.setVisibility(View.GONE);
+
         linearLayout.setVisibility(View.GONE);
         scrollView.setVisibility(View.GONE);
-        txtBottomBorder.setVisibility(View.GONE);
+
 
         btnPopDone.setVisibility(View.VISIBLE);
         txtStationName.setVisibility(View.VISIBLE);
@@ -183,14 +190,22 @@ public class popupApplication extends Activity {
         txtData3.setVisibility(View.GONE);
         txtStationName.setVisibility(View.GONE);
         btnPopDone.setVisibility(View.GONE);
-        txtBottomBorder.setVisibility(View.GONE);
+
 
         txtH4.setText("Please select a car below first");
         txtH4.setVisibility(View.VISIBLE);
         linearLayout.setVisibility(View.VISIBLE);
         scrollView.setVisibility(View.VISIBLE);
+        ArrayList<CarType>userCars;
 
-        ArrayList<CarType>userCars=stationsEfficiencyActivity.getUserCars();
+        if(activity.equals("selectCarEff")){
+            userCars=stationsEfficiencyActivity.getUserCars();
+        }
+        else{
+            userCars=viewFillUpsActivity.getUserCars();
+        }
+
+
 
         ViewGroup.LayoutParams layoutParams=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -221,7 +236,14 @@ public class popupApplication extends Activity {
         int pos=txt.indexOf(":");
         appInformation.setLiscence_plate(txt.substring(pos+1));
         finish();
-        Intent intent=new Intent(getApplicationContext(),StationsEfficiencyActivity.class);
+        Intent intent;
+        if(activity.equals("selectCarEff")){
+            intent=new Intent(getApplicationContext(),StationsEfficiencyActivity.class);
+        }
+        else{
+            intent=new Intent(getApplicationContext(),ViewFillUpsActivity.class);
+        }
+
         startActivity(intent);
     }
 
@@ -229,7 +251,6 @@ public class popupApplication extends Activity {
     public void carEffPopUp(Bundle bundle) {
         btnPopDone.setVisibility(View.GONE);
         txtStationName.setVisibility(View.GONE);
-        txtBottomBorder.setVisibility(View.GONE);
         txtH4.setVisibility(View.GONE);
 
         linearLayout.setVisibility(View.GONE);

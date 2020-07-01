@@ -103,15 +103,17 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
             startActivity(intent);
         }
         else if(numCars==1){
+            selectedPlate=userCars.get(0).getLiscence_plate();//If the use has only one car we can get the number plate from it
             fetchData();
-        }else if(numCars>1&appInformation.getLiscence_plate().equals("")){
+        }
+        else if(appInformation.getLiscence_plate().equals("")){
+
             appInformation.setActivity("selectCarEff");
             Intent intent=new Intent(getApplicationContext(),popupApplication.class);
-            finish();
             startActivity(intent);
         }
         else{
-            fetchDataManyCars();
+            fetchData();
         }
 
     }
@@ -155,16 +157,16 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
         startActivity(i);
-        barChart.clear();
-        Stations.clear();
-        stationsMap.clear();
-        //Clears all the data from the previous bargraph first
-        userCars.clear();//Clears the users array first so we don't add to it again
+        if(Stations.size()>0) {//Makes sure we don't have an empty barchart
+            barChart.clear();
+            Stations.clear();
+            stationsMap.clear();
+            //Clears all the data from the previous bargraph first
+            userCars.clear();//Clears the users array first so we don't add to it again
+
+        }
         appInformation.setLiscence_plate("");
         finish();
-
-
-        startActivity(i);
 
     }
 
@@ -172,36 +174,26 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
         startActivity(i);
-        barChart.clear();
-        Stations.clear();
-        stationsMap.clear();
-        //Clears all the data from the previous bargraph first
-        userCars.clear();//Clears the users array first so we don't add to it again
-        appInformation.setLiscence_plate("");//
+        if(Stations.size()>0) {//Makes sure we don't have an empty barchart
+            barChart.clear();
+            Stations.clear();
+            stationsMap.clear();
+            //Clears all the data from the previous bargraph first
+            userCars.clear();//Clears the users array first so we don't add to it again
+
+        }
+        appInformation.setLiscence_plate("");
         finish();
-        startActivity(i);
+
     }
 
-    private void fetchData(){//directly fetches the raw data to be processed
-        Connection connection=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
-        ContentValues cv=new ContentValues();
-        cv.put("USERNAME",username);
 
-        connection.fetchInfo(StationsEfficiencyActivity.this, "get_STATIONS_EFFICIENCY",cv, new RequestHandler() {
-            @Override
-            public void processResponse(String response) {
-
-                processJson(response);
-            }
-        });
-    }
-
-    public void fetchDataManyCars(){
+    private void fetchData(){
         Connection connection=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
         ContentValues cv=new ContentValues();
         cv.put("LISCENCE_PLATE",selectedPlate);
 
-        connection.fetchInfo(StationsEfficiencyActivity.this, "get_STATIONS_EFFICIENCY2",cv, new RequestHandler() {
+        connection.fetchInfo(StationsEfficiencyActivity.this, "get_STATIONS_EFFICIENCY",cv, new RequestHandler() {
             @Override
             public void processResponse(String response) {
 
@@ -217,6 +209,10 @@ public class StationsEfficiencyActivity extends AppCompatActivity {
 
         try {
             JSONArray jsonArray=new JSONArray(data);
+            if(jsonArray.length()==0){
+                Toastie.centerWarning(getApplicationContext(),"You have no full ups in this car yet",Toast.LENGTH_LONG).show();
+                return;
+            }
 
             for (int i=0;i<jsonArray.length();i++) {
                 JSONObject item= (JSONObject) jsonArray.get(i);

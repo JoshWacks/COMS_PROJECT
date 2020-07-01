@@ -17,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -26,12 +28,16 @@ import org.json.JSONObject;
 
 public class ViewFillUpsActivity extends AppCompatActivity {
     private static String username;
-    private TableLayout tbl;;
+    private TableLayout tbl;
     private String JSON;
 
     private Button btnBack;
     private boolean backBtnVisible =true;
     private LinearLayout fullScreenContentControls;
+
+    private int numCars;
+    private static String selectedPlate;
+    private static final ArrayList<CarType> userCars=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,20 +45,112 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_fill_ups);
 
         username=appInformation.getUsername();
+        selectedPlate=appInformation.getLiscence_plate();
+
         tbl=findViewById(R.id.tblLayout);
-
-        fillTable();
-
-
-
         configureScreen();
+        checkNumCars();
+
 
 
     }
+    private void configureScreen(){
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.hide();//hides the name of the activity at the top
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);//hides the navigation bar at the bottom
 
-    public void fillTable(){//method to full the table when it originally opens
+        btnBack=findViewById(R.id.btnBackFillUps);
+        fullScreenContentControls=findViewById(R.id.fullscreen_content_controls);
+
+        ConstraintLayout mContentView=findViewById(R.id.FillUpsContent);
+        mContentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggle();
+            }
+        });
+    }
+
+    private void toggle(){//sets the navigation bar at the bottom visible or not when the user touches the screen
+        if(backBtnVisible){
+
+            btnBack.setVisibility(View.INVISIBLE);
+            fullScreenContentControls.setVisibility(View.INVISIBLE);
+            backBtnVisible =false;
+        }
+        else{
+            btnBack.setVisibility(View.VISIBLE);
+            fullScreenContentControls.setVisibility(View.VISIBLE);
+            backBtnVisible =true;
+        }
+    }
+
+    public ArrayList<CarType> getUserCars() {
+        return userCars;
+    }
+
+    private void checkNumCars(){
+        ContentValues cv = new ContentValues();
+
+        cv.put("USERNAME", username);
+
+        Connection c = new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
+
+        c.fetchInfo(ViewFillUpsActivity.this, "get_CAR_DESC", cv, new RequestHandler() {
+            @Override
+            public void processResponse(String response) {
+
+                try {
+                    fillUserCars(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void fillUserCars(String json) throws JSONException {
+        JSONArray jsonArray = new JSONArray(json);
+
+        for(int i=0;i<jsonArray.length();i++){
+            JSONObject item= (JSONObject) jsonArray.get(i);
+
+            CarType ct=new CarType(item.getString("CAR_BRAND"),item.getString("CAR_MODEL"),item.getString("CAR_YEAR"));
+            ct.setLiscence_plate(item.getString("LISCENCE_PLATE"));
+            userCars.add(ct);
+
+        }
+
+        numCars=userCars.size();
+        if(numCars==0){
+            Toastie.centerInfo(getApplicationContext(),"Please add your car first", Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),AddCars.class);
+            finish();
+            startActivity(intent);
+        }
+        else if(numCars==1){
+
+            selectedPlate=userCars.get(0).getLiscence_plate();//If the use has only one car we can get the number plate from it
+            fillTable();
+        }else if(selectedPlate.equals("")){
+            appInformation.setActivity("selectCarFillUps");
+            Intent intent=new Intent(getApplicationContext(),popupApplication.class);
+            startActivity(intent);
+        }
+        else{
+
+            fillTable();
+        }
+
+    }
+
+
+    private void fillTable(){//method to full the table when it originally opens
         ContentValues cv=new ContentValues();
-        cv.put("USERNAME",username);
+        cv.put("LISCENCE_PLATE",selectedPlate);
 
         Connection c=new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
 
@@ -67,7 +165,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
     }
 
-    public void processJson(String json){
+    private void processJson(String json){
 
         ViewGroup.LayoutParams param = findViewById(R.id.txtHeading0).getLayoutParams();
         TableRow.LayoutParams tableRowParams=new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
@@ -75,6 +173,11 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
         try {
             JSONArray jsonArray=new JSONArray(json);
+            if(jsonArray.length()==0){
+                Toastie.centerWarning(getApplicationContext(),"You have no full ups in this car yet",Toast.LENGTH_LONG).show();
+                return;
+            }
+            Toastie.topSuccess(getApplicationContext(),"Click on a record for more info",Toast.LENGTH_LONG).show();
             for (int i = 0; i <jsonArray.length() ; i++) {
                 TableRow blankLine=new TableRow(this);//every record will have a blank line between them
                 blankLine.setLayoutParams(tableRowParams);
@@ -82,7 +185,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                 JSONObject item=jsonArray.getJSONObject(i);
 
                 String stationFullName=item.getString("PETROL_STATION_NAME");
-                String words[]=stationFullName.split(" ");
+                String[] words =stationFullName.split(" ");
                 String station=words[0];//only want the first name of the station
                 double cost=item.getDouble("COST");
                 double mileage=item.getDouble("MILEAGE");
@@ -204,7 +307,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
         txtDate.setText("");
         if (req_date.equals(",")) {
-           Toastie.centerError(this,"The search query cannot be empty",Toast.LENGTH_SHORT).show();
+           Toastie.centerInfo(this,"The search query cannot be empty",Toast.LENGTH_SHORT).show();
             return;
         }
         else{
@@ -227,12 +330,13 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                 catch (NullPointerException | IndexOutOfBoundsException ex ){
                     processJson(JSON);
                 }
+                found=true;
                 TableRow blankLine = new TableRow(this);//every record will have a blank line between them
                 blankLine.setLayoutParams(tableRowParams);
-                found=true;
+
 
                 String stationFullName = item.getString("PETROL_STATION_NAME");
-                String words[] = stationFullName.split(" ");
+                String[] words = stationFullName.split(" ");
                 String station = words[0];
                 double cost = item.getDouble("COST");
                 double mileage = item.getDouble("MILEAGE");
@@ -250,7 +354,6 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
                         extra.putString("name",stationFullName);
                         extra.putDouble("eff",eff);
-                        extra.putBoolean("found",true);
                         Intent i=new Intent(getApplicationContext(),popupApplication.class);
                         i.putExtras(extra);
                         startActivity(i);
@@ -330,12 +433,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
 
         }
         if(!found){
-            appInformation.setActivity("FillUps");
-            Bundle extra=new Bundle();
-            extra.putBoolean("found",found);
-            Intent i=new Intent(getApplicationContext(),popupApplication.class);
-            i.putExtras(extra);
-            startActivity(i);
+            Toastie.centerInfo(getApplicationContext(),"No records were found on that date \nPlease re-enter your query",Toast.LENGTH_LONG).show();
         }
 
 
@@ -360,7 +458,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         tbl.removeViews(1,numViews-1);//removes all the current records being shown first
 
         ContentValues cv=new ContentValues();
-        cv.put("USERNAME",username);
+        cv.put("LISCENCE_PLATE",selectedPlate);
         cv.put("sort",sort);
         cv.put("order",order);
 
@@ -376,51 +474,20 @@ public class ViewFillUpsActivity extends AppCompatActivity {
     }
 
     public void goBack(View view){
+        appInformation.setLiscence_plate("");
+        userCars.clear();
         Intent i=new Intent(getApplicationContext(),MainMenuActivity.class);
         finish();
         startActivity(i);
     }
+    @Override
+    public void onBackPressed() {
+        appInformation.setLiscence_plate("");
+        userCars.clear();
+        Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+        finish();
+        startActivity(i);
 
-    public void configureScreen(){
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.hide();//hides the name of the activity at the top
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        decorView.setSystemUiVisibility(uiOptions);//hides the navigation bar at the bottom
 
-        Toastie.topSuccess(getApplicationContext(),"Click on a record for more info",Toast.LENGTH_LONG).show();
-
-        btnBack=findViewById(R.id.btnBackFillUps);
-        fullScreenContentControls=findViewById(R.id.fullscreen_content_controls);
-
-        ConstraintLayout mContentView=findViewById(R.id.FillUpsContent);
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggle();
-            }
-        });
     }
-    private void toggle(){//sets the navigation bar at the bottom visible or not when the user touches the screen
-        if(backBtnVisible){
-
-            btnBack.setVisibility(View.INVISIBLE);
-            fullScreenContentControls.setVisibility(View.INVISIBLE);
-            backBtnVisible =false;
-        }
-        else{
-            btnBack.setVisibility(View.VISIBLE);
-            fullScreenContentControls.setVisibility(View.VISIBLE);
-            backBtnVisible =true;
-        }
-    }
-
-
-
-
-
-
-
-
 }

@@ -94,8 +94,8 @@
                 android:layout_marginTop="200dp"/>
         <TextView
                 android:text="Please select a car first"
-                android:layout_width="96dp"
-                android:layout_height="104dp" android:id="@+id/txtInstructions"
+                android:layout_width="88dp"
+                android:layout_height="77dp" android:id="@+id/txtInstructions"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="245dp"
                 app:layout_constraintStart_toStartOf="parent" android:textStyle="bold" android:textSize="16sp"
                 android:fontFamily="@font/autour_one" android:textColor="#000000" android:layout_marginStart="3dp"/>
@@ -108,11 +108,11 @@
                 android:layout_marginStart="45dp" app:layout_constraintEnd_toEndOf="parent"/>
         <ScrollView
                 android:layout_width="263dp"
-                android:layout_height="53dp"
+                android:layout_height="45dp"
+                android:id="@+id/scrollSelectCar"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="200dp" app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="165dp" app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/scrollSelectCar" android:scrollIndicators="right">
+                android:layout_marginStart="145dp" android:scrollIndicators="left|right">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                           android:orientation="vertical" android:id="@+id/selectCarLinearLayout"/>
         </ScrollView>

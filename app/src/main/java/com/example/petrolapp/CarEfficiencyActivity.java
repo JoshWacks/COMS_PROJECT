@@ -209,7 +209,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
 
         String[] emptyArr =new String[names.length];
         for(int i=0;i<names.length;i++){
-            emptyArr[i]="";//We set all the values to an empty string or it takes up too much space on the x-axis and the names overlap
+            emptyArr[i]=(i+1)+"";//We set all the values to a number or it takes up too much space on the x-axis and the names overlap
         }
         ValueFormatter formatter = new ValueFormatter() {
             @Override
@@ -324,6 +324,8 @@ public class CarEfficiencyActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), popupApplication.class);
                 i.putExtras(extra);
                 startActivity(i);
+
+                Toastie.success(getApplicationContext(),"The efficiency of that car is "+ e.getY(),Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -478,9 +480,11 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             String typeSelected = brandSelected + modelSelected + yearSelected;
 
             int pos = 0;
+            double e = 0;
             for (CarType ct : CarTypes) {
                 if (ct.getType().equals(typeSelected)) {
                     pos = CarTypes.indexOf(ct);
+                    e=ct.getAverage();
 
                     break;
                 }
@@ -495,6 +499,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), popupApplication.class);//We show that popup Activity
             i.putExtras(extra);
             startActivity(i);
+            Toastie.success(getApplicationContext(),"The efficiency of that car is "+e,Toast.LENGTH_LONG).show();
 
 
         }

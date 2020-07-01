@@ -181,7 +181,7 @@ public class AtStationActivity extends AppCompatActivity {
                 TextView textView=new TextView(this);
                 textView.setLayoutParams(layoutParams);
                 textView.setTextAppearance(R.style.fontForTextViews2);
-                textView.setText(brand+"\t"+model+"\t:"+plate);
+                textView.setText(brand+" "+model+"\t:"+plate);
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -211,7 +211,7 @@ public class AtStationActivity extends AppCompatActivity {
             TextView textView=new TextView(this);
             textView.setLayoutParams(layoutParams);
             textView.setTextAppearance(R.style.fontForTextViews2);
-            textView.setText(brand+"\t"+model+"\t:"+plate);
+            textView.setText(brand+" "+model+"\t:"+plate);
 
             linearLayout.addView(textView);
 
@@ -278,7 +278,6 @@ public class AtStationActivity extends AppCompatActivity {
         bundle.putDouble("x_co", x_co);
         bundle.putDouble("y_co", y_co);
         intent.putExtras(bundle);
-
         startActivity(intent);
 
     }
@@ -341,49 +340,6 @@ public class AtStationActivity extends AppCompatActivity {
         }
 
     }
-
-//    private boolean runtime_permissions() {
-//
-//        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED)
-//        {
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
-//                    .ACCESS_COARSE_LOCATION}, 100);
-//
-//            return true;
-//
-//        }//Even if the user already has permissions enables we begin the GPS service here
-//        gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
-//        startService(gpsIntent);//Starts the GPS service here as we have been given permissions
-//        return false;
-//    }
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == 100) {
-//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {//Once the user has granted permissions we begin the GPS service here
-//                enable_buttons();
-//                gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
-//                startService(gpsIntent);//Starts the GPS service here once given permission
-//            } else {
-//                runtime_permissions();
-//            }
-//        }
-//    }
-
-//    private void enable_buttons() {
-//        btnDone.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                insert();// we do the insert here or the onclick is overwritten
-//
-//                Intent i = new Intent(getApplicationContext(), GPS_Service.class);//Stops the service, stops checking for x and y co-ords
-//                stopService(i);
-//            }
-//        });
-//    }
 
 
     @Override

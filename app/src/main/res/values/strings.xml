@@ -13,6 +13,7 @@
         <item>litres</item>
         <item>cost</item>
         <item>mileage</item>
+        <item>efficiency</item>
     </string-array>
     <string-array name="order_array">
         <item>Ascending</item>
