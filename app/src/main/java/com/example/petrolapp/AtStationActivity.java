@@ -1,20 +1,16 @@
 package com.example.petrolapp;
 
-import android.Manifest;
 import android.content.*;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import com.mrntlu.toastie.Toastie;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,8 +19,7 @@ import org.json.JSONObject;
 import java.time.LocalDate;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ The activity to control the insertion of full ups and the user at the station details.
  */
 @RequiresApi(api = Build.VERSION_CODES.O)
 
@@ -32,7 +27,7 @@ public class AtStationActivity extends AppCompatActivity {
     public static TextView txtStation;
     public static String stationAt;
     private static String username;
-    private LocalDate d = LocalDate.now();//saves it for the query
+    private final LocalDate d = LocalDate.now();//saves it for the query
     private TextView txtDate;
     private TextView txtLitres;
     private TextView txtMileage;
@@ -50,9 +45,7 @@ public class AtStationActivity extends AppCompatActivity {
     private String strPrice;
     private String selected_liscencePlate = "";
 
-    private TextView carChoice1;
-    private TextView carChoice2;
-    private TextView carChoice3;
+    private LinearLayout linearLayout;
 
     private ImageView image;
     private Intent gpsIntent;
@@ -74,12 +67,12 @@ public class AtStationActivity extends AppCompatActivity {
         configure();
 
 
-        btnDone = findViewById(R.id.btnDone);
 
-        if (!runtime_permissions()) {
-            enable_buttons();
 
-        }
+//        if (!runtime_permissions()) {
+//            enable_buttons();
+//
+//        }
 
     }
 
@@ -98,33 +91,41 @@ public class AtStationActivity extends AppCompatActivity {
         txtLitres = findViewById(R.id.txtInLitres);
         txtMileage = findViewById(R.id.txtInMileage);
         txtInstructions = findViewById(R.id.txtInstructions);
-
+        btnDone = findViewById(R.id.btnDone);
         txtDate = findViewById(R.id.txtViewDate);
         txtDate.append(d + " ");//sets the current date
 
-        carChoice1 = findViewById(R.id.txtCarChoice1);
-        carChoice2 = findViewById(R.id.txtCarChoice2);
-        carChoice3 = findViewById(R.id.txtCarChoice3);
+        linearLayout=findViewById(R.id.selectCarLinearLayout);
 
         image = findViewById(R.id.imageAtStation);
 
         //their current petrol station is found in processStation
         getDesc();
 
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                insert();// we do the insert here or the onclick is overwritten
+
+                Intent i = new Intent(getApplicationContext(), GPS_Service.class);//Stops the service, stops checking for x and y co-ords
+                stopService(i);
+            }
+        });
     }
 
     public void selectCar(View view) {
-        carChoice1.setBackgroundColor(Color.WHITE);
-        carChoice2.setBackgroundColor(Color.WHITE);
-        carChoice3.setBackgroundColor(Color.WHITE);//Resets all previous selections first
+        TextView textView;
 
-        TextView temp = (TextView) view;
-        temp.setBackgroundColor(Color.CYAN);
+        for(int i=0;i<linearLayout.getChildCount();i++){
+            textView= (TextView) linearLayout.getChildAt(i);
+            textView.setBackgroundColor(Color.WHITE);//reset all other to textviews to white first
 
-        String txt = (String) temp.getText();
-        int pos = txt.indexOf(",");
-        selected_liscencePlate = txt.substring(pos + 2);
-
+        }
+        TextView selectedTxtView= (TextView) view;
+        selectedTxtView.setBackgroundColor(Color.CYAN);
+        String txt= (String) selectedTxtView.getText();
+        int pos=txt.indexOf(":");
+        selected_liscencePlate=txt.substring(pos+1);
 
     }
 
@@ -141,8 +142,8 @@ public class AtStationActivity extends AppCompatActivity {
             public void processResponse(String response) {
 
                 try {
-                    processCar(response);
 
+                    processCar(response);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -154,14 +155,19 @@ public class AtStationActivity extends AppCompatActivity {
 
     private void processCar(String json) throws JSONException {
         JSONArray jsonArray = new JSONArray(json);
-        image.setVisibility(View.GONE);
+
+        ViewGroup.LayoutParams layoutParams=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
         if (jsonArray.length() == 0) {
-            Toastie.info(getApplicationContext(),"Please add your car first",Toast.LENGTH_LONG).show();
+            Toastie.centerInfo(getApplicationContext(),"Please add your car first",Toast.LENGTH_LONG).show();
 
             finish();//makes sure they cannot go back to their old activity before adding a car
             Intent intent = new Intent(getApplicationContext(), AddCars.class);
             startActivity(intent);//takes them to add their car first before filling up for a car not on our system
-        } else if (jsonArray.length() > 1) {//they have more than one car and we need to know which car they are filling up first
+
+        }
+        else if (jsonArray.length() > 1) {//they have more than one car and we need to know which car they are filling up first
+
             txtInstructions.setVisibility(View.VISIBLE);
             Toastie.centerWarning(getApplicationContext(), "Remember it is the mileage for your last trip \nAnd to full up to the same point each time", Toast.LENGTH_SHORT).show();
 
@@ -172,19 +178,26 @@ public class AtStationActivity extends AppCompatActivity {
                 model = item.getString("CAR_MODEL");
                 plate = item.getString("LISCENCE_PLATE");
 
-                if (i == 0) {
-                    carChoice1.setText(brand + " " + model + ", " + plate);
-                } else if (i == 1) {
-                    carChoice2.setText(brand + " " + model + ", " + plate);
-                } else {
-                    carChoice3.setText(brand + " " + model + ", " + plate);
-                }
+                TextView textView=new TextView(this);
+                textView.setLayoutParams(layoutParams);
+                textView.setTextAppearance(R.style.fontForTextViews2);
+                textView.setText(brand+"\t"+model+"\t:"+plate);
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectCar(v);
+                    }
+                });
+
+                TextView blankLine=new TextView(this);
+                linearLayout.addView(textView);
+                linearLayout.addView(blankLine);
             }
 
 
         } else {//only one car
-            txtInstructions.setVisibility(View.GONE);
             image.setVisibility(View.VISIBLE);
+            txtInstructions.setVisibility(View.GONE);
 
             Toastie.centerWarning(getApplicationContext(), "Remember it is the mileage for your last trip \nAnd to full up to the same point each time", Toast.LENGTH_SHORT).show();
 
@@ -195,8 +208,12 @@ public class AtStationActivity extends AppCompatActivity {
             String plate = item.getString("LISCENCE_PLATE");
 
             selected_liscencePlate = plate;
-            carChoice1.setText(brand + " " + model + ", " + plate);
-            carChoice1.setBackgroundColor(Color.CYAN);
+            TextView textView=new TextView(this);
+            textView.setLayoutParams(layoutParams);
+            textView.setTextAppearance(R.style.fontForTextViews2);
+            textView.setText(brand+"\t"+model+"\t:"+plate);
+
+            linearLayout.addView(textView);
 
         }
     }
@@ -279,8 +296,7 @@ public class AtStationActivity extends AppCompatActivity {
         if (stationAt.equals("")) {
 
             insertNewStation();
-            txtStation.append(appInformation.getNewStationName());
-            stationAt = appInformation.getNewStationName();
+
         } else if (selected_liscencePlate.equals("")) {
 
             Toastie.centerWarning(getApplicationContext(), "Please select a car first", Toast.LENGTH_LONG).show();
@@ -326,48 +342,49 @@ public class AtStationActivity extends AppCompatActivity {
 
     }
 
-    private boolean runtime_permissions() {
+//    private boolean runtime_permissions() {
+//
+//        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED)
+//        {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
+//                    .ACCESS_COARSE_LOCATION}, 100);
+//
+//            return true;
+//
+//        }//Even if the user already has permissions enables we begin the GPS service here
+//        gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
+//        startService(gpsIntent);//Starts the GPS service here as we have been given permissions
+//        return false;
+//    }
 
-        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
-                    .ACCESS_COARSE_LOCATION}, 100);
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == 100) {
+//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {//Once the user has granted permissions we begin the GPS service here
+//                enable_buttons();
+//                gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
+//                startService(gpsIntent);//Starts the GPS service here once given permission
+//            } else {
+//                runtime_permissions();
+//            }
+//        }
+//    }
 
-            return true;
+//    private void enable_buttons() {
+//        btnDone.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                insert();// we do the insert here or the onclick is overwritten
+//
+//                Intent i = new Intent(getApplicationContext(), GPS_Service.class);//Stops the service, stops checking for x and y co-ords
+//                stopService(i);
+//            }
+//        });
+//    }
 
-        }//Even if the user already has permissions enables we begin the GPS service here
-        gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
-        startService(gpsIntent);//Starts the GPS service here
-        return false;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 100) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {//Once the user has granted permissions we begin the GPS service here
-                enable_buttons();
-                gpsIntent = new Intent(getApplicationContext(), GPS_Service.class);
-                startService(gpsIntent);//Starts the GPS service here
-            } else {
-                runtime_permissions();
-            }
-        }
-    }
-
-    private void enable_buttons() {
-        btnDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                insert();// we do the insert here or the onclick is overwritten
-
-                Intent i = new Intent(getApplicationContext(), GPS_Service.class);//Stops the service, stops checking for x and y co-ords
-                stopService(i);
-            }
-        });
-    }
 
     @Override
     protected void onResume() {
@@ -380,7 +397,7 @@ public class AtStationActivity extends AppCompatActivity {
                     x_co = extras.getDouble("x_co");
                     y_co = extras.getDouble("y_co");
 
-                    if (!nameSet) {
+                    if (!nameSet) {//The name has not been set yet
                         getStations();//We only call get stations once we have the x and y co-ords
                         nameSet = true;
                     }

@@ -2,13 +2,13 @@ package com.example.petrolapp;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.ViewGroup;
+import android.widget.*;
 import androidx.annotation.Nullable;
 import com.mrntlu.toastie.Toastie;
 
@@ -26,9 +26,8 @@ public class popupApplication extends Activity {
     private TextView txtData2;
     private TextView txtData3;
 
-    private TextView txtCarChoice1;
-    private TextView txtCarChoice2;
-    private TextView txtCarChoice3;
+    private ScrollView scrollView;
+    private LinearLayout linearLayout;
 
     private String activity;
 
@@ -49,29 +48,10 @@ public class popupApplication extends Activity {
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        stationsEfficiencyActivity=new StationsEfficiencyActivity();
 
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-
-        txtH1 = findViewById(R.id.txtPopHeading1);
-        txtH2 = findViewById(R.id.txtPopHeading2);
-        txtH3 = findViewById(R.id.txtPopHeading3);
-        txtH4 = findViewById(R.id.txtPopHeading4);
-
-
-        txtData1 = findViewById(R.id.txtPopData1);
-        txtData2 = findViewById(R.id.txtPopData2);
-        txtData3 = findViewById(R.id.txtPopData3);
-
-        txtCarChoice1=findViewById(R.id.txtCarChoice1);
-        txtCarChoice2=findViewById(R.id.txtCarChoice2);
-        txtCarChoice3=findViewById(R.id.txtCarChoice3);
-
-        txtBottomBorder = findViewById(R.id.txtBottomBorder);
-        txtStationName = findViewById(R.id.etxtName);
-
-        btnPopDone=findViewById(R.id.btnPopDone);
+        configure();
 
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
@@ -83,22 +63,26 @@ public class popupApplication extends Activity {
             case "FillUps":
                 fillUpsPopUp(bundle);
                 hDim = 0.16;
-                wDim = 0.9;
+                wDim = 0.92;
                 getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
+
                 break;
             case "AtStation":
                 hDim = 0.18;
                 wDim = 1;
                 atStationPopup(bundle);
                 getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
+
                 break;
             case "CarEff":
                 hDim = 0.2;
                 wDim = 0.7;
                 getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
                 carEffPopUp(bundle);
+
                 break;
             case "selectCarEff":
+                stationsEfficiencyActivity=new StationsEfficiencyActivity();
                 hDim = 0.25;
                 wDim = 1;
                 getWindow().setLayout((int) (width * wDim), (int) (height * hDim));
@@ -110,6 +94,28 @@ public class popupApplication extends Activity {
 
     }
 
+    private void configure(){
+
+
+        txtH1 = findViewById(R.id.txtPopHeading1);
+        txtH2 = findViewById(R.id.txtPopHeading2);
+        txtH3 = findViewById(R.id.txtPopHeading3);
+        txtH4 = findViewById(R.id.txtPopHeading4);
+
+
+        txtData1 = findViewById(R.id.txtPopData1);
+        txtData2 = findViewById(R.id.txtPopData2);
+        txtData3 = findViewById(R.id.txtPopData3);
+
+        linearLayout=findViewById(R.id.scrollLinearLayout);
+        scrollView=findViewById(R.id.scrollCarChoice);
+
+        txtBottomBorder = findViewById(R.id.txtBottomBorder);
+        txtStationName = findViewById(R.id.etxtName);
+
+        btnPopDone=findViewById(R.id.btnPopDone);
+    }
+
     public void fillUpsPopUp(Bundle bundle) {
         //Method for when the fillups activity is calling the popup window
         TextView txtFound = findViewById(R.id.txtNotFound);
@@ -117,9 +123,8 @@ public class popupApplication extends Activity {
         btnPopDone.setVisibility(View.GONE);
         txtH4.setVisibility(View.GONE);
         txtStationName.setVisibility(View.GONE);
-        txtCarChoice1.setVisibility(View.GONE);
-        txtCarChoice2.setVisibility(View.GONE);
-        txtCarChoice3.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.GONE);
+        scrollView.setVisibility(View.GONE);
 
         txtBottomBorder.setVisibility(View.VISIBLE);
         txtH1.setText("Station: ");
@@ -159,9 +164,8 @@ public class popupApplication extends Activity {
         txtData1.setVisibility(View.GONE);
         txtH2.setVisibility(View.GONE);
         txtData2.setVisibility(View.GONE);
-        txtCarChoice1.setVisibility(View.GONE);
-        txtCarChoice2.setVisibility(View.GONE);
-        txtCarChoice3.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.GONE);
+        scrollView.setVisibility(View.GONE);
         txtBottomBorder.setVisibility(View.GONE);
 
         btnPopDone.setVisibility(View.VISIBLE);
@@ -183,44 +187,42 @@ public class popupApplication extends Activity {
 
         txtH4.setText("Please select a car below first");
         txtH4.setVisibility(View.VISIBLE);
-
-        txtCarChoice1.setVisibility(View.VISIBLE);
-        txtCarChoice2.setVisibility(View.VISIBLE);
-        txtCarChoice3.setVisibility(View.VISIBLE);
-
-
+        linearLayout.setVisibility(View.VISIBLE);
+        scrollView.setVisibility(View.VISIBLE);
 
         ArrayList<CarType>userCars=stationsEfficiencyActivity.getUserCars();
 
+        ViewGroup.LayoutParams layoutParams=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 
         for(int i=0;i<userCars.size();i++){
             CarType ct=userCars.get(i);
-            if(i==0){
-                txtCarChoice1.setText(ct.getBrand()+"  "+ct.getModel()+"  "+ct.getYear()+"\t \t ,"+ct.getLiscence_plate());
-            }
-            else if(i==1){
-                txtCarChoice2.setText(ct.getBrand()+"  "+ct.getModel()+"  "+ct.getYear()+"\t \t ,"+ct.getLiscence_plate());
-            }
-            else if(i==2){
-                txtCarChoice3.setText(ct.getBrand()+"  "+ct.getModel()+"  "+ct.getYear()+"\t \t ,"+ct.getLiscence_plate());
-            }
+            TextView textView=new TextView(this);
+            textView.setLayoutParams(layoutParams);
+            textView.setTextAppearance(R.style.fontForTextViews2);
+            textView.setText(ct.getBrand()+"\t  "+ct.getModel()+" \t\t:"+ct.getLiscence_plate());
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onCarSelected(v);
+                }
+            });
+            TextView blankLine=new TextView(this);
+            linearLayout.addView(textView);
+            linearLayout.addView(blankLine);
         }
 
     }
 
     public void onCarSelected(View view){
-        TextView temp= (TextView) view;
-        temp.setBackgroundColor(Color.CYAN);
 
-
-
-        String txt= (String) temp.getText();
-        int pos=txt.indexOf(",");
-        String plate=txt.substring(pos+1);
-        appInformation.setLiscence_plate(plate);
+        TextView selectedTxtView= (TextView) view;
+        selectedTxtView.setBackgroundColor(Color.CYAN);
+        String txt= (String) selectedTxtView.getText();
+        int pos=txt.indexOf(":");
+        appInformation.setLiscence_plate(txt.substring(pos+1));
         finish();
-
-
+        Intent intent=new Intent(getApplicationContext(),StationsEfficiencyActivity.class);
+        startActivity(intent);
     }
 
 
@@ -230,9 +232,8 @@ public class popupApplication extends Activity {
         txtBottomBorder.setVisibility(View.GONE);
         txtH4.setVisibility(View.GONE);
 
-        txtCarChoice1.setVisibility(View.GONE);
-        txtCarChoice2.setVisibility(View.GONE);
-        txtCarChoice3.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.GONE);
+        scrollView.setVisibility(View.GONE);
         txtH1.setText("BRAND:     ");
         txtH2.setText("MODEL:    ");
         txtH3.setText("YEAR:    ");
@@ -260,13 +261,17 @@ public class popupApplication extends Activity {
 
             Connection connection = new Connection("https://lamp.ms.wits.ac.za/home/s2143116/");
             ContentValues cv = new ContentValues();
-            stationName=stationName+"_"+x_co+"_"+y_co;//We ensure that station name is unique by using the x an u co-ords
+            double add1=x_co*10000 % 1000;
+            double add2=y_co*10000 % 1000;
+            int a1= (int)add1;
+            int a2= (int)add2;
+            stationName=stationName+"_"+a1+"_"+a2;//We ensure that station name is unique by using the x an y co-ords
             cv.put("STATION", stationName);
             cv.put("X_CO", x_co);
             cv.put("Y_CO", y_co);
 
-            String finalStationName = stationName;
 
+            String finalStationName = stationName;
             connection.fetchInfo(popupApplication.this, "insert_STATION", cv, new RequestHandler() {
                 @Override
                 public void processResponse(String response) {

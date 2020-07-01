@@ -194,9 +194,10 @@ public class CarEfficiencyActivity extends AppCompatActivity {
 
     }
 
-    private void createGraph() {//Boolean to check if w we are using it for the default data or not
+    private void createGraph() {
+//MPAndroidChart
+        barChart = findViewById(R.id.CarBarGraph);//finds the barchart in our layout
 
-        barChart = findViewById(R.id.CarBarGraph);
         entries = new ArrayList<>();//the data values
         names = new String[CarTypes.size()];//the names on the x-axis
 
@@ -206,11 +207,14 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         set = new BarDataSet(entries, "Station Efficiencies");
         data = new BarData(set);
 
-
+        String[] emptyArr =new String[names.length];
+        for(int i=0;i<names.length;i++){
+            emptyArr[i]="";//We set all the values to an empty string or it takes up too much space on the x-axis and the names overlap
+        }
         ValueFormatter formatter = new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
-                return names[(int) value];//sets the names on the X-Axis to our stations
+                return emptyArr[(int) value];//sets the names on the X-Axis to our stations
             }
         };
         formatDefaultBarGraph(set, data, formatter);
@@ -283,7 +287,7 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         yAxisL.setDrawGridLines(true);
         yAxisR.setDrawGridLines(true);
 
-        float barWidth = 0.3f;
+        float barWidth = 0.25f;
         data.setBarWidth(barWidth); // set custom bar width
         barChart.setData(data);
 
@@ -291,7 +295,6 @@ public class CarEfficiencyActivity extends AppCompatActivity {
         barChart.setNoDataText("WOOPS it looks like you have no fill ups yet");//What it displays when no data is found
         barChart.setDrawBorders(true);
         barChart.setFitBars(true); // make the x-axis fit exactly all bars
-        barChart.setTouchEnabled(true);
         barChart.setDragEnabled(true);
         barChart.setScaleEnabled(true);
 
