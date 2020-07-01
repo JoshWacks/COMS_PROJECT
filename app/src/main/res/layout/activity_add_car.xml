@@ -48,11 +48,11 @@
             app:layout_constraintVertical_bias="0.331"/>
     <Button
             android:text="Back to main menu"
-            android:layout_width="144dp"
+            android:layout_width="180dp"
             android:onClick="bttnBack"
             android:textStyle="bold" android:textSize="18sp"
             android:textAlignment="center" android:gravity="center"
-            android:layout_height="61dp" android:id="@+id/bttnAdd"
+            android:layout_height="wrap_content" android:id="@+id/bttnAdd"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_bias="0.498" app:layout_constraintVertical_bias="0.9"

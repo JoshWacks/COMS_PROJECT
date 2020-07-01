@@ -105,7 +105,7 @@
                 android:id="@+id/imageAtStation"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="270dp" app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="45dp" app:layout_constraintEnd_toEndOf="parent"/>
+                android:layout_marginStart="60dp" app:layout_constraintEnd_toEndOf="parent"/>
         <ScrollView
                 android:layout_width="263dp"
                 android:layout_height="45dp"

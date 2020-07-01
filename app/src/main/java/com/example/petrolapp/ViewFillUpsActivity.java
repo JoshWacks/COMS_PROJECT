@@ -174,7 +174,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         try {
             JSONArray jsonArray=new JSONArray(json);
             if(jsonArray.length()==0){
-                Toastie.centerWarning(getApplicationContext(),"You have no full ups in this car yet",Toast.LENGTH_LONG).show();
+                Toastie.centerWarning(getApplicationContext(),"You have no fill ups in this car yet",Toast.LENGTH_LONG).show();
                 return;
             }
             Toastie.topSuccess(getApplicationContext(),"Click on a record for more info",Toast.LENGTH_LONG).show();
@@ -299,20 +299,30 @@ public class ViewFillUpsActivity extends AppCompatActivity {
         ViewGroup.LayoutParams param = findViewById(R.id.txtHeading0).getLayoutParams();
         TableRow.LayoutParams tableRowParams=new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
 
-        TextView txtDate=findViewById(R.id.txtDate);
-        JSONArray jsonArray=new JSONArray(JSON);
+       Spinner spinnerYear=findViewById(R.id.spinnerYear);
+       Spinner spinnerMonth=findViewById(R.id.spinnerMonth);
+       Spinner spinnerDay=findViewById(R.id.spinnerDay);
 
-        CharSequence req_date= ","+txtDate.getText();
+       String year= (String) spinnerYear.getSelectedItem();
+       String month= (String) spinnerMonth.getSelectedItem();
+       String day= (String) spinnerDay.getSelectedItem();
+
+       if(year.equals("Year")){
+           Toastie.centerInfo(getApplicationContext(),"Please select a year first",Toast.LENGTH_SHORT).show();
+           return;
+       }
+       else if(month.equals("Month")){
+           Toastie.centerInfo(getApplicationContext(),"Please select a month first",Toast.LENGTH_SHORT).show();
+           return;
+       }
+       else if(day.equals("Day")){
+           Toastie.centerInfo(getApplicationContext(),"Please select a day first",Toast.LENGTH_SHORT).show();
+           return;
+       }
+       String req_date=year+"-"+month+"-"+day;
+       JSONArray jsonArray=new JSONArray(JSON);
 
 
-        txtDate.setText("");
-        if (req_date.equals(",")) {
-           Toastie.centerInfo(this,"The search query cannot be empty",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        else{
-            req_date=req_date.subSequence(1,req_date.length());
-        }
 
         boolean found=false;//keeps track of if we found a record or not
 
@@ -328,7 +338,7 @@ public class ViewFillUpsActivity extends AppCompatActivity {
                     }
                 }
                 catch (NullPointerException | IndexOutOfBoundsException ex ){
-                    processJson(JSON);
+                    processJson(JSON);//re-fill the table if any problems
                 }
                 found=true;
                 TableRow blankLine = new TableRow(this);//every record will have a blank line between them

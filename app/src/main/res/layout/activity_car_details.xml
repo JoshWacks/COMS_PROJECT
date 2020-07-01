@@ -24,8 +24,8 @@
             android:fontFamily="monospace"/>
     <Button
             android:text="BACK TO MAIN MENU"
-            android:layout_width="167dp"
-            android:layout_height="70dp"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
             android:id="@+id/BackBttn"
             android:onClick="goBack2"
             android:textStyle="bold" android:textSize="18sp"
